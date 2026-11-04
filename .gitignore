@@ -1,0 +1,6 @@
+# El manual de marca en PDF es un documento corporativo con derechos propios: no se versiona aquí.
+uploads/*.pdf
+*.pdf
+node_modules/
+.DS_Store
+Thumbs.db
