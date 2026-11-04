@@ -1,0 +1,195 @@
+<!-- @dsCard group="4 · Espacio y forma" viewport="960x780" name="Auditoría de accesibilidad" subtitle="Nombre accesible, objetivo táctil y anillo de foco, medidos" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../_ds_bundle.js"></script>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--trf-surface);font-family:var(--trf-font-sans);color:var(--trf-text);padding:20px}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{text-align:left;padding:8px 10px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--trf-text-muted);border-bottom:1px solid var(--trf-border)}
+  td{padding:6px 10px;border-bottom:1px solid var(--trf-border)}
+  .m{font-family:var(--trf-font-mono);font-size:11px;font-variant-numeric:tabular-nums}
+  .ok{color:var(--trf-success-text);font-weight:600}
+  .bad{color:var(--trf-danger-text);font-weight:600}
+  .fix{color:var(--trf-text-muted)}
+  h2{font-size:13px;font-weight:600;margin:0 0 2px}
+  p.note{margin:0 0 14px;font-size:12px;line-height:1.55;color:var(--trf-text-secondary)}
+  /* Fuera de pantalla pero medible: visibility:hidden conserva el layout. */
+  #stage{position:absolute;left:-9999px;top:0;visibility:hidden}
+</style>
+</head>
+<body>
+<div id="root">
+<table><thead><tr><th>Componente</th><th>Control</th><th>Nombre accesible</th><th>Objetivo</th><th>Foco</th><th></th></tr></thead></table>
+</div>
+<script type="text/babel">
+const DS = window.TransfiriendoDesignSystem_0ece16;
+const { Button, Input, Card, Switch, Tabs, Chip, Select, Combobox, DatePicker,
+  Pagination, Breadcrumbs, Sidebar, FileUpload, DataGrid, Popover, Tooltip, Accordion } = DS;
+
+// Cada probe: nombre, selector del control a medir, y el nodo.
+const SPECS = [
+  ["Button", "button", <Button>Guardar</Button>],
+  ["Button loading", "[role=status]", <Button loading>Procesando</Button>],
+  ["Input", "input", <Input label="Nombre del proceso" />],
+  ["Card clicable", "[role=button]", <Card hover onClick={() => {}}>Detalle</Card>],
+  ["Switch", "[role=switch]", <Switch checked label="Notificar" onChange={() => {}} />],
+  ["Tabs", "[role=tab]", <Tabs value="a" onChange={() => {}} items={[{ id: "a", label: "Resumen" }]} />],
+  ["Chip", "button", <Chip selected onToggle={() => {}}>Salud</Chip>],
+  ["Select", "[role=combobox]", <Select value="Salud" options={["Salud"]} />],
+  ["Combobox", "[role=combobox]", <Combobox label="Responsable" options={["Salud"]} />],
+  ["DatePicker", "button", <DatePicker value={{ y: 2026, m: 6, d: 15 }} />],
+  ["Pagination", "button", <Pagination total={90} page={2} onChange={() => {}} />],
+  ["Breadcrumbs", "a", <Breadcrumbs items={["Inicio", "Procesos"]} onNavigate={() => {}} />],
+  ["Sidebar", ".trf-sidebar__item", <Sidebar items={[{ label: "Inicio" }]} active="Inicio" />],
+  ["Sidebar toggle", ".trf-sidebar__toggle", <Sidebar items={[{ label: "Inicio" }]} />],
+  ["FileUpload", "[role=button]", <FileUpload />],
+  ["DataGrid orden", ".trf-grid__sort", <DataGrid columns={[{ key: "a", label: "ID" }]} rows={[{ a: 1 }]} />],
+  ["Popover", "[role=button]", <Popover trigger={<span>Filtrar</span>}>x</Popover>],
+  ["Tooltip", "[role=tooltip]", <Tooltip label="Ayuda"><button>i</button></Tooltip>],
+  ["Accordion", ".trf-acc__head", <Accordion items={[{ title: "Pregunta", body: "R" }]} />],
+  // Control NEGATIVO: botón desnudo sin clase del sistema. Debe salir en rojo
+  // en "Foco" — si sale en verde, la comprobación volvió a ser vacua.
+  ["Control negativo", "button", <button type="button">Sin estilo</button>],
+];
+
+const MIN = 24; // WCAG 2.2 SC 2.5.8
+
+/* Selectores que aparecen en algún bloque :focus-visible de las hojas del
+   sistema. --trf-focus-ring se hereda a TODO el documento, así que comprobar
+   "!!ring" era comprobar solo "¿es enfocable?": sale en verde aunque falte la
+   regla real. Aquí se lee la hoja de verdad. */
+function selectoresFocusVisible() {
+  const out = [];
+  const recorrer = (hoja) => {
+    let reglas;
+    try { reglas = hoja.cssRules; } catch { return; } // hoja de otro origen
+    if (!reglas) return;
+    for (const r of Array.from(reglas)) {
+      if (r.styleSheet) { recorrer(r.styleSheet); continue; }       // @import
+      if (!r.selectorText && r.cssRules) { recorrer(r); continue; } // @media, @supports
+      if (!r.selectorText || !r.selectorText.includes(":focus-visible")) continue;
+      for (const s of r.selectorText.split(",")) {
+        const t = s.trim();
+        if (t.includes(":focus-visible")) out.push(t.replace(/:focus-visible/g, ""));
+      }
+    }
+  };
+  for (const h of Array.from(document.styleSheets)) recorrer(h);
+  return out;
+}
+const FV = selectoresFocusVisible();
+const tieneAnilloReal = (el) => !!el && FV.some((s) => { try { return el.matches(s); } catch { return false; } });
+
+function accName(el) {
+  if (!el) return null;
+  const al = el.getAttribute("aria-label");
+  if (al && al.trim()) return al.trim();
+  const lb = el.getAttribute("aria-labelledby");
+  if (lb) {
+    const t = lb.split(/\s+/).map((id) => document.getElementById(id)?.textContent || "").join(" ").trim();
+    if (t) return t;
+  }
+  if (el.id) {
+    const lab = document.querySelector(`label[for="${el.id}"]`);
+    if (lab && lab.textContent.trim()) return lab.textContent.trim();
+  }
+  const closest = el.closest("label");
+  if (closest && closest.textContent.trim()) return closest.textContent.trim();
+  const txt = (el.textContent || "").trim();
+  if (txt) return txt;
+  const ph = el.getAttribute("placeholder");
+  return ph && ph.trim() ? ph.trim() : null;
+}
+
+function App() {
+  const [rows, setRows] = React.useState(null);
+
+  const measure = React.useCallback(() => {
+    setRows(SPECS.map(([name, sel]) => {
+      const host = document.querySelector(`[data-probe="${name}"]`);
+      const el = host ? host.querySelector(sel) : null;
+      const r = el ? el.getBoundingClientRect() : null;
+      const nombre = accName(el);
+      // El anillo sale de :focus-visible, que no se puede forzar a mostrarse;
+      // se comprueba que el elemento sea alcanzable Y que matchee alguna regla
+      // :focus-visible REAL de las hojas cargadas (no que el token herede).
+      const focusable = !!el && (el.tabIndex >= 0 || ["BUTTON","INPUT","A","SELECT","TEXTAREA"].includes(el.tagName));
+      const decorativo = sel === "[role=tooltip]" || sel === "[role=status]";
+      const w = r ? Math.round(r.width) : 0, h = r ? Math.round(r.height) : 0;
+      const sizeOk = decorativo || (w >= MIN && h >= MIN);
+      const focusOk = decorativo || (focusable && tieneAnilloReal(el));
+      return { name, sel, nombre, w, h, sizeOk, focusOk, decorativo,
+        ok: !!el && !!nombre && sizeOk && focusOk, found: !!el };
+    }));
+  }, []);
+
+  React.useLayoutEffect(() => {
+    measure();
+    const stage = document.getElementById("stage");
+    if (!stage) return undefined;
+    const obs = new MutationObserver(measure);
+    obs.observe(stage, { childList: true, subtree: true });
+    return () => obs.disconnect();
+  }, [measure]);
+
+  const byName = {};
+  if (rows) for (const r of rows) byName[r.name] = r;
+  const fails = rows ? rows.filter((r) => !r.ok) : [];
+
+  return (
+    <div>
+      <h2>Nombre accesible · objetivo táctil · anillo de foco</h2>
+      <p className="note">
+        {!rows
+          ? <span>Midiendo…</span>
+          : fails.length === 0
+            ? <span><strong>{rows.length} de {rows.length}</strong> controles tienen nombre accesible, objetivo ≥{MIN}×{MIN} y anillo de foco.</span>
+            : <span className="bad">{fails.length} de {rows.length} fallan: {fails.map((f) => f.name).join(", ")}.</span>}
+        {" "}WCAG 2.2 SC 2.5.8 pide {MIN}×{MIN} como piso duro. Las filas marcadas «decorativo»
+        no reciben foco a propósito (el spinner y la burbuja del tooltip se anuncian, no se enfocan).
+      </p>
+      <table>
+        <thead><tr><th>Componente</th><th>Control</th><th>Nombre accesible</th><th>Objetivo</th><th>Foco</th><th></th></tr></thead>
+        <tbody>
+          {SPECS.map(([name, sel]) => {
+            const r = byName[name];
+            return (
+              <tr key={name}>
+                <td style={{ fontWeight: 600 }}>{name}</td>
+                <td className="fix m">{sel}</td>
+                <td>{!r ? "·" : (r.nombre ? r.nombre.slice(0, 34) : <span className="bad">falta</span>)}</td>
+                <td className="m">{!r ? "·" : `${r.w}×${r.h}`}</td>
+                <td className={!r ? "fix" : (r.decorativo ? "fix" : (r.focusOk ? "ok" : "bad"))}>
+                  {!r ? "·" : (r.decorativo ? "decorativo" : (r.focusOk ? "✓" : "sin anillo"))}
+                </td>
+                <td className={!r ? "fix" : (r.ok ? "ok" : "bad")}>
+                  {!r ? "·" : (r.ok ? "✓" : (r.found ? "revisar" : "no hallado"))}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      <div id="stage">
+        {SPECS.map(([name, sel, node]) => (
+          <div key={name} data-probe={name}>{node}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

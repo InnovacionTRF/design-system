@@ -1,0 +1,43 @@
+/* Transfiriendo — Typography tokens
+   Fase 4: sistema tipográfico de dos niveles (ver readme → VISUAL FOUNDATIONS → Type).
+   Poppins queda para Display/H1/H2/H3 y momentos de marca (Manual §4.2, acotado —
+   no revertido — a esos momentos). IBM Plex Sans es la fuente de interfaz: todo lo
+   demás, porque casi todo el sistema ya escribe `font-family: var(--trf-font-sans)`
+   sin saber qué hay detrás. JetBrains Mono para IDs, códigos y métricas.
+   Neue Kaya Serif + Garet Book son solo del logo (Manual §2.3), no se usan en UI. */
+:root {
+  --trf-font-brand: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --trf-font-sans:  'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --trf-font-mono:  'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* Weights */
+  --trf-fw-light: 300;      /* @kind font */
+  --trf-fw-regular: 400;    /* @kind font */
+  --trf-fw-medium: 500;     /* @kind font */
+  --trf-fw-semibold: 600;   /* @kind font */
+
+  /* Type scale (px) */
+  --trf-text-display: 40px;   /* screen titles */
+  --trf-text-h1: 34px;
+  --trf-text-h2: 28px;
+  --trf-text-h3: 22px;        /* section / card heads */
+  --trf-text-h4: 19px;
+  --trf-text-lg: 17px;        /* Fase 4: era 16 — 1,07 con base, plano */
+  --trf-text-base: 15px;      /* body */
+  --trf-text-sm: 13px;        /* Fase 4: era 14 — 1,07 con base, plano */
+  --trf-text-xs: 12px;        /* labels · Fase 4: era 13 — 1,08 con sm, plano */
+  --trf-text-2xs: 11px;       /* overline / metadata */
+
+  /* Line heights */
+  --trf-leading-tight: 1.15;
+  --trf-leading-snug: 1.35;
+  --trf-leading-normal: 1.55;
+  --trf-leading-relaxed: 1.65;
+
+  /* Letter spacing */
+  --trf-tracking-display: -0.03em;
+  --trf-tracking-heading: -0.01em;
+  --trf-tracking-normal: 0;
+  --trf-tracking-label: 0.04em;
+  --trf-tracking-over: 0.08em;   /* uppercase overline */
+}

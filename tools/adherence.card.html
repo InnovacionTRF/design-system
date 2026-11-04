@@ -1,0 +1,96 @@
+<!-- @dsCard group="4 · Espacio y forma" viewport="900x420" name="Adherencia" subtitle="El verificador corriendo sobre el proyecto real" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../styles.css">
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:var(--trf-surface);font-family:var(--trf-font-sans);color:var(--trf-text);font-size:13px}
+h2{margin:0 0 2px;font-size:14px;font-weight:600}
+p.note{margin:0 0 14px;font-size:12px;line-height:1.55;color:var(--trf-text-secondary)}
+.ok{color:var(--trf-success-text);font-weight:600}
+.bad{color:var(--trf-danger-text);font-weight:600}
+table{width:100%;border-collapse:collapse;font-size:12px}
+th{text-align:left;padding:7px 9px;font-size:10px;font-weight:600;letter-spacing:var(--trf-tracking-over);text-transform:uppercase;color:var(--trf-text-muted);border-bottom:1px solid var(--trf-border)}
+td{padding:5px 9px;border-bottom:1px solid var(--trf-border);vertical-align:top}
+.m{font-family:var(--trf-font-mono);font-size:11px}
+</style>
+</head>
+<body>
+<h2>Adherencia</h2>
+<p class="note" id="estado">Ejecutando…</p>
+<table><thead><tr><th>Regla</th><th>Qué impide</th><th>Resultado</th></tr></thead><tbody id="tb"></tbody></table>
+<script type="module">
+import { comprobar } from "./checks.mjs";
+
+// Por qué existe cada regla: todas nacieron de un defecto real de este proyecto.
+const PORQUE = {
+  "hex-crudo": "El template de referencia llegó a estar escrito entero con hex crudos.",
+  "px-fuera-de-escala": "Valores sueltos que rompen el ritmo de la escala base-4.",
+  "fuente-ajena": "Inter apareció como fallback dentro de un token de fuente.",
+  "animation-sin-keyframes": "Button y Skeleton animaban con @keyframes inexistentes.",
+  "token-tematico-sobre-relleno-fijo": "Heatmap/FunnelChart usaban un token de texto que voltea con el tema sobre un relleno de datos que no voltea: ilegible en oscuro.",
+  "texto-blanco-sobre-relleno": "El naranja de marca no admite blanco (2,72:1); reapareció en un especimen que redibujaba el botón.",
+  "locale-suelto": "Convivían tres locales: el mismo número salía distinto en el eje y en el tooltip.",
+  "fallback-literal": "var(--x, #hex) sugiere una opcionalidad que el contrato no tiene.",
+  "variante-sin-regla": "Badge aceptaba tone=\"warning\" sin regla CSS: la píldora salía sin estilo.",
+  "contrato-ausente": "Un componente sin .d.ts no tiene contrato de props.",
+  "ruta-muerta": "SKILL.md mandaba a los agentes a un directorio de UI kits que no existe.",
+};
+// Reglas que solo puede evaluar el runner de Node: el navegador no enumera el
+// disco, solo conoce los archivos que ha podido pedir, así que aquí marcaría
+// como muerta cualquier ruta que no haya cargado.
+const SOLO_CI = {
+  "ruta-muerta": true,
+};
+
+const txt = (r) => fetch(new URL(r, location.href)).then((x) => (x.ok ? x.text() : ""));
+
+(async () => {
+  // La lista de archivos se DERIVA de las fuentes, no se escribe a mano:
+  // los @import de styles.css dan el CSS y el manifiesto da los componentes.
+  const raiz = "../";
+  const styles = await txt(raiz + "styles.css");
+  const hojas = [...styles.matchAll(/@import\s+url\(['"]([^'"]+)['"]\)/g)]
+    .map((m) => m[1]).filter((u) => !/^https?:/.test(u));
+
+  let manifiesto = {};
+  try { manifiesto = JSON.parse(await txt(raiz + "_ds_manifest.json")); } catch (e) {}
+  const comps = (manifiesto.components || []).map((c) => c.sourcePath).filter(Boolean);
+  const cards = (manifiesto.cards || []).map((c) => c.path || c.file).filter(Boolean);
+  const dts = comps.map((p) => p.replace(/\.(jsx|tsx)$/, ".d.ts"));
+
+  const rutas = [...new Set(["styles.css", ...hojas, ...comps, ...dts, ...cards, "readme.md", "SKILL.md"])];
+  const pares = await Promise.all(rutas.map(async (r) => [r, await txt(raiz + r)]));
+  const archivos = Object.fromEntries(pares.filter(([, t]) => t));
+
+  const todo = comprobar(archivos, Object.keys(archivos));
+  const v = todo.filter((x) => !SOLO_CI[x.regla]);
+  const porRegla = {};
+  for (const x of v) (porRegla[x.regla] ||= []).push(x);
+
+  document.getElementById("estado").innerHTML = v.length === 0
+    ? `<span class="ok">Sin violaciones</span> en ${Object.keys(archivos).length} archivos. `
+      + `Las once reglas nacieron de un defecto real de este proyecto; ninguna es de estilo genérico. `
+      + `En CI: el workflow <span class="m">adherencia.yml</span>, que sale con código 1.`
+    : `<span class="bad">${v.length} violación(es)</span> en ${Object.keys(archivos).length} archivos.`;
+
+  const tb = document.getElementById("tb");
+  for (const [regla, porque] of Object.entries(PORQUE)) {
+    const fallos = porRegla[regla] || [];
+    const tr = document.createElement("tr");
+    const soloCI = SOLO_CI[regla];
+    tr.innerHTML = `<td class="m">${regla}</td><td style="color:var(--trf-text-secondary)">${porque}</td>`
+      + `<td class="${soloCI ? "" : (fallos.length ? "bad" : "ok")}" ${soloCI ? 'style="color:var(--trf-text-muted)"' : ""}>`
+      + (soloCI ? "solo en CI" : (fallos.length ? fallos.slice(0, 3).map((f) => `${f.ruta}:${f.linea}`).join("<br>") : "✓"))
+      + "</td>";
+    tb.appendChild(tr);
+  }
+})();
+</script>
+</body>
+</html>

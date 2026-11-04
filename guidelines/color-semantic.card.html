@@ -1,0 +1,33 @@
+<!-- @dsCard group="2 · Color" viewport="700x300" name="Semánticos" subtitle="Relleno (3:1) y texto (4,5:1) son tokens distintos" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+
+
+<link rel="stylesheet" href="../styles.css">
+<style>*{box-sizing:border-box}body{margin:0;font-family:var(--trf-font-sans);color:var(--trf-text);background:var(--trf-surface);padding:20px}
+.row{display:flex;gap:12px}
+.sw{flex:1}
+.b{height:44px;border-radius:8px;box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.n{margin:7px 0 0;font-size:12px;font-weight:600}
+.h{margin:2px 0 0;font-family:var(--trf-font-mono);font-size:11px;color:var(--trf-text-muted)}
+.u{margin:1px 0 0;font-size:10px;color:var(--trf-text-muted)}
+.hdr{margin:0 0 8px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--trf-text-muted)}
+.txt{margin:0;font-size:13px;font-weight:600}</style></head>
+<body>
+<p class="hdr">Relleno · bordes, barras, iconos · umbral 3:1</p>
+<div class="row">
+<div class="sw"><div class="b" style="background:var(--trf-success)"></div><p class="n">success</p><p class="h">#87a37d</p></div>
+<div class="sw"><div class="b" style="background:var(--trf-info)"></div><p class="n">info</p><p class="h">#0189cc</p></div>
+<div class="sw"><div class="b" style="background:var(--trf-warning)"></div><p class="n">warning</p><p class="h">#fca03a</p></div>
+<div class="sw"><div class="b" style="background:var(--trf-danger)"></div><p class="n">danger</p><p class="h">#ec663b</p></div>
+<div class="sw"><div class="b" style="background:var(--trf-danger-action)"></div><p class="n">danger-action</p><p class="h">#c34a24</p><p class="u">fill con texto blanco</p></div>
+</div>
+<p class="hdr" style="margin-top:18px">Texto sobre claro · umbral 4,5:1</p>
+<div class="row">
+<div class="sw"><p class="txt" style="color:var(--trf-success-text)">Proceso publicado</p><p class="h">success-text · #5c7553</p></div>
+<div class="sw"><p class="txt" style="color:var(--trf-info-text)">Sincronización lista</p><p class="h">info-text · #0169a0</p></div>
+<div class="sw"><p class="txt" style="color:var(--trf-danger-text)">Conexión rechazada</p><p class="h">danger-text · #bb4520</p></div>
+<div class="sw"><p class="txt" style="color:var(--trf-orange-text)">Ver detalle</p><p class="h">orange-text · #b04f00</p></div>
+</div>
+<p style="margin:16px 0 0;font-size:12px;color:var(--trf-text-secondary)">El token de relleno <strong>nunca</strong> va como <code>color:</code>. <code>--trf-danger</code> sirve de borde o barra, no de texto.</p>
+</body></html>

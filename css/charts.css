@@ -1,0 +1,87 @@
+/* Transfiriendo — components/charts.
+   La geometría de las gráficas sigue inline porque la calculan los datos;
+   lo que sale a CSS es todo lo que no depende de los valores. */
+
+/* ============ Embudo ============ */
+.trf-funnel { display: flex; flex-direction: column; gap: var(--trf-space-2); font-family: var(--trf-font-sans); }
+.trf-funnel__row { display: grid; grid-template-columns: 132px 1fr; gap: var(--trf-space-3); align-items: center; }
+.trf-funnel__label { margin: 0; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-funnel__drop { margin: 1px 0 0; font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label); color: var(--trf-text-muted); }
+.trf-funnel__track { height: 44px; display: flex; align-items: center; }
+.trf-funnel__bar {
+  height: 100%; min-width: 68px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--trf-space-3);
+  transition: width var(--trf-motion-slow);
+}
+.trf-funnel__val,
+.trf-funnel__pct { font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); font-variant-numeric: tabular-nums; }
+.trf-funnel__pct { opacity: .8; }
+
+/* ============ Barras apiladas ============ */
+.trf-stack { font-family: var(--trf-font-sans); }
+.trf-stack__row { display: flex; align-items: flex-end; gap: var(--trf-space-3); }
+.trf-stack__col {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  gap: var(--trf-space-2); height: 100%; justify-content: flex-end;
+}
+.trf-stack__total {
+  font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold);
+  font-variant-numeric: tabular-nums; color: var(--trf-text-muted);
+  transition: color var(--trf-motion-fast);
+}
+.trf-stack__col[data-hot] .trf-stack__total { color: var(--trf-text); }
+.trf-stack__bars {
+  width: 100%; max-width: 46px; display: flex; flex-direction: column;
+  border-radius: 6px 6px 0 0; overflow: hidden;
+  transition: opacity var(--trf-motion-base);
+}
+.trf-stack__bars[data-dim] { opacity: .45; }
+.trf-stack__label { font-size: var(--trf-text-2xs); color: var(--trf-text-muted); }
+
+/* ============ Dispersión ============ */
+.trf-scatter { font-family: var(--trf-font-sans); }
+.trf-scatter__plot { position: relative; }
+.trf-scatter__dot { cursor: default; transition: fill-opacity var(--trf-motion-fast); }
+.trf-scatter__dot:focus-visible { outline: 2px solid var(--trf-action); outline-offset: 2px; }
+.trf-chart__hit:focus-visible { outline: 2px solid var(--trf-action); outline-offset: -2px; }
+.trf-scatter__tip {
+  position: absolute; width: 168px; pointer-events: none; z-index: 2;
+  transform: translate(-50%, calc(-100% - 12px));
+  border-radius: var(--trf-radius-lg); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-lg); overflow: hidden;
+}
+.trf-scatter__tip-head {
+  padding: var(--trf-space-2) var(--trf-space-3); border-bottom: 1px solid var(--trf-border);
+  display: flex; align-items: center; gap: var(--trf-space-2);
+}
+.trf-scatter__tip-id { font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-scatter__tip-rows { padding: var(--trf-space-2) var(--trf-space-3); display: flex; flex-direction: column; gap: var(--trf-space-1); }
+.trf-scatter__foot {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: var(--trf-space-3); margin-top: var(--trf-space-3);
+}
+.trf-scatter__axes { font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label); color: var(--trf-text-muted); }
+
+/* ============ Mapa de calor ============ */
+.trf-heat { font-family: var(--trf-font-sans); }
+.trf-heat__scroll { overflow-x: auto; }
+.trf-heat__grid { display: inline-grid; gap: var(--trf-space-1); min-width: 520px; }
+.trf-heat__wd {
+  text-align: center; font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label);
+  color: var(--trf-text-muted); padding-bottom: var(--trf-space-1);
+}
+.trf-heat__rowname {
+  display: flex; align-items: center; padding-right: var(--trf-space-2);
+  font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label); color: var(--trf-text-secondary);
+}
+.trf-heat__cell {
+  aspect-ratio: 1 / 1; min-height: 34px; border-radius: 6px;
+  display: grid; place-items: center;
+  transition: transform var(--trf-motion-fast);
+}
+.trf-heat__val { font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold); font-variant-numeric: tabular-nums; }
+.trf-heat__legend { display: flex; align-items: center; gap: var(--trf-space-3); margin-top: var(--trf-space-4); }
+.trf-heat__legend span { font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label); color: var(--trf-text-muted); }
+.trf-heat__ramp { display: flex; gap: 3px; }
+.trf-heat__swatch { width: 22px; height: 12px; border-radius: 3px; }

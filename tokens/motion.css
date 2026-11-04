@@ -1,0 +1,16 @@
+/* Transfiriendo — Motion tokens.
+   One curve for everything: fast start, soft stop. Nothing moves longer than 400ms.
+   Movement confirms that something happened; if it confirms nothing, it is removed. */
+:root {
+  --trf-ease: cubic-bezier(.32,.72,0,1);               /* @kind other */
+  --trf-motion-instant: 100ms ease-out;                /* @kind other */
+  --trf-motion-fast: 180ms cubic-bezier(.32,.72,0,1);  /* @kind other */
+  --trf-motion-base: 260ms cubic-bezier(.32,.72,0,1);  /* @kind other */
+  --trf-motion-slow: 400ms cubic-bezier(.32,.72,0,1);  /* @kind other */
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}

@@ -1,0 +1,47 @@
+/* Transfiriendo — Base de componentes.
+   Convención del sistema (la misma en los ~40 componentes):
+     · una clase de bloque por componente: .trf-btn, .trf-card, .trf-alert…
+     · las variantes y los estados viajan en atributos data-*, no en clases
+       concatenadas: [data-variant], [data-tone], [data-size], [data-hover].
+       Salen directos de los props de React sin construir strings de className.
+     · los sub-elementos usan __: .trf-switch__thumb
+   Ninguna transición usa `all`: las propiedades se enumeran siempre. */
+
+/* ---- Anillo de foco unificado ----
+   :focus-visible y no :focus: el anillo aparece con teclado y no con ratón.
+   Antes solo Input tenía anillo, y lo disparaba con onFocus de React, o sea
+   también al hacer clic — justo lo que :focus-visible existe para evitar. */
+.trf-focusable:focus-visible,
+.trf-btn:focus-visible,
+.trf-tab:focus-visible,
+.trf-switch__track:focus-visible,
+.trf-card[data-hover]:focus-visible {
+  outline: 2px solid var(--trf-action);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--trf-focus-ring);
+}
+/* Sobre superficie oscura el naranja se sostiene, pero el halo necesita más cuerpo. */
+[data-theme="dark"] .trf-focusable:focus-visible,
+[data-theme="dark"] .trf-btn:focus-visible,
+[data-theme="dark"] .trf-tab:focus-visible,
+[data-theme="dark"] .trf-switch__track:focus-visible {
+  box-shadow: 0 0 0 4px rgba(252,118,3,.32);
+}
+/* La navegación lateral es oscura incluso en modo claro: el anillo se aclara
+   para no perderse contra --trf-sidebar-bg. */
+.trf-sidebar .trf-focusable:focus-visible {
+  outline-color: var(--trf-orange-200);
+  box-shadow: 0 0 0 4px rgba(252,118,3,.32);
+}
+
+/* El foco nunca queda tapado por un hermano posterior. */
+.trf-btn:focus-visible,
+.trf-tab:focus-visible,
+.trf-focusable:focus-visible { position: relative; z-index: 1; }
+
+/* Solo para lectores de pantalla: mantiene el nombre accesible cuando la
+   etiqueta visible se oculta (Sidebar colapsada). */
+.trf-sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}

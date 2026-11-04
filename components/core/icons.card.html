@@ -1,0 +1,59 @@
+<!-- @dsCard group="6 · Componentes" viewport="700x600" name="Iconos" subtitle="Subconjunto curado de Lucide, nombrado por intención" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:var(--trf-surface);font-family:var(--trf-font-sans);color:var(--trf-text)}
+.grp{margin-bottom:16px}
+.lb{margin:0 0 8px;font-size:10px;font-weight:600;letter-spacing:var(--trf-tracking-over);text-transform:uppercase;color:var(--trf-text-muted)}
+.row{display:flex;flex-wrap:wrap;gap:6px}
+.cell{display:flex;flex-direction:column;align-items:center;gap:5px;width:74px;padding:9px 4px;border:1px solid var(--trf-border);border-radius:var(--trf-radius-md);color:var(--trf-text-secondary)}
+.nm{font-family:var(--trf-font-mono);font-size:9px;letter-spacing:-.01em;color:var(--trf-text-muted);text-align:center;line-height:1.2}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Icon, ICONS } = window.TransfiriendoDesignSystem_0ece16;
+const GRUPOS = [
+  ["Acciones", ["crear","guardar","editar","eliminar","duplicar","descargar","subir"]],
+  ["Navegación", ["atras","adelante","desplegar","plegar","cerrar","menu","masOpciones","enlaceExterno"]],
+  ["Datos", ["buscar","filtrar","ordenar","calendario","actualizar"]],
+  ["Estado", ["info","exito","advertencia","error"]],
+  ["Innovación & IA", ["proceso","modelo","reporte","documento","automatizacion"]],
+  ["Cuenta", ["usuario","equipo","ajustes"]],
+];
+function App() {
+  return (
+    <div>
+      {GRUPOS.map(([titulo, nombres]) => (
+        <div className="grp" key={titulo}>
+          <p className="lb">{titulo}</p>
+          <div className="row">
+            {nombres.map((n) => (
+              <div className="cell" key={n}>
+                <Icon name={n} size={18} />
+                <span className="nm">{n}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+</script>
+</body>
+</html>

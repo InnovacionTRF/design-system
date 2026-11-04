@@ -1,0 +1,21 @@
+<!-- @dsCard group="7 · Navegación" viewport="700x190" subtitle="pasos completados/actual" name="Stepper" -->
+<!doctype html><html><head><meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<style>body{margin:0;font-family:var(--trf-font-sans);background:var(--trf-surface);color:var(--trf-text);padding:24px}</style>
+</head><body><div id="root"></div>
+<script src="../../_ds_bundle.js"></script>
+<script>Object.assign(window, window.TransfiriendoDesignSystem_0ece16);</script>
+<script>
+function App(){const [c,setC]=React.useState(1);
+return React.createElement('div',null,
+  React.createElement(Stepper,{current:c,steps:['Origen','Reglas','Validación','Publicar']}),
+  React.createElement('div',{style:{display:'flex',gap:10,marginTop:22}},
+    React.createElement('button',{style:{height:36,padding:'0 16px',border:'1px solid var(--trf-border-strong)',borderRadius:'var(--trf-radius-md)',background:'var(--trf-surface)',color:'var(--trf-text-secondary)',fontFamily:'var(--trf-font-sans)',fontSize:13,fontWeight:600,cursor:'pointer'},onClick:()=>setC(v=>Math.max(0,v-1))},'Atrás'),
+    React.createElement('button',{style:{height:36,padding:'0 16px',border:'none',borderRadius:'var(--trf-radius-md)',background:'var(--trf-action)',color:'var(--trf-neutral-900)',fontFamily:'var(--trf-font-sans)',fontSize:13,fontWeight:600,cursor:'pointer'},onClick:()=>setC(v=>Math.min(3,v+1))},'Siguiente')));}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));</script>
+</body></html>

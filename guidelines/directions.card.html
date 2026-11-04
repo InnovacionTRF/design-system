@@ -1,0 +1,61 @@
+<!-- @dsCard group="4 · Espacio y forma" viewport="960x470" name="Direcciones visuales" subtitle="Material, Cálido y Nítido · claro y oscuro · solo el naranja no cambia" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+
+
+<link rel="stylesheet" href="../styles.css">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:var(--trf-font-sans);background:#e9e7e4;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pane{background:var(--trf-bg);border-radius:10px;padding:14px;color:var(--trf-text)}
+.hd{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:10px}
+.hd b{font-size:13px;font-weight:600}
+.hd span{font-family:var(--trf-font-mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--trf-text-muted);white-space:nowrap}
+.card{background:var(--trf-surface);border:1px solid var(--trf-border);border-radius:var(--trf-radius-lg);box-shadow:var(--trf-shadow-sm);padding:12px;margin-bottom:10px}
+.card p{margin:0;font-size:12px;line-height:1.5;color:var(--trf-text-secondary)}
+.row{display:flex;gap:8px;align-items:center}
+.btn{height:32px;padding:0 14px;display:inline-flex;align-items:center;white-space:nowrap;border-radius:var(--trf-radius-md);font-size:12px;font-weight:600;border:none;background:var(--trf-action);color:var(--trf-neutral-900);box-shadow:var(--trf-shadow-accent)}
+.btn.s{background:var(--trf-surface);color:var(--trf-text-secondary);border:1px solid var(--trf-border);box-shadow:none}
+.inp{flex:1;min-width:0;height:32px;border-radius:var(--trf-radius-md);border:1px solid var(--trf-border);background:var(--trf-surface);color:var(--trf-text-muted);font-size:12px;padding:0 12px;display:flex;align-items:center;white-space:nowrap;overflow:hidden}
+</style></head>
+<body>
+<div class="grid">
+  <div class="pane" data-direction="material">
+    <div class="hd"><b>Material</b><span>claro · 12/8</span></div>
+    <div class="card"><p>Superficie blanca sobre lienzo cálido; la sombra separa los planos.</p></div>
+    <div class="row"><span class="btn">Guardar</span><span class="btn s">Cancelar</span></div>
+    <div class="row" style="margin-top:8px"><span class="inp">Buscar proceso</span></div>
+  </div>
+  <div class="pane" data-direction="calido">
+    <div class="hd"><b>Cálido</b><span>claro · 16/999</span></div>
+    <div class="card"><p>Neutros arena y control en cápsula; el aire separa, no la sombra.</p></div>
+    <div class="row"><span class="btn">Guardar</span><span class="btn s">Cancelar</span></div>
+    <div class="row" style="margin-top:8px"><span class="inp">Buscar proceso</span></div>
+  </div>
+  <div class="pane" data-direction="nitido">
+    <div class="hd"><b>Nítido</b><span>claro · 6 plano</span></div>
+    <div class="card"><p>6px en todo y sin elevación: la línea carga la jerarquía.</p></div>
+    <div class="row"><span class="btn">Guardar</span><span class="btn s">Cancelar</span></div>
+    <div class="row" style="margin-top:8px"><span class="inp">Buscar proceso</span></div>
+  </div>
+
+  <div class="pane" data-direction="material" data-theme="dark">
+    <div class="hd"><b>Material</b><span>oscuro</span></div>
+    <div class="card"><p>La sombra se profundiza para seguir separando planos.</p></div>
+    <div class="row"><span class="btn">Guardar</span><span class="btn s">Cancelar</span></div>
+    <div class="row" style="margin-top:8px"><span class="inp">Buscar proceso</span></div>
+  </div>
+  <div class="pane" data-direction="calido" data-theme="dark">
+    <div class="hd"><b>Cálido</b><span>oscuro</span></div>
+    <div class="card"><p>Los neutros conservan el matiz tierra; sigue sin sombra.</p></div>
+    <div class="row"><span class="btn">Guardar</span><span class="btn s">Cancelar</span></div>
+    <div class="row" style="margin-top:8px"><span class="inp">Buscar proceso</span></div>
+  </div>
+  <div class="pane" data-direction="nitido" data-theme="dark">
+    <div class="hd"><b>Nítido</b><span>oscuro</span></div>
+    <div class="card"><p>Fondo más profundo (#141414) y borde tenue; sigue sin sombra.</p></div>
+    <div class="row"><span class="btn">Guardar</span><span class="btn s">Cancelar</span></div>
+    <div class="row" style="margin-top:8px"><span class="inp">Buscar proceso</span></div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,85 @@
+<!-- @dsCard group="8 · Gráficas" viewport="700x1600" name="Gráficas avanzadas" subtitle="Embudo, barras apiladas, dispersión y mapa de calor" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body{margin:0;background:var(--trf-bg);font-family:var(--trf-font-sans);color:var(--trf-text);padding:20px}
+  .card{border-radius:var(--trf-radius-lg);border:1px solid var(--trf-border);background:var(--trf-surface);box-shadow:var(--trf-shadow-sm);padding:20px;margin-bottom:18px}
+  .hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
+  .t{margin:0;font-size:14px;font-weight:600}
+  .k{font-size:11px;letter-spacing:.04em;color:var(--trf-text-muted)}
+  .s{margin:0 0 16px;font-size:12px;color:var(--trf-text-secondary)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { FunnelChart, StackedBarChart, ScatterChart, Heatmap } = window.TransfiriendoDesignSystem_0ece16;
+const UNITS = [
+  { key:"salud", name:"Salud", color:"var(--trf-series-1)" },
+  { key:"facturacion", name:"Facturación", color:"var(--trf-series-2)" },
+  { key:"seguros", name:"Seguros", color:"var(--trf-series-3)" },
+  { key:"cobranzas", name:"Cobranzas", color:"var(--trf-series-6)" },
+];
+function App(){
+  return (
+    <div>
+      <div className="card">
+        <div className="hd"><p className="t">Onboarding de procesos</p><span className="k">Embudo</span></div>
+        <p className="s">Conversión etapa a etapa · intensidad en escala de naranja</p>
+        <FunnelChart steps={[
+          {label:"Solicitudes",value:4820},{label:"Validadas",value:3610},
+          {label:"Mapeadas",value:2740},{label:"Publicadas",value:1240},
+        ]}/>
+      </div>
+
+      <div className="card">
+        <div className="hd"><p className="t">Volumen mensual apilado</p><span className="k">Barras apiladas</span></div>
+        <p className="s">Aporte de cada unidad al total del mes</p>
+        <StackedBarChart series={UNITS} data={[
+          {label:"Sep",values:{salud:980,facturacion:640,seguros:1720,cobranzas:390}},
+          {label:"Oct",values:{salud:1120,facturacion:710,seguros:1880,cobranzas:410}},
+          {label:"Nov",values:{salud:1240,facturacion:890,seguros:2105,cobranzas:430}},
+          {label:"Dic",values:{salud:1310,facturacion:820,seguros:1990,cobranzas:520}},
+        ]}/>
+      </div>
+
+      <div className="card">
+        <div className="hd"><p className="t">Volumen vs. tasa de error</p><span className="k">Dispersión</span></div>
+        <p className="s">Cada punto es un proceso · tamaño = horas ahorradas</p>
+        <ScatterChart xLabel="volumen mensual" yLabel="tasa de error (‰)" series={UNITS} points={[
+          {label:"TRF-4821",x:1240,y:4,size:320,category:"salud"},
+          {label:"TRF-4820",x:890,y:9,size:180,category:"facturacion"},
+          {label:"TRF-4819",x:2105,y:2,size:480,category:"seguros"},
+          {label:"TRF-4818",x:430,y:12,size:90,category:"cobranzas"},
+          {label:"TRF-4817",x:1670,y:5,size:390,category:"salud"},
+          {label:"TRF-4816",x:615,y:7,size:150,category:"seguros"},
+        ]}/>
+      </div>
+
+      <div className="card">
+        <div className="hd"><p className="t">Actividad por unidad y día</p><span className="k">Mapa de calor</span></div>
+        <p className="s">Operaciones por día de la semana · intensidad en escala de naranja</p>
+        <Heatmap columns={["L","M","M","J","V","S","D"]} rows={[
+          {name:"Salud",values:[12,18,24,31,28,8,3]},
+          {name:"Facturación",values:[9,14,19,22,26,6,2]},
+          {name:"Seguros",values:[16,21,27,34,30,11,4]},
+          {name:"Cobranzas",values:[5,8,11,14,12,3,1]},
+        ]}/>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

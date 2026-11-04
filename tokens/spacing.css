@@ -1,0 +1,29 @@
+/* Transfiriendo — Spacing, radius & layout tokens. Base-4 scale; no loose values. */
+:root {
+  --trf-space-1: 4px;
+  --trf-space-2: 8px;
+  --trf-space-3: 12px;
+  --trf-space-4: 16px;
+  --trf-space-5: 20px;
+  --trf-space-6: 24px;
+  --trf-space-8: 32px;
+  --trf-space-10: 40px;
+  --trf-space-12: 48px;
+  --trf-space-16: 64px;
+
+  /* Radios. La base equivale a la dirección Nítido (la de defecto): sm, md y lg
+     comparten el radio plano de 6px, igual que radiusSm/ctrl/lg en la tabla `themes`
+     de la fuente. Las otras direcciones (Material, Cálido) los redefinen en
+     tokens/themes.css — Material incluida, ahora que solo se activa de forma
+     explícita vía data-direction="material". */
+  --trf-radius-sm: 6px;
+  --trf-radius-md: 6px;   /* control */
+  --trf-radius-lg: 6px;   /* contenedor */
+  --trf-radius-xl: 16px;
+  --trf-radius-full: 9999px;
+
+  /* Control heights */
+  --trf-control-sm: 32px;
+  --trf-control-md: 40px;
+  --trf-control-lg: 48px;
+}

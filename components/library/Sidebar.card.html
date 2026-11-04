@@ -1,0 +1,25 @@
+<!-- @dsCard group="7 · Navegación" viewport="900x420" subtitle="oscura · colapsable · activo naranja" name="Sidebar" -->
+<!doctype html><html><head><meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<style>body{margin:0;font-family:var(--trf-font-sans);background:var(--trf-bg);color:var(--trf-text);min-width:900px}#root{height:420px;display:flex}</style>
+</head><body><div id="root"></div>
+<script src="../../_ds_bundle.js"></script>
+<script>Object.assign(window, window.TransfiriendoDesignSystem_0ece16);</script>
+<script>
+function App(){const [a,setA]=React.useState('procesos');
+  const foot=React.createElement('div',{style:{display:'flex',alignItems:'center',gap:10}},
+    React.createElement('div',{style:{width:30,height:30,borderRadius:'var(--trf-radius-full)',background:'var(--trf-action)',display:'grid',placeItems:'center',fontSize:11,fontWeight:700,color:'var(--trf-neutral-900)'}},'JR'),
+    React.createElement('div',null,React.createElement('p',{style:{fontSize:12,fontWeight:600,color:'var(--trf-sidebar-text-active)',margin:0}},'J. Ramírez'),React.createElement('p',{style:{fontSize:10,color:'var(--trf-sidebar-text)',margin:0}},'Innovación & IA')));
+  return React.createElement(React.Fragment,null,
+    React.createElement(Sidebar,{active:a,onSelect:setA,footer:foot,items:[
+      {label:'Inicio',value:'inicio'},{label:'Procesos',value:'procesos'},{label:'Modelos',value:'modelos'},
+      {label:'Reportes',value:'reportes'},{label:'Equipo',value:'equipo'},{label:'Configuración',value:'config'}]}),
+    React.createElement('div',{style:{flex:1,display:'grid',placeItems:'center',color:'var(--trf-text-muted)',fontSize:13}},'Sección: '+a));}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script>
+</body></html>

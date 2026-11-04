@@ -1,0 +1,63 @@
+<!-- @dsCard group="9 · Pantallas" viewport="700x525" name="Confirmaciones y guardado" subtitle="Destructiva escrita, deshacer reversible, cambios sin guardar" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body{margin:0;background:var(--trf-bg);font-family:var(--trf-font-sans);color:var(--trf-text);padding:20px}
+  .card{border-radius:var(--trf-radius-lg);border:1px solid var(--trf-border);background:var(--trf-surface);box-shadow:var(--trf-shadow-sm);padding:18px;margin-bottom:16px}
+  .lb{margin:0 0 4px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--trf-text-secondary)}
+  .s{margin:0 0 14px;font-size:12px;color:var(--trf-text-muted)}
+  .b{height:36px;padding:0 16px;display:inline-flex;align-items:center;justify-content:center;white-space:nowrap;border-radius:var(--trf-radius-md);font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;border:1px solid var(--trf-border);background:var(--trf-surface);color:var(--trf-text-secondary)}
+  /* --trf-danger es color de BORDE/icono (3,22:1 con blanco). El relleno de un
+   botón destructivo es --trf-danger-action, que sí admite blanco (4,86:1). */
+.b.d{background:var(--trf-danger-action);border-color:transparent;color:var(--trf-text-on-fill)}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { ConfirmDestructive, UndoToast, UnsavedBar } = window.TransfiriendoDesignSystem_0ece16;
+function App(){
+  const [del,setDel]=React.useState(false);
+  const [undo,setUndo]=React.useState(false);
+  const [dirty,setDirty]=React.useState(true);
+  return (
+    <div>
+      <div className="card">
+        <p className="lb">Irreversible · confirmación escrita</p>
+        <p className="s">El botón se habilita solo al escribir el ID exacto.</p>
+        <button className="b d" onClick={()=>setDel(true)}>Eliminar TRF-4821</button>
+      </div>
+      <div className="card">
+        <p className="lb">Reversible · deshacer</p>
+        <p className="s">Se ejecuta ya; se puede revertir durante unos segundos.</p>
+        <button className="b" onClick={()=>setUndo(true)}>Archivar proceso</button>
+        <div style={{marginTop:14}}>
+          <UndoToast open={undo} message="Proceso archivado" onUndo={()=>setUndo(false)} onDismiss={()=>setUndo(false)} />
+        </div>
+      </div>
+      <div className="card">
+        <p className="lb">Cambios sin guardar</p>
+        <p className="s">Aparece mientras el formulario está sucio; dos salidas explícitas.</p>
+        <UnsavedBar dirty={dirty} onDiscard={()=>setDirty(false)} onSave={()=>setDirty(false)} />
+        {!dirty && <button className="b" onClick={()=>setDirty(true)}>Volver a ensuciar</button>}
+      </div>
+      <ConfirmDestructive open={del} title="Eliminar el proceso TRF-4821"
+        description="Se borran la configuración, el historial y las reglas asociadas. Esta acción no se puede deshacer."
+        confirmPhrase="TRF-4821" onCancel={()=>setDel(false)} onConfirm={()=>setDel(false)} />
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

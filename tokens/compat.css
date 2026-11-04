@@ -1,0 +1,119 @@
+/* Transfiriendo — Alias de compatibilidad.
+   Los componentes portados desde el proyecto fuente "Sistema de diseño Transfiriendo"
+   referencian los nombres cortos (--accent, --surface, --text-2, --radius-md, …).
+   Aquí se resuelven contra los tokens canónicos --trf-*, para que exista UNA sola
+   fuente de verdad. Al escribir componentes NUEVOS use siempre los --trf-*. */
+:root {
+  /* Marca */
+  --brand-orange: var(--trf-orange);
+  --brand-orange-hover: var(--trf-action-hover);
+  --brand-gray: var(--trf-gray);
+
+  /* Escala naranja */
+  --orange-50: var(--trf-orange-50);
+  --orange-100: var(--trf-orange-100);
+  --orange-200: var(--trf-orange-200);
+  --orange-300: var(--trf-orange-300);
+  --orange-400: var(--trf-orange-400);
+  --orange-500: var(--trf-orange-500);
+  --orange-600: var(--trf-orange-600);
+  --orange-700: var(--trf-orange-700);
+
+  /* Neutros */
+  --neutral-0: var(--trf-neutral-0);
+  --neutral-50: var(--trf-neutral-50);
+  --neutral-100: var(--trf-neutral-100);
+  --neutral-300: var(--trf-neutral-300);
+  --neutral-500: var(--trf-neutral-500);
+  --neutral-700: var(--trf-neutral-700);
+  --neutral-800: var(--trf-neutral-800);
+  --neutral-900: var(--trf-neutral-900);
+
+  /* Semánticos */
+  --success: var(--trf-success);
+  --info: var(--trf-info);
+  --warning: var(--trf-warning);
+  --danger: var(--trf-danger);
+  --success-text: var(--trf-success-text);
+  --danger-text: var(--trf-danger-text);
+  --info-text: var(--trf-info-text);
+
+  /* Alias de superficie y texto — ojo: los que dependen de la dirección NO pueden
+     declararse aquí. Ver el bloque universal al final del archivo. */
+  --accent: var(--trf-action);
+  --accent-hover: var(--trf-action-hover);
+
+  /* Tipografía */
+  --font-ui: var(--trf-font-sans);
+  --font-mono: var(--trf-font-mono);
+  --type-display-size: var(--trf-text-h1);   --type-display-weight: 600; --type-display-tracking: -0.025em;
+  --type-heading-size: var(--trf-text-h3);   --type-heading-weight: 600; --type-heading-tracking: -0.01em;
+  --type-body-size: var(--trf-text-base);    --type-body-weight: 400;    --type-body-line: 1.6;
+  --type-label-size: 12px;                   --type-label-weight: 600;   --type-label-tracking: 0.05em;
+  --type-mono-size: 13px;                    --type-mono-weight: 500;
+
+  /* Radios — los --radius-* se declaran en el bloque universal del final, porque
+     todos sus consumidores en la librería portada son CONTENEDORES y deben seguir
+     la dirección. Aquí solo queda el que nunca cambia. */
+  --radius-full: var(--trf-radius-full);
+
+  /* Espaciado */
+  --space-1: var(--trf-space-1);
+  --space-2: var(--trf-space-2);
+  --space-3: var(--trf-space-3);
+  --space-4: var(--trf-space-4);
+  --space-6: var(--trf-space-6);
+  --space-8: var(--trf-space-8);
+  --space-12: var(--trf-space-12);
+  --space-16: var(--trf-space-16);
+
+  /* Movimiento — los componentes portados componen "var(--motion-fast) var(--ease)" */
+  --ease: cubic-bezier(.32,.72,0,1); /* @kind other */
+  --motion-instant: 100ms; /* @kind other */
+  --motion-fast: 180ms; /* @kind other */
+  --motion-base: 260ms; /* @kind other */
+  --motion-slow: 400ms; /* @kind other */
+}
+
+/* ============================================================
+   Alias que dependen de la DIRECCIÓN — en selector universal, no en :root.
+
+   Cuando el valor de una custom property contiene var(), la sustitución ocurre
+   en el elemento donde se DECLARA. En :root, --ctrl-radius se resolvería al
+   literal "8px" sobre <html> y ese valor ya resuelto se heredaría hacia abajo:
+   un [data-direction] en un descendiente jamás podría cambiarlo. Declarados en
+   "*", la indirección se re-resuelve en CADA elemento, así que aplicar una
+   dirección a un contenedor sí alcanza a los componentes portados de dentro.
+   ============================================================ */
+*, ::before, ::after {
+  --bg: var(--trf-bg);
+  --surface: var(--trf-surface);
+  --surface-2: var(--trf-surface-2);
+  --surface-inset: var(--trf-surface-2);
+  --text: var(--trf-text);
+  --text-2: var(--trf-text-secondary);
+  --text-3: var(--trf-text-muted);
+  --border: var(--trf-border);
+  --border-2: var(--trf-border-strong);
+  --accent-soft: var(--trf-surface-accent);
+  --accent-text: var(--trf-orange-text);
+  --radius: var(--trf-radius-lg);      /* contenedor */
+  --ctrl-radius: var(--trf-radius-md); /* control */
+
+  /* Radios de la librería portada. Todos sus usos son CONTENEDORES, nunca controles,
+     así que apuntan al token de contenedor — no a --trf-radius-md, que en Cálido vale
+     999px y los convertiría en cápsulas.
+       --radius-lg → superficies grandes: Accordion, DataGrid, FileUpload, Modal, StatCard
+       --radius-md → paneles de dropdown: Combobox, DatePicker, DateRangePicker, Popover, Select
+     --radius-md usa el escalón "sm" (8/12/6) para conservar los 8px que la fuente
+     daba a esos paneles en Material. */
+  --radius-sm: var(--trf-radius-sm);
+  --radius-md: var(--trf-radius-sm);
+  --radius-lg: var(--trf-radius-lg);
+  --radius-xl: var(--trf-radius-xl);
+  --elev: var(--trf-shadow-sm);
+  --btn-elev: var(--trf-shadow-accent);
+  --sidebar-bg: var(--trf-sidebar-bg);
+  --sidebar-text: var(--trf-sidebar-text);
+  --sidebar-text-active: var(--trf-sidebar-text-active);
+}

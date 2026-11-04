@@ -1,0 +1,51 @@
+/* Transfiriendo — Tokens de visualización de datos.
+   Orden de serie FIJO: el naranja de marca se reserva SIEMPRE a la serie
+   principal; el resto sale de las paletas 2ª/3ª del manual. La escala de calor
+   va de crema a naranja quemado — nunca un degradado arcoíris. */
+:root {
+  /* Orden de serie (categórico) */
+  --trf-series-1: #fc7603;  /* serie principal · naranja de marca */
+  --trf-series-2: #0189cc;  /* Vivid Blue */
+  --trf-series-3: #87a37d;  /* Sage Green */
+  --trf-series-4: #fca03a;  /* Bright Orange */
+  --trf-series-5: #b49eb7;  /* Lavender Gray */
+  --trf-series-6: #c4af8f;  /* Sandstone */
+  --trf-series-7: #38b6ff;  /* Sky Blue */
+  --trf-series-8: #8c8c8c;  /* Philippine Gray */
+
+  /* Escala secuencial (mapas de calor, embudos) — de menos a más */
+  --trf-heat-1: #fdf3e9;
+  --trf-heat-2: #ffd8a8;
+  --trf-heat-3: #ffab5c;
+  --trf-heat-4: #fc7603;
+  --trf-heat-5: #a8410f;
+  /* Emparejamiento de texto, derivado del MISMO índice de bucket que el fondo.
+     Los tokens de texto son FIJOS, no temáticos: esta rampa es paleta de DATOS
+     y no tiene —ni debe tener— variante oscura, así que un token que voltee
+     encima suyo se rompe en modo oscuro. Con --trf-text las cinco celdas caían
+     por debajo de 2,5:1; los ratios de abajo valen en los dos temas.
+       heat-1..heat-4 → --trf-neutral-900: 12,22 / 9,97 / 7,16 / 4,93:1
+       heat-5         → --trf-text-on-fill (blanco): 6,13:1
+     heat-5 se oscureció desde #ec663b, que no admitía ningún color de texto a 11px
+     (blanco 3,22 · oscuro 4,16). La rampa sigue siendo monótona crema → naranja quemado. */
+
+}
+
+/* Cromo de gráfica. En selector universal, no en :root: la indirección var() se
+   sustituye donde se DECLARA, así que en :root quedarían congelados y no seguirían
+   ni al tema ni a la dirección. --trf-axis rotula TEXTO (11px), de modo que reusa el
+   token de texto muted (4,71:1 en claro · 5,12:1 en oscuro) en vez del #a0a0a0
+   anterior, que daba 2,61:1. */
+*, ::before, ::after {
+  /* DOS tokens, no uno. --trf-axis servía a la vez para la LÍNEA del eje
+     (componente de UI: umbral 3:1) y para su ETIQUETA (texto de 11px: umbral
+     4,5:1). Un solo nombre para dos umbrales invita a usar el valor flojo en
+     el texto, que es exactamente el fallo que tuvo: #a0a0a0 daba 2,61:1. */
+  --trf-axis-line: var(--trf-border-strong);
+  --trf-axis-label: var(--trf-text-muted);
+  /* Alias retrocompatible. Apunta a la ETIQUETA, que es el umbral más exigente:
+     si alguien lo usa para una línea, la línea sale más oscura de lo necesario,
+     que es el error inocuo. Al revés no lo sería. */
+  --trf-axis: var(--trf-axis-label);
+  --trf-grid: var(--trf-border);
+}

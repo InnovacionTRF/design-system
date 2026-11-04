@@ -1,0 +1,38 @@
+<!-- @dsCard group="8 · Gráficas" viewport="700x240" name="Estados de gráfica" subtitle="Toda gráfica resuelve estos casos antes de pintar datos" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+
+
+<link rel="stylesheet" href="../styles.css">
+<style>*{box-sizing:border-box}body{margin:0;font-family:var(--trf-font-sans);color:var(--trf-text);background:var(--trf-bg);padding:20px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.card{border-radius:var(--trf-radius-lg);border:1px solid var(--trf-border);background:var(--trf-surface);box-shadow:var(--trf-shadow-sm);padding:18px}
+.lb{margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--trf-text-secondary)}
+.box{height:112px;border-radius:var(--trf-radius-md);background:var(--trf-surface-2);display:grid;place-items:center;text-align:center;padding:12px}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sk{border-radius:4px;background:linear-gradient(90deg,#f0f0f0,#f8f8f8,#f0f0f0);background-size:200% 100%;animation:sh 1.4s ease-in-out infinite}</style></head>
+<body>
+<div class="grid">
+  <div class="card"><p class="lb">Sin datos</p>
+    <div class="box" style="border:1px dashed var(--trf-border);background:var(--trf-surface-2)">
+      <div><span style="color:var(--trf-neutral-300);font-size:22px">▢</span>
+      <p style="margin:6px 0 0;font-size:12px;color:var(--trf-text-secondary)">Sin datos para este período</p></div>
+    </div>
+  </div>
+  <div class="card"><p class="lb">Un solo valor</p>
+    <div class="box" style="flex-direction:column">
+      <div><p style="margin:0;font-size:34px;font-weight:600;letter-spacing:-.02em;color:var(--trf-action);font-variant-numeric:tabular-nums">1.240</p>
+      <p style="margin:4px 0 0;font-size:11px;letter-spacing:.04em;color:var(--trf-text-secondary)">Un punto no es una tendencia: muéstrelo como número</p></div>
+    </div>
+  </div>
+  <div class="card"><p class="lb">Cargando</p>
+    <div class="box" style="align-items:flex-end;padding:16px">
+      <div style="display:flex;align-items:flex-end;gap:8px;width:100%;height:100%">
+        <div class="sk" style="flex:1;height:40%"></div><div class="sk" style="flex:1;height:65%"></div>
+        <div class="sk" style="flex:1;height:52%"></div><div class="sk" style="flex:1;height:80%"></div>
+        <div class="sk" style="flex:1;height:70%"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body></html>

@@ -1,0 +1,96 @@
+<!-- @dsCard group="4 · Espacio y forma" viewport="960x1060" name="Anidamiento de tema y dirección" subtitle="Los cinco casos, medidos en el DOM" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../styles.css">
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:#e9e7e4;font-family:var(--trf-font-sans);padding:16px}
+  .case{background:var(--trf-bg);color:var(--trf-text);border-radius:var(--trf-radius-lg);padding:14px;margin-bottom:12px}
+  .lbl{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .lbl b{font-size:12px;font-weight:600}
+  .lbl code{font-family:var(--trf-font-mono);font-size:10px;color:var(--trf-text-muted)}
+  .card{background:var(--trf-surface);border:1px solid var(--trf-border);border-radius:var(--trf-radius-lg);box-shadow:var(--trf-shadow-sm);padding:12px}
+  .card p{margin:0;font-size:12px;color:var(--trf-text-secondary)}
+  .btn{margin-top:10px;height:32px;padding:0 14px;display:inline-flex;align-items:center;white-space:nowrap;border-radius:var(--trf-radius-md);font-size:12px;font-weight:600;border:none;background:var(--trf-action);color:var(--trf-neutral-900)}
+  table{width:100%;border-collapse:collapse;font-size:12px;margin-top:4px}
+  th{text-align:left;padding:7px 10px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--trf-text-muted);border-bottom:1px solid var(--trf-border);background:var(--trf-surface)}
+  td{padding:6px 10px;border-bottom:1px solid var(--trf-border);background:var(--trf-surface)}
+  .m{font-family:var(--trf-font-mono);font-size:11px}
+  .ok{color:var(--trf-success-text);font-weight:600}
+  .bad{color:var(--trf-danger-text);font-weight:600}
+  #report{background:var(--trf-surface);border-radius:var(--trf-radius-lg);padding:14px;color:var(--trf-text)}
+  #report h2{margin:0 0 8px;font-size:13px;font-weight:600}
+</style>
+</head>
+<body>
+
+<!-- 1 · tema oscuro en el ancestro, dirección anidada -->
+<div data-theme="dark">
+  <div class="case" id="c1" data-direction="calido">
+    <div class="lbl"><b>1 · Dirección anidada bajo tema oscuro</b><code>[data-theme=dark] &gt; [data-direction=calido]</code></div>
+    <div class="card"><p>Debe verse Cálido OSCURO: antes revertía a claro.</p><span class="btn">Guardar</span></div>
+  </div>
+</div>
+
+<!-- 2 · ambos en el mismo nodo -->
+<div class="case" id="c2" data-direction="calido" data-theme="dark">
+  <div class="lbl"><b>2 · Ambos en el mismo nodo</b><code>[data-direction=calido][data-theme=dark]</code></div>
+  <div class="card"><p>Caso que ya funcionaba.</p><span class="btn">Guardar</span></div>
+</div>
+
+<!-- 3 · panel oscuro dentro de página clara -->
+<div class="case" id="c3" data-theme="dark">
+  <div class="lbl"><b>3 · Panel oscuro en página clara</b><code>[data-theme=dark] sin dirección</code></div>
+  <div class="card"><p>Debe caer en Material oscuro, la dirección por defecto.</p><span class="btn">Guardar</span></div>
+</div>
+
+<!-- 4 · dirección anidada en página CLARA: debe seguir clara -->
+<div class="case" id="c4" data-direction="nitido">
+  <div class="lbl"><b>4 · Dirección anidada en página clara</b><code>[data-direction=nitido] sin tema</code></div>
+  <div class="card"><p>Debe seguir CLARA: el arreglo no debe oscurecer de más.</p><span class="btn">Guardar</span></div>
+</div>
+
+<!-- 5 · caso inverso real: tema oscuro anidado bajo una dirección -->
+<div data-direction="calido">
+  <div class="case" id="c5" data-theme="dark">
+    <div class="lbl"><b>5 · Tema oscuro anidado bajo una dirección</b><code>[data-direction=calido] &gt; [data-theme=dark]</code></div>
+    <div class="card"><p>Debe resolver a Cálido OSCURO. Antes daba un híbrido: color de Material con forma de Cálido.</p><span class="btn">Guardar</span></div>
+  </div>
+</div>
+
+<div id="report"><h2>Medición</h2><table><thead><tr><th>Caso</th><th>--trf-bg</th><th>--trf-surface</th><th>--trf-radius-md</th><th>Esperado</th><th></th></tr></thead><tbody id="tb"></tbody></table></div>
+
+<script>
+(function(){
+  var CASES = [
+    { id:'c1', esperado:{ bg:'#1c1a17', surface:'#26231f', r:'999px' }, nota:'Cálido oscuro' },
+    { id:'c2', esperado:{ bg:'#1c1a17', surface:'#26231f', r:'999px' }, nota:'Cálido oscuro' },
+    { id:'c3', esperado:{ bg:'#191919', surface:'#242424', r:'8px'  }, nota:'Material oscuro' },
+    { id:'c4', esperado:{ bg:'#f4f4f3', surface:'#ffffff', r:'6px'  }, nota:'Nítido claro' },
+    { id:'c5', esperado:{ bg:'#1c1a17', surface:'#26231f', r:'999px' }, nota:'Cálido oscuro' }
+  ];
+  var tb = document.getElementById('tb');
+  CASES.forEach(function(c){
+    var el = document.getElementById(c.id), cs = getComputedStyle(el);
+    var got = {
+      bg: cs.getPropertyValue('--trf-bg').trim(),
+      surface: cs.getPropertyValue('--trf-surface').trim(),
+      r: cs.getPropertyValue('--trf-radius-md').trim()
+    };
+    var ok = got.bg === c.esperado.bg && got.surface === c.esperado.surface && got.r === c.esperado.r;
+    var tr = document.createElement('tr');
+    tr.innerHTML = '<td style="font-weight:600">' + c.id.toUpperCase() + '</td>'
+      + '<td class="m">' + got.bg + '</td><td class="m">' + got.surface + '</td><td class="m">' + got.r + '</td>'
+      + '<td>' + c.nota + '</td>'
+      + '<td class="' + (ok ? 'ok' : 'bad') + '">' + (ok ? '\u2713' : 'revisar') + '</td>';
+    tb.appendChild(tr);
+  });
+})();
+</script>
+</body>
+</html>

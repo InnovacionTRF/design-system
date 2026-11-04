@@ -1,0 +1,285 @@
+/* Transfiriendo — components/core.
+   Estilos de Button, Input, Card, Badge, Alert, Tabs, Switch y Skeleton.
+   Tamaños de fuente y espaciado vienen de tokens; nada cableado. */
+
+/* ============ Button ============ */
+.trf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--trf-space-2);
+  font-family: var(--trf-font-sans); font-weight: var(--trf-fw-semibold); line-height: 1;
+  white-space: nowrap; border-radius: var(--trf-radius-md); cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast),
+              border-color var(--trf-motion-fast), box-shadow var(--trf-motion-fast),
+              transform var(--trf-motion-fast);
+}
+.trf-btn[data-size="sm"] { height: var(--trf-control-sm); padding: 0 var(--trf-space-3); font-size: var(--trf-text-xs); }
+.trf-btn[data-size="md"] { height: var(--trf-control-md); padding: 0 var(--trf-space-4); font-size: var(--trf-text-sm); }
+.trf-btn[data-size="lg"] { height: var(--trf-control-lg); padding: 0 var(--trf-space-6); font-size: var(--trf-text-base); }
+.trf-btn[data-full] { width: 100%; }
+
+/* Rellenos: el fill NO cambia en hover. Oscurecer el naranja rompe AA con texto
+   oscuro (#ec663b da 4,16:1), así que el hover se expresa con elevación y subida. */
+.trf-btn[data-variant="primary"] {
+  background: var(--trf-action); color: var(--trf-neutral-900); box-shadow: var(--trf-shadow-accent);
+}
+.trf-btn[data-variant="primary"]:hover:not(:disabled) { box-shadow: var(--trf-shadow-accent-lg); transform: translateY(-1px); }
+.trf-btn[data-variant="danger"] {
+  background: var(--trf-danger-action); color: var(--trf-text-on-fill); box-shadow: var(--trf-shadow-sm);
+}
+.trf-btn[data-variant="danger"]:hover:not(:disabled) { box-shadow: var(--trf-shadow-md); transform: translateY(-1px); }
+
+/* Sin relleno: estos sí se tiñen, y el tinte usa el token de TEXTO. */
+.trf-btn[data-variant="secondary"] {
+  background: var(--trf-surface); color: var(--trf-text-secondary); border-color: var(--trf-border);
+}
+.trf-btn[data-variant="secondary"]:hover:not(:disabled) {
+  border-color: var(--trf-action); color: var(--trf-orange-text); transform: translateY(-1px);
+}
+.trf-btn[data-variant="ghost"] { background: transparent; color: var(--trf-text-secondary); }
+.trf-btn[data-variant="ghost"]:hover:not(:disabled) {
+  background: var(--trf-surface-accent); color: var(--trf-orange-text);
+}
+
+.trf-btn:active:not(:disabled) { transform: scale(.97); }
+.trf-btn:disabled { opacity: .4; cursor: not-allowed; }
+.trf-btn[aria-busy="true"] { cursor: progress; }
+
+.trf-btn__spinner {
+  width: 15px; height: 15px; border-radius: var(--trf-radius-full);
+  border: 2px solid currentColor; border-top-color: transparent; opacity: .75;
+  display: inline-block; animation: trf-spin .7s linear infinite;
+}
+
+/* ============ Input ============ */
+.trf-field { display: block; font-family: var(--trf-font-sans); }
+.trf-field__label {
+  display: block; margin-bottom: var(--trf-space-2);
+  font-size: var(--trf-text-xs); font-weight: var(--trf-fw-medium); color: var(--trf-text-secondary);
+}
+.trf-field__wrap { position: relative; display: block; }
+.trf-field__icon {
+  position: absolute; left: var(--trf-space-3); top: 50%; transform: translateY(-50%);
+  display: inline-flex; pointer-events: none; color: var(--trf-text-muted);
+  transition: color var(--trf-motion-fast);
+}
+/* :focus-within en el envoltorio sustituye al estado onFocus de React. */
+.trf-field__wrap:focus-within .trf-field__icon { color: var(--trf-action); }
+
+.trf-input {
+  width: 100%; height: var(--trf-control-md); box-sizing: border-box;
+  padding: 0 var(--trf-space-3);
+  font-family: var(--trf-font-sans); font-size: var(--trf-text-sm); color: var(--trf-text);
+  background: var(--trf-surface); border: 1px solid var(--trf-border);
+  border-radius: var(--trf-radius-md); outline: none;
+  transition: border-color var(--trf-motion-fast), box-shadow var(--trf-motion-fast);
+}
+.trf-input[data-with-icon] { padding-left: var(--trf-space-8); }
+.trf-input:hover:not(:focus) { border-color: var(--trf-border-strong); }
+.trf-input:focus-visible { border-color: var(--trf-action); box-shadow: 0 0 0 4px var(--trf-focus-ring); }
+.trf-input[aria-invalid="true"] { border-color: var(--trf-danger); }
+.trf-input:disabled { opacity: .55; cursor: not-allowed; }
+
+.trf-field__hint {
+  display: block; margin-top: var(--trf-space-2);
+  font-size: var(--trf-text-xs); color: var(--trf-text-muted);
+}
+.trf-field__hint[data-error] { color: var(--trf-danger-text); }
+
+/* ============ Card ============ */
+.trf-card {
+  background: var(--trf-surface); border: 1px solid var(--trf-border);
+  border-radius: var(--trf-radius-lg); box-shadow: var(--trf-shadow-sm);
+  box-sizing: border-box; font-family: var(--trf-font-sans); color: var(--trf-text);
+  transition: box-shadow var(--trf-motion-base), border-color var(--trf-motion-base),
+              transform var(--trf-motion-base);
+}
+.trf-card[data-accent] { background: var(--trf-surface-accent); border-color: rgba(252,118,3,.28); }
+/* Solo eleva si es clicable. */
+.trf-card[data-hover] { cursor: pointer; }
+.trf-card[data-hover]:hover,
+.trf-card[data-hover]:focus-visible {
+  box-shadow: var(--trf-shadow-hover); border-color: rgba(252,118,3,.28); transform: translateY(-4px);
+}
+
+/* ============ Badge ============ */
+/* El relleno neutral vive en la BASE, no en [data-tone="neutral"]: así un tono
+   desconocido degrada a neutral en vez de renderizar sin fondo ni color, que es
+   como se cuela un fallo silencioso. Mismo patrón que .trf-tl__dot. */
+.trf-badge {
+  display: inline-flex; align-items: center; gap: var(--trf-space-2);
+  padding: var(--trf-space-1) var(--trf-space-3);
+  border-radius: var(--trf-radius-full);
+  font-family: var(--trf-font-sans); font-size: var(--trf-text-2xs);
+  font-weight: var(--trf-fw-semibold); line-height: 1.4; letter-spacing: .02em;
+  background: var(--trf-fill-subtle); color: var(--trf-text-secondary);
+}
+.trf-badge[data-tone="neutral"] { background: var(--trf-fill-subtle); color: var(--trf-text-secondary); }
+/* Relleno translúcido, NO un escalón del ramp. El ramp naranja es paleta de marca
+   fija: --trf-orange-50 (#fff4ea) no tiene ni debe tener variante oscura, así que
+   usarlo como superficie temática dejaba este badge en 1,73:1 en modo oscuro.
+   Con rgba se compone sobre el surface de cada tema, igual que los otros cinco tonos. */
+.trf-badge[data-tone="orange"]  { background: rgba(252,118,3,.12); color: var(--trf-orange-text); box-shadow: inset 0 0 0 1px rgba(252,118,3,.30); }
+/* El relleno del Badge sube la luminancia del fondo, así que el tono de texto que
+   pasa sobre superficie (5,52:1) se queda corto AQUÍ. --trf-success-text-on-fill
+   es un escalón más oscuro, solo para texto sobre el relleno propio del tono. */
+.trf-badge[data-tone="success"] { background: rgba(135,163,125,.15); color: var(--trf-success-text-on-fill); box-shadow: inset 0 0 0 1px rgba(135,163,125,.30); }
+.trf-badge[data-tone="info"]    { background: rgba(1,137,204,.10); color: var(--trf-info-text); box-shadow: inset 0 0 0 1px rgba(1,137,204,.25); }
+.trf-badge[data-tone="warning"] { background: rgba(252,160,58,.14); color: var(--trf-orange-text); box-shadow: inset 0 0 0 1px rgba(252,160,58,.42); }
+.trf-badge[data-tone="danger"]  { background: rgba(236,102,59,.10); color: var(--trf-danger-text); box-shadow: inset 0 0 0 1px rgba(236,102,59,.25); }
+.trf-badge__dot { width: 6px; height: 6px; border-radius: var(--trf-radius-full); background: currentColor; }
+
+/* ============ Alert ============ */
+/* Borde COMPLETO de 1px en el tono semántico, no una barra lateral gruesa.
+   Un acento de color en un solo borde de >1px es un anti-patrón: el tono queda
+   colgado de un canto y el resto del contorno no pertenece a nadie. Con el borde
+   entero, el relleno y el ícono, el tono se lee por tres vías coherentes. */
+.trf-alert {
+  display: flex; gap: var(--trf-space-3); padding: var(--trf-space-4);
+  border-radius: var(--trf-radius-lg); font-family: var(--trf-font-sans);
+  border: 1px solid var(--trf-info);
+}
+.trf-alert[data-tone="info"]    { background: rgba(1,137,204,.06);   border-color: rgba(1,137,204,.38); }
+.trf-alert[data-tone="success"] { background: rgba(135,163,125,.08); border-color: rgba(135,163,125,.45); }
+.trf-alert[data-tone="warning"] { background: rgba(252,160,58,.08);  border-color: rgba(252,160,58,.48); }
+.trf-alert[data-tone="danger"]  { background: rgba(236,102,59,.06);  border-color: rgba(236,102,59,.40); }
+.trf-alert__icon { flex-shrink: 0; margin-top: 1px; display: inline-flex; }
+.trf-alert[data-tone="info"]    .trf-alert__icon { color: var(--trf-info); }
+.trf-alert[data-tone="success"] .trf-alert__icon { color: var(--trf-success); }
+.trf-alert[data-tone="warning"] .trf-alert__icon { color: var(--trf-warning); }
+.trf-alert[data-tone="danger"]  .trf-alert__icon { color: var(--trf-danger); }
+.trf-alert__title { margin: 0; font-size: var(--trf-text-sm); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-alert__body { margin: 0; font-size: var(--trf-text-xs); line-height: var(--trf-leading-normal); color: var(--trf-text-secondary); }
+.trf-alert__title + .trf-alert__body { margin-top: 2px; }
+
+/* ============ Tabs ============ */
+.trf-tabs {
+  position: relative; display: flex; gap: var(--trf-space-1);
+  border-bottom: 1px solid var(--trf-border); font-family: var(--trf-font-sans);
+}
+.trf-tab {
+  position: relative; padding: var(--trf-space-2) var(--trf-space-4);
+  border: none; background: transparent; font-family: inherit;
+  font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); cursor: pointer;
+  color: var(--trf-text-muted);
+  border-top-left-radius: var(--trf-radius-md); border-top-right-radius: var(--trf-radius-md);
+  transition: color var(--trf-motion-fast), background-color var(--trf-motion-fast);
+}
+.trf-tab:hover { color: var(--trf-text-secondary); }
+.trf-tab[aria-selected="true"] { color: var(--trf-orange-text); }
+.trf-tabs__bar {
+  position: absolute; bottom: -1px; height: 2px; border-radius: 2px;
+  background: var(--trf-action);
+  transition: left var(--trf-motion-base), width var(--trf-motion-base);
+}
+
+/* ============ Switch ============ */
+.trf-switch {
+  display: inline-flex; align-items: center; gap: var(--trf-space-3);
+  font-family: var(--trf-font-sans);
+}
+.trf-switch[data-disabled] { opacity: .5; }
+.trf-switch__track {
+  position: relative; width: 44px; height: 24px; flex-shrink: 0; padding: 0;
+  border: none; border-radius: var(--trf-radius-full); cursor: pointer;
+  background: var(--trf-track-off);
+  transition: background-color var(--trf-motion-fast);
+}
+.trf-switch__track[aria-checked="true"] { background: var(--trf-action); }
+.trf-switch__track:disabled { cursor: not-allowed; }
+.trf-switch__thumb {
+  position: absolute; top: 4px; left: 4px; width: 16px; height: 16px;
+  border-radius: var(--trf-radius-full); background: var(--trf-neutral-0);
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  transition: transform var(--trf-motion-fast);
+}
+.trf-switch__track[aria-checked="true"] .trf-switch__thumb { transform: translateX(20px); }
+.trf-switch__label { font-size: var(--trf-text-sm); color: var(--trf-text-secondary); cursor: pointer; }
+.trf-switch[data-disabled] .trf-switch__label { cursor: not-allowed; }
+
+/* ============ Checkbox ============ */
+.trf-checkbox { display: inline-flex; align-items: center; gap: var(--trf-space-3); font-family: var(--trf-font-sans); }
+.trf-checkbox[data-disabled] { opacity: .5; }
+.trf-checkbox__ctrl {
+  width: 24px; height: 24px; padding: 0; border: none; background: transparent;
+  display: grid; place-items: center; cursor: pointer; border-radius: var(--trf-radius-sm);
+}
+.trf-checkbox__ctrl:disabled { cursor: not-allowed; }
+.trf-checkbox__box {
+  width: 18px; height: 18px; border-radius: var(--trf-radius-sm);
+  border: 1px solid var(--trf-border-strong); background: var(--trf-surface);
+  display: grid; place-items: center;
+  transition: background-color var(--trf-motion-fast), border-color var(--trf-motion-fast);
+}
+.trf-checkbox__ctrl[aria-checked="true"] .trf-checkbox__box,
+.trf-checkbox__ctrl[aria-checked="mixed"] .trf-checkbox__box {
+  background: var(--trf-action); border-color: var(--trf-action);
+}
+.trf-checkbox__mark { color: var(--trf-neutral-900); font-size: 12px; font-weight: 700; line-height: 1; }
+.trf-checkbox__label { font-size: var(--trf-text-sm); color: var(--trf-text-secondary); cursor: pointer; }
+.trf-checkbox[data-disabled] .trf-checkbox__label { cursor: not-allowed; }
+
+/* ============ Radio / RadioGroup ============ */
+.trf-radiogroup { display: flex; flex-direction: column; gap: var(--trf-space-2); font-family: var(--trf-font-sans); }
+.trf-radio, .trf-radio-standalone {
+  display: inline-flex; align-items: center; gap: var(--trf-space-3);
+}
+button.trf-radio {
+  border: none; background: transparent; padding: var(--trf-space-1) 0; cursor: pointer;
+  font-family: inherit; font-size: var(--trf-text-sm); color: var(--trf-text-secondary);
+  border-radius: var(--trf-radius-sm);
+}
+button.trf-radio:disabled { opacity: .5; cursor: not-allowed; }
+button.trf-radio[aria-checked="true"] { color: var(--trf-text); font-weight: var(--trf-fw-medium); }
+.trf-radio__dot {
+  width: 18px; height: 18px; flex-shrink: 0; border-radius: var(--trf-radius-full);
+  border: 1px solid var(--trf-border-strong); background: var(--trf-surface);
+  display: grid; place-items: center;
+  transition: border-color var(--trf-motion-fast);
+}
+.trf-radio__dot::after {
+  content: ""; width: 8px; height: 8px; border-radius: var(--trf-radius-full);
+  background: var(--trf-action); transform: scale(0);
+  transition: transform var(--trf-motion-fast);
+}
+button.trf-radio[aria-checked="true"] .trf-radio__dot { border-color: var(--trf-action); }
+button.trf-radio[aria-checked="true"] .trf-radio__dot::after { transform: scale(1); }
+.trf-radio__label { font-size: var(--trf-text-sm); color: var(--trf-text-secondary); }
+
+/* ============ Textarea ============ */
+.trf-textarea {
+  height: auto; padding: var(--trf-space-3); resize: vertical;
+  min-height: calc(var(--trf-text-sm) * 1.55 * 2 + var(--trf-space-3) * 2);
+  font-family: inherit; line-height: var(--trf-leading-normal);
+}
+.trf-field__hint-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--trf-space-3); margin-top: var(--trf-space-2); }
+.trf-field__count { font-size: var(--trf-text-xs); color: var(--trf-text-muted); white-space: nowrap; font-variant-numeric: tabular-nums; }
+
+.trf-skeleton {
+  display: block; border-radius: var(--trf-radius-sm);
+  background: linear-gradient(90deg, var(--trf-skeleton-base), var(--trf-skeleton-hi), var(--trf-skeleton-base));
+  background-size: 200% 100%;
+  animation: trf-shimmer 1.4s ease-in-out infinite;
+}
+
+/* ============ Dialog (primitiva) ============
+   Un solo overlay y un solo contenedor para TODOS los diálogos. Antes Modal y
+   ConfirmDestructive traían cada uno los suyos y divergían: scrim rgba(30,25,20,.45)
+   con blur(3px) frente a rgba(47,47,47,.34) sin blur, y ninguno de los dos
+   tokenizado.
+
+   Sin backdrop-filter: el readme reserva el blur a cabeceras sticky, y sobre el
+   área completa de la ventana es el efecto más caro que existe — repinta en cada
+   scroll del contenido de detrás. El scrim solo ya separa las capas. */
+.trf-dialog__overlay {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center;
+  padding: var(--trf-space-6);
+  background: var(--trf-scrim);
+}
+.trf-dialog {
+  position: relative; max-width: 100%;
+  border-radius: var(--trf-radius-lg); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-lg); overflow: hidden;
+  font-family: var(--trf-font-sans); color: var(--trf-text);
+  animation: trf-dialog-in var(--trf-motion-base) both;
+}

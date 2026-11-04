@@ -1,0 +1,50 @@
+/* Transfiriendo — Animaciones.
+   ÚNICO sitio donde viven los @keyframes del sistema. Antes cada componente
+   inyectaba un <style> propio (o los referenciaba sin definirlos: el spinner y el
+   skeleton estaban congelados para cualquiera que solo enlazara styles.css).
+
+   Nombres en kebab-case, prefijo trf-. Duraciones y curva salen de tokens/motion.css.
+   El bloque prefers-reduced-motion de motion.css neutraliza todo esto. */
+
+/* Spinner del estado loading de Button. */
+@keyframes trf-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Barrido del Skeleton. */
+@keyframes trf-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Entrada de página / de contenido: 12px de subida + fade.
+   Una sola dirección — nunca desde los lados, nunca con escala. */
+@keyframes trf-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Velo de fondo (Sidebar drawer en móvil). */
+@keyframes trf-fade-in {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+/* Entrada de diálogo (Modal, ConfirmDestructive). */
+@keyframes trf-dialog-in {
+  from { opacity: 0; transform: translateY(8px) scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Entrada de toast: se desliza desde el borde derecho. */
+@keyframes trf-toast-in {
+  from { opacity: 0; transform: translateX(24px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Barra anclada al pie (UnsavedBar) y toast de deshacer (UndoToast):
+   suben desde abajo, la misma dirección que trf-rise. */
+@keyframes trf-dock-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}

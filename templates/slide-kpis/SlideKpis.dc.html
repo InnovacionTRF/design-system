@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Slide · KPIs" description="16:9 KPI slide — brand header, headline, three big metric figures with deltas, in Transfiriendo style." -->
+<helmet>
+
+
+
+<script src="./ds-base.js"></script>
+<style>
+  /* Paleta FIJA a propósito: una diapositiva es un artefacto de marca, no una
+     interfaz temática. Usa la rampa (--trf-neutral-*, --trf-orange-*), que no
+     cambia con data-theme ni data-direction, así que se ve idéntica en las seis
+     combinaciones. Los tokens semánticos (--trf-surface, --trf-text) SÍ cambian:
+     con ellos, el panel oscuro de marca se volvería claro en modo oscuro. */
+  body{margin:0;background:var(--trf-neutral-800);font-family:var(--trf-font-brand);-webkit-font-smoothing:antialiased}
+  .slide{width:1280px;height:720px;background:var(--trf-paper);position:relative;overflow:hidden;display:flex;flex-direction:column}
+  .mono{font-family:var(--trf-font-mono)}
+</style>
+</helmet>
+<div class="slide">
+  <div style="position:absolute;top:-160px;right:-160px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle,rgba(252,118,3,.10),transparent 66%)"></div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:56px 72px 0;position:relative">
+    <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.Logo" base="../../assets" height="{{ 56 }}" hint-size="200px,56px"></x-import>
+    <span class="mono" style="font-size:14px;letter-spacing:.16em;text-transform:uppercase;color:var(--trf-neutral-400)">Innovación &amp; IA · Q4 2024</span>
+  </div>
+
+  <div style="padding:44px 72px 0;position:relative">
+    <p class="mono" style="margin:0;font-size:15px;letter-spacing:.16em;text-transform:uppercase;color:var(--trf-orange-500)">Impacto de la automatización</p>
+    <h1 style="margin:14px 0 0;font-size:58px;line-height:1.06;font-weight:600;letter-spacing:-.03em;color:var(--trf-neutral-900);max-width:860px">Un trimestre que <span style="color:var(--trf-orange-500)">movió los números</span></h1>
+  </div>
+
+  <div style="flex:1;display:grid;grid-template-columns:repeat(3,1fr);gap:28px;padding:52px 72px;align-content:center;position:relative">
+    <div>
+      <p style="margin:0;font-size:74px;font-weight:600;letter-spacing:-.03em;color:var(--trf-neutral-900);font-variant-numeric:tabular-nums;line-height:1">1.840</p>
+      <p style="margin:12px 0 0;font-size:17px;font-weight:500;color:var(--trf-neutral-700)">Horas ahorradas</p>
+      <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:5px 12px;border-radius:999px;background:rgba(135,163,125,.15);color:var(--trf-success-text);font-size:13px;font-weight:600">↑ 14,1% vs. Q3</div>
+    </div>
+    <div>
+      <p style="margin:0;font-size:74px;font-weight:600;letter-spacing:-.03em;color:var(--trf-neutral-900);font-variant-numeric:tabular-nums;line-height:1">127</p>
+      <p style="margin:12px 0 0;font-size:17px;font-weight:500;color:var(--trf-neutral-700)">Procesos activos</p>
+      <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:5px 12px;border-radius:999px;background:rgba(135,163,125,.15);color:var(--trf-success-text);font-size:13px;font-weight:600">↑ 8,2% vs. Q3</div>
+    </div>
+    <div>
+      <p style="margin:0;font-size:74px;font-weight:600;letter-spacing:-.03em;color:var(--trf-neutral-900);font-variant-numeric:tabular-nums;line-height:1">0,4<span style="font-size:44px">%</span></p>
+      <p style="margin:12px 0 0;font-size:17px;font-weight:500;color:var(--trf-neutral-700)">Tasa de error</p>
+      <div style="display:inline-flex;align-items:center;gap:6px;margin-top:12px;padding:5px 12px;border-radius:999px;background:var(--trf-orange-50);color:var(--trf-orange-text);font-size:13px;font-weight:600">↓ 1,8% vs. Q3</div>
+    </div>
+  </div>
+
+  <div style="height:8px;background:var(--trf-orange-500)"></div>
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:22px 72px;background:var(--trf-neutral-900)">
+    <span style="font-size:15px;color:var(--trf-neutral-100);font-weight:500">Juntos creamos ecosistemas de negocio</span>
+    <span class="mono" style="font-size:13px;color:var(--trf-neutral-600)">Transfiriendo · 2024</span>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:720}}"></script>
+</body>
+</html>

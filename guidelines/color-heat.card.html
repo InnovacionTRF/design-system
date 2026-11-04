@@ -1,0 +1,23 @@
+<!-- @dsCard group="2 · Color" viewport="700x215" name="Escala de calor" subtitle="El texto se deriva del bucket, no de un umbral aparte" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+
+
+<link rel="stylesheet" href="../styles.css">
+<style>*{box-sizing:border-box}body{margin:0;font-family:var(--trf-font-sans);color:var(--trf-text);background:var(--trf-surface);padding:20px}
+.row{display:flex;gap:0;border-radius:8px;overflow:hidden}
+.b{flex:1;height:60px;display:grid;place-items:center;gap:2px;text-align:center}
+.b b{font-family:var(--trf-font-mono);font-size:10px;font-weight:600}
+.b i{font-family:var(--trf-font-mono);font-size:9px;font-style:normal;opacity:.85}
+.lg{display:flex;justify-content:space-between;margin:8px 2px 0;font-size:11px;color:var(--trf-text-muted)}</style></head>
+<body>
+<div class="row">
+<div class="b" style="background:var(--trf-heat-1);color:var(--trf-neutral-900)"><b>heat-1</b><i>12,22:1</i></div>
+<div class="b" style="background:var(--trf-heat-2);color:var(--trf-neutral-900)"><b>heat-2</b><i>9,97:1</i></div>
+<div class="b" style="background:var(--trf-heat-3);color:var(--trf-neutral-900)"><b>heat-3</b><i>7,16:1</i></div>
+<div class="b" style="background:var(--trf-heat-4);color:var(--trf-neutral-900)"><b>heat-4</b><i>4,93:1</i></div>
+<div class="b" style="background:var(--trf-heat-5);color:var(--trf-text-on-fill)"><b>heat-5</b><i>6,13:1</i></div>
+</div>
+<div class="lg"><span>Menos</span><span>Más</span></div>
+<p style="margin:12px 0 0;font-size:12px;line-height:1.55;color:var(--trf-text-secondary)">El color del texto sale del <strong>mismo índice</strong> que el fondo: <code>heat-1…4</code> llevan <code>--trf-text</code> y solo <code>heat-5</code> lleva blanco. Un umbral aparte dejaba texto blanco sobre <code>heat-3</code> (1,87:1). <code>heat-5</code> es <code>#a8410f</code>, oscurecido para admitir blanco.</p>
+</body></html>

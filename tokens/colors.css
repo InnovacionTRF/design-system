@@ -1,0 +1,162 @@
+/* Transfiriendo — Color tokens
+   Derived from the Manual de Marca Transfiriendo 2024 (§2.6 primary, §2.7 secondary,
+   §2.7.1 tertiary) and the MUI theme. Orange = action, never decoration. Gray carries
+   text. Semantic colors are drawn from the secondary/tertiary palettes, never external. */
+:root {
+  /* ---- Brand (primary · Manual §2.6) ---- */
+  --trf-orange: #fc7603;        /* PANTONE 1585 C · primary action, focus */
+  --trf-gray:   #565656;        /* PANTONE 425 C · primary text */
+
+  /* ---- Orange scale ---- */
+  --trf-orange-50:  #fff4ea;
+  --trf-orange-100: #ffd8a8;    /* Light Apricot */
+  --trf-orange-200: #ffab5c;    /* Light Orange */
+  --trf-orange-300: #fca03a;    /* Bright Orange */
+  --trf-orange-400: #ffa674;    /* Peach Orange */
+  --trf-orange-500: #fc7603;    /* brand */
+  --trf-orange-600: #ec663b;    /* Burnt Orange */
+  --trf-orange-700: #b3754e;    /* Copper Brown */
+  --trf-orange-text: #b04f00;   /* naranja legible como TEXTO sobre claro · 4,75:1 en el peor lienzo */
+
+  /* ---- Neutrals (secondary grays) ---- */
+  --trf-neutral-0:   #ffffff;
+  --trf-paper:       #f5f4f2;   /* beige cálido de marca, valor FIJO: lo usan los
+                                   artefactos impresos/presentados, que no siguen tema */
+  --trf-neutral-50:  #f7f7f7;
+  --trf-neutral-100: #e8e1dc;   /* Eggshell */
+  --trf-neutral-200: #d9d5cf;
+  --trf-neutral-300: #c4c4c4;
+  --trf-neutral-400: #8c8c8c;   /* Philippine Gray */
+  --trf-neutral-500: #878787;   /* Neutral Gray · PANTONE 424 C */
+  --trf-neutral-600: #7a7a7a;   /* Graystone */
+  --trf-neutral-700: #565656;   /* brand gray · PANTONE 425 C */
+  --trf-neutral-800: #4c4c4c;   /* Dark Gray */
+  --trf-neutral-900: #2f2f2f;   /* Charcoal Gray · PANTONE 419 C */
+
+  /* ---- Tertiary accents (Manual §2.7.1) ---- */
+  --trf-blue:       #0189cc;    /* Vivid Blue */
+  --trf-sky:        #38b6ff;    /* Sky Blue */
+  --trf-sage:       #87a37d;    /* Sage Green */
+  --trf-mint:       #9ad9b3;    /* Mint Green */
+  --trf-sandstone:  #c4af8f;    /* Sandstone */
+  --trf-copper:     #b3754e;    /* Copper Brown */
+  --trf-rose:       #d9b6ae;    /* Soft Rose */
+  --trf-coral:      #e8afa3;    /* Soft Coral */
+  --trf-lavender:   #b49eb7;    /* Lavender Gray */
+  --trf-lavender-blue: #a3a4c4; /* Lavender Blue */
+
+  /* ---- Semantic ---- */
+  /* Relleno / no textual (bordes, barras, iconos) — umbral 3:1 */
+  --trf-success: #87a37d;       /* Sage Green */
+  --trf-info:    #0189cc;       /* Vivid Blue */
+  --trf-warning: #fca03a;       /* Bright Orange */
+  --trf-danger:  #ec663b;       /* Burnt Orange */
+  /* Acción destructiva: fill de botón que admite texto blanco · 4,86:1 */
+  --trf-danger-action: #c34a24;
+  --trf-success-text-on-fill: #586f4f;  /* texto sobre el relleno del propio tono (4,84:1) */
+  --trf-success-text: #5c7553;
+  --trf-info-text:    #0169a0;
+  --trf-danger-text:  #bb4520;  /* 4,73:1 en el peor lienzo */
+
+  /* ============ SEMANTIC ALIASES (light) ============
+     Nítido es la dirección por defecto (ver tokens/themes.css): estos valores son
+     verbatim los de [data-direction="nitido"]. Material sigue disponible, ahora
+     de forma explícita, vía data-direction="material". */
+  --trf-bg:            #f4f4f3;  /* app canvas */
+  --trf-surface:       #ffffff;  /* card / paper */
+  --trf-surface-2:     #f7f7f6;  /* subtle raised */
+  --trf-surface-accent:#fff4ea;  /* soft orange fill */
+  --trf-border:        #e6e6e6;  /* hairline */
+  --trf-border-strong: #d9d9d9;
+  --trf-text:          #1a1a1a;  /* primary text */
+  --trf-text-secondary:#525252;  /* AA */
+  --trf-text-muted:    #6b6b6b;  /* AA · metadata, ejes, overlines */
+  --trf-text-disabled: #b0b0b0;  /* exento de AA: solo estado deshabilitado */
+  --trf-action:        #fc7603;  /* primary action */
+  /* Los botones rellenos NO cambian de fill en hover (ver Button.jsx): oscurecer el
+     naranja rompe AA con texto oscuro. Este queda para bordes y acentos de hover.
+     --trf-danger-hover se eliminó: se conservó «por si acaso» y ningún componente
+     llegó a usarlo. Un token sin consumidor ni propósito declarado es ruido. */
+  --trf-action-hover:  #ec663b;
+  --trf-focus-ring:    rgba(252,118,3,.12);
+
+  /* Controles y superficies auxiliares */
+  --trf-track-off:     #d4d4d4;  /* switch apagado */
+  --trf-fill-subtle:   #f2f2f2;  /* relleno neutro de badge/chip */
+  --trf-skeleton-base: #eeeeee;
+  --trf-skeleton-hi:   #f6f6f6;
+
+  /* Navegación oscura */
+  --trf-sidebar-bg: #1a1a1a;
+  --trf-sidebar-text: #8a8a8a;
+  --trf-sidebar-text-active: #ffffff;
+
+  /* Inverso (tooltips, toasts, barras oscuras) */
+  --trf-surface-inverse: #2f2f2f;
+  --trf-text-on-inverse: #ffffff;
+  --trf-text-on-inverse-2: #b8b8b8;
+  --trf-text-on-inverse-3: #8c8c8c;
+
+  /* Texto sobre un FILL de color (botón destructivo, badges sólidos).
+     NO voltea con el tema: el fill sigue siendo oscuro en modo oscuro.
+     Distinto de --trf-text-on-inverse, que sí voltea porque describe una SUPERFICIE. */
+  --trf-text-on-fill: #ffffff;
+
+  /* Scrim de overlay. UN solo valor para diálogos y para el drawer móvil; es el
+     que el readme documentaba y el que ConfirmDestructive ya usaba. Modal tenía
+     rgba(30,25,20,.45), que no salía de ningún token. */
+  --trf-scrim: rgba(47,47,47,.34);
+}
+
+/* ============ DARK THEME ============
+   Nítido oscuro: verbatim [data-direction="nitido"][data-theme="dark"]. */
+[data-theme="dark"] {
+  --trf-bg:            #141414;
+  --trf-surface:       #1e1e1e;
+  --trf-surface-2:     #282828;
+  --trf-surface-accent:rgba(252,118,3,.16);
+  --trf-border:        #2e2e2e;
+  --trf-border-strong: #383838;
+  --trf-text:          #fafafa;
+  --trf-text-secondary:#a8a8a8;
+  --trf-text-muted:    #9b9b9b;
+  --trf-text-disabled: #6e6e6e;
+  --trf-orange-text:   #ffab5c;
+  --trf-focus-ring:    rgba(252,118,3,.24);
+  /* En oscuro un velo gris medio no separa: el contenido de detrás ya es oscuro.
+     El scrim se hunde a negro para que el diálogo siga leyéndose como capa aparte. */
+  --trf-scrim: rgba(0,0,0,.62);
+
+  /* ---- Texto semántico: variantes claras de la paleta del manual ----
+     Verificados ≥4,5:1 contra los nueve fondos oscuros del sistema
+     (surface, bg y surface-2 de las tres direcciones; el peor es #302c27). */
+  --trf-success-text: #9ad9b3;
+  --trf-success-text-on-fill: #9ad9b3;  /* en oscuro el relleno oscurece: el mismo tono ya da 7,48:1 */  /* Mint Green · 8,37:1 */
+  --trf-info-text:    #38b6ff;  /* Sky Blue · 6,02:1 */
+  --trf-danger-text:  #e8afa3;  /* Soft Coral · 7,17:1 */
+
+  /* ---- Rellenos y controles ----
+     Translucido a propósito: se adapta al surface de cada dirección sin
+     necesidad de redeclararlo tres veces. */
+  --trf-fill-subtle: rgba(255,255,255,.07);
+  --trf-track-off:   #565656;
+
+  /* ---- Superficie inversa: en oscuro invierte DE VERDAD ----
+     Superficie clara con texto oscuro, para que Tooltip y las barras ancladas
+     sigan destacando sobre el fondo. */
+  --trf-surface-inverse:   #f2f2f2;
+  --trf-text-on-inverse:   #2f2f2f;
+  --trf-text-on-inverse-2: #565656;
+  --trf-text-on-inverse-3: #7a7a7a;
+
+  /* ---- Elevación: Nítido no lleva sombra de tarjeta/botón ni en claro ni en oscuro
+     (--trf-shadow-sm/--trf-shadow-accent van a "none"). Los universales xs/md/lg/hover,
+     reservados a overlays flotantes (Dialog, Popover), no cambian por dirección. ---- */
+  --trf-shadow-xs:        0 1px 2px rgba(0,0,0,.35);
+  --trf-shadow-sm:        none;
+  --trf-shadow-md:        0 4px 12px rgba(0,0,0,.45);
+  --trf-shadow-lg:        0 12px 32px rgba(0,0,0,.55);
+  --trf-shadow-accent:    none;
+  --trf-shadow-accent-lg: 0 6px 16px rgba(252,118,3,.45);
+  --trf-shadow-hover:     0 10px 30px -10px rgba(252,118,3,.35);
+}

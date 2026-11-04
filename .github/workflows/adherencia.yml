@@ -1,0 +1,95 @@
+name: Adherencia
+on: [push, pull_request]
+
+# El runner, la verificación de adherencia Y el build de CSS van INLINE aquí,
+# no como archivos .mjs del repositorio, porque el compilador del design
+# system empaqueta todo .mjs del árbol; un script con `import … from
+# "node:fs/promises"` (o un shebang) rompe esa transformación JSX aunque el
+# script nunca se ejecute en el navegador (avisado por check_design_system;
+# ocurrió de verdad con tools/build-css.mjs en la Fase 4 — se retiró por esto).
+# La lógica de las reglas SÍ vive en tools/checks.mjs porque es lógica pura,
+# sin imports de plataforma: no rompe nada al empaquetarse, y así el mismo
+# archivo alimenta este runner y la tarjeta Adherencia del navegador.
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Verificar que el bundle de CSS esté al día
+        run: |
+          cat > /tmp/build-css.mjs <<'EOF'
+          // Vive solo aquí, no en tools/, por la misma razón anotada arriba:
+          // node:fs/promises rompería el bundle del design system si este
+          // archivo estuviera en el árbol con extensión .mjs.
+          import { readFile, writeFile } from "node:fs/promises";
+          const manifest = await readFile("styles.css", "utf8");
+          const rutas = [...manifest.matchAll(/@import\s+url\('([^']+)'\)/g)].map((m) => m[1]);
+          const HEADER = `/* Generado a partir de styles.css. NO EDITAR A MANO.
+             Concatena, en orden, cada hoja que styles.css importa (fuentes por separado
+             siguen viviendo en sus propios archivos, listados abajo, por legibilidad).
+             Un consumidor que prefiera UNA sola petición enlaza este archivo en vez de
+             styles.css; el @import a Google Fonts sigue siendo responsabilidad del <link>
+             directo documentado en tokens/fonts.css — ver readme → Entrega de CSS. */
+          `;
+          const partes = [HEADER];
+          for (const r of rutas) partes.push(`\n/* ---- ${r} ---- */\n${await readFile(r, "utf8")}`);
+          const nuevo = partes.join("");
+          const actual = await readFile("dist/styles.bundle.css", "utf8").catch(() => "");
+          if (process.argv.includes("--check")) {
+            if (nuevo !== actual) { console.error("dist/styles.bundle.css desactualizado respecto a styles.css"); process.exit(1); }
+            console.log(`dist/styles.bundle.css al día (${rutas.length} hojas).`);
+          } else {
+            await writeFile("dist/styles.bundle.css", nuevo);
+            console.log(`Regenerado a partir de ${rutas.length} hojas.`);
+          }
+          EOF
+          node /tmp/build-css.mjs --check
+
+      - name: Verificar adherencia
+        run: |
+          cat > /tmp/verify.mjs <<'EOF'
+          import { readdirSync, readFileSync, statSync } from "node:fs";
+          import { join, relative, resolve } from "node:path";
+          import { pathToFileURL } from "node:url";
+
+          const RAIZ = process.cwd();
+          const { comprobar, informe } = await import(
+            pathToFileURL(resolve(RAIZ, "tools/checks.mjs")).href
+          );
+
+          // Solo se excluyen de LEERSE, no del inventario de rutas: si .github/ y
+          // tools/ no estuvieran en TODAS, la regla ruta-muerta marcaría como
+          // inexistente cualquier ruta documentada que apunte ahí.
+          const NO_ANALIZAR = new Set(["node_modules", ".git"]);
+          const NO_LEER_DIR = new Set([".github", "tools"]);
+          const NO_LEER = /^(uploads|assets)\//;
+          const EXT = /\.(jsx?|mjs|tsx?|css|html|md)$/;
+
+          const TODAS = [];
+          function recorrer(dir, out = {}) {
+            for (const n of readdirSync(dir)) {
+              if (NO_ANALIZAR.has(n)) continue;
+              const abs = join(dir, n);
+              const rel = relative(RAIZ, abs).split("\\").join("/");
+              if (statSync(abs).isDirectory()) { recorrer(abs, out); continue; }
+              TODAS.push(rel);
+              const enCarpetaExcluida = rel.split("/").some((s) => NO_LEER_DIR.has(s));
+              if (EXT.test(n) && !NO_LEER.test(rel) && !enCarpetaExcluida && !/support\.js$/.test(rel)) {
+                out[rel] = readFileSync(abs, "utf8");
+              }
+            }
+            return out;
+          }
+
+          const archivos = recorrer(RAIZ);
+          const { ok, texto } = informe(comprobar(archivos, TODAS));
+          console.log(`${Object.keys(archivos).length} archivos revisados de ${TODAS.length} rutas.`);
+          console.log(texto);
+          process.exit(ok ? 0 : 1);
+          EOF
+          node /tmp/verify.mjs

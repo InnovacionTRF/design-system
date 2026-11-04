@@ -1,0 +1,56 @@
+<!-- @dsCard group="8 · Gráficas" viewport="900x780" subtitle="línea · barras · dona · sparkline" name="Charts" -->
+<!doctype html><html><head><meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<style>
+  body{margin:0;font-family:var(--trf-font-sans);background:var(--trf-bg);color:var(--trf-text);padding:24px}
+  .card{background:var(--trf-surface);border:1px solid var(--trf-border);border-radius:var(--trf-radius-lg);padding:20px}
+  .t{font-size:14px;font-weight:700;margin:0 0 2px}
+  .s{font-size:12px;color:var(--trf-text-secondary);margin:0 0 14px}
+  .grid{display:grid;grid-template-columns:1.6fr 1fr;gap:16px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+</style>
+</head><body><div id="root"></div>
+<script src="../../_ds_bundle.js"></script>
+<script>Object.assign(window, window.TransfiriendoDesignSystem_0ece16);</script>
+<script>
+  const UNITS=[
+    {name:'Salud',color:'var(--trf-series-1)',primary:true,vals:[820,910,880,1010,1120,1240]},
+    {name:'Facturación',color:'var(--trf-series-2)',vals:[640,700,760,720,810,890]},
+    {name:'Seguros',color:'var(--trf-series-3)',vals:[1450,1520,1600,1710,1820,2105]},
+    {name:'Cobranzas',color:'var(--trf-series-4)',vals:[520,480,500,430,460,430]},
+  ];
+  const MONTHS=['Ene','Feb','Mar','Abr','May','Jun'];
+  const MONTHS_F=['Enero','Febrero','Marzo','Abril','Mayo','Junio'];
+  const june=UNITS.map(u=>({name:u.name,val:u.vals[5],color:u.color}));
+  const h=React.createElement;
+  function App(){
+    return h('div',null,
+      h('div',{className:'grid'},
+        h('div',{className:'card'},
+          h('p',{className:'t'},'Volumen por unidad'),
+          h('p',{className:'s'},'Miles de operaciones · ene–jun 2026'),
+          h(LineChart,{series:UNITS,labels:MONTHS,months:MONTHS_F,yMax:2200,label:'Volumen mensual de operaciones por unidad, enero a junio de 2026'})),
+        h('div',{className:'card'},
+          h('p',{className:'t'},'Composición'),
+          h('p',{className:'s'},'Junio · por unidad'),
+          h(DonutChart,{label:'Composición del volumen de junio por unidad de negocio',data:june}))),
+      h('div',{className:'row2'},
+        h('div',{className:'card'},
+          h('p',{className:'t'},'Comparativa de junio'),
+          h('p',{className:'s'},'Operaciones por unidad'),
+          h(BarChart,{label:'Volumen de junio comparado entre las cuatro unidades',data:june,yMax:2400})),
+        h('div',{className:'card',style:{display:'flex',alignItems:'center',justifyContent:'space-between',gap:16}},
+          h('div',null,
+            h('p',{style:{fontSize:10,textTransform:'uppercase',letterSpacing:'.07em',color:'var(--trf-text-muted)',margin:'0 0 4px'}},'Horas ahorradas'),
+            h('p',{style:{fontSize:26,fontWeight:700,letterSpacing:'-0.02em',margin:0,fontVariantNumeric:'tabular-nums'}},'1.840'),
+            h('p',{style:{fontSize:11,fontWeight:600,color:'var(--trf-success-text)',margin:'3px 0 0'}},'↑ 14,1%')),
+          h(Sparkline,{label:'Tendencia de horas ahorradas en los últimos doce meses',vals:[1210,1290,1250,1360,1440,1400,1520,1610,1580,1700,1780,1840]}))));
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(h(App));
+</script>
+</body></html>

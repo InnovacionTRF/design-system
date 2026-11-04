@@ -1,0 +1,1720 @@
+/* Generado a partir de styles.css. NO EDITAR A MANO — regenerar corriendo el
+   script de build inline en .github/workflows/adherencia.yml (ese script no
+   vive como .mjs propio en el árbol: node:fs/promises rompería el empaquetado
+   del design system, ver esa nota en el workflow).
+   Concatena, en orden, cada hoja que styles.css importa (fuentes por separado
+   siguen viviendo en sus propios archivos, listados abajo, por legibilidad).
+   Un consumidor que prefiera UNA sola petición enlaza este archivo en vez de
+   styles.css; el @import a Google Fonts sigue siendo responsabilidad del <link>
+   directo documentado en tokens/fonts.css — ver readme → Entrega de CSS. */
+
+/* ---- tokens/fonts.css ---- */
+/* Transfiriendo — Webfonts
+   ============================================================
+   Poppins (Light 300 / Regular 400 / Medium 500 / SemiBold 600) — tipografía
+   de MARCA (Manual §4.2), acotada desde la Fase 4 a Display/H1/H2/H3 y cifras
+   destacadas. IBM Plex Sans (400/500/600) — tipografía de INTERFAZ, añadida en
+   la Fase 4 para todo lo que se lee denso: tablas, formularios, badges,
+   metadatos. JetBrains Mono para IDs, códigos y métricas. Las tipografías del
+   logo (Neue Kaya Serif, Garet Book) NO se envían: el wordmark se usa como
+   imagen. Ver readme → VISUAL FOUNDATIONS.
+
+   ESTE ARCHIVO NO CARGA LAS FUENTES. Antes de esta revisión tenía un @import
+   a la hoja de Google como RESPALDO, para que enlazar solo styles.css bastara.
+   Se retiró a propósito (Fase 3, T7): un @import anidado no se descubre hasta
+   que su padre se ha descargado y parseado, así que ese respaldo era él mismo
+   el nivel más caro de la cadena —exactamente lo que esta tarea existía para
+   eliminar—, incluso cuando nunca se ejecutaba porque el <link> directo ya
+   había resuelto la fuente antes.
+
+   CONTRATO ACTUAL: enlazar SOLO styles.css ya no garantiza Poppins/JetBrains
+   Mono — sí garantiza todos los tokens y la hoja de componentes. Para la
+   tipografía, el consumidor debe copiar estas tres líneas en su <head>, ANTES
+   de styles.css para que arranquen en paralelo:
+
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+
+   Todas las páginas de este proyecto (tarjetas, guías, plantillas) ya las traen.
+   Sin ellas, el texto cae al stack de reserva de --trf-font-brand/--trf-font-sans/
+   --trf-font-mono (system-ui, sans-serif / monospace) — legible, pero no la
+   tipografía de marca ni la de interfaz.
+
+   Por qué no se autohospedan los .woff2 en su lugar, que evitaría esta
+   disyuntiva por completo: Google negocia el formato según el navegador y
+   sirve URLs distintas para woff2 y para ttf; fijar una URL de gstatic en el
+   código rompe esa negociación. Autohospedar bien exige descargar los
+   binarios y versionarlos en `assets/fonts/`, que es una decisión de
+   infraestructura —y de tener los archivos reales—, no de CSS. Sigue anotado
+   como pendiente en el readme.
+
+   Las familias se referencian siempre por token: --trf-font-brand, --trf-font-sans,
+   --trf-font-mono (tokens/typography.css). */
+
+/* ---- tokens/colors.css ---- */
+/* Transfiriendo — Color tokens
+   Derived from the Manual de Marca Transfiriendo 2024 (§2.6 primary, §2.7 secondary,
+   §2.7.1 tertiary) and the MUI theme. Orange = action, never decoration. Gray carries
+   text. Semantic colors are drawn from the secondary/tertiary palettes, never external. */
+:root {
+  /* ---- Brand (primary · Manual §2.6) ---- */
+  --trf-orange: #fc7603;        /* PANTONE 1585 C · primary action, focus */
+  --trf-gray:   #565656;        /* PANTONE 425 C · primary text */
+
+  /* ---- Orange scale ---- */
+  --trf-orange-50:  #fff4ea;
+  --trf-orange-100: #ffd8a8;    /* Light Apricot */
+  --trf-orange-200: #ffab5c;    /* Light Orange */
+  --trf-orange-300: #fca03a;    /* Bright Orange */
+  --trf-orange-400: #ffa674;    /* Peach Orange */
+  --trf-orange-500: #fc7603;    /* brand */
+  --trf-orange-600: #ec663b;    /* Burnt Orange */
+  --trf-orange-700: #b3754e;    /* Copper Brown */
+  --trf-orange-text: #b04f00;   /* naranja legible como TEXTO sobre claro · 4,75:1 en el peor lienzo */
+
+  /* ---- Neutrals (secondary grays) ---- */
+  --trf-neutral-0:   #ffffff;
+  --trf-paper:       #f5f4f2;   /* beige cálido de marca, valor FIJO: lo usan los
+                                   artefactos impresos/presentados, que no siguen tema */
+  --trf-neutral-50:  #f7f7f7;
+  --trf-neutral-100: #e8e1dc;   /* Eggshell */
+  --trf-neutral-200: #d9d5cf;
+  --trf-neutral-300: #c4c4c4;
+  --trf-neutral-400: #8c8c8c;   /* Philippine Gray */
+  --trf-neutral-500: #878787;   /* Neutral Gray · PANTONE 424 C */
+  --trf-neutral-600: #7a7a7a;   /* Graystone */
+  --trf-neutral-700: #565656;   /* brand gray · PANTONE 425 C */
+  --trf-neutral-800: #4c4c4c;   /* Dark Gray */
+  --trf-neutral-900: #2f2f2f;   /* Charcoal Gray · PANTONE 419 C */
+
+  /* ---- Tertiary accents (Manual §2.7.1) ---- */
+  --trf-blue:       #0189cc;    /* Vivid Blue */
+  --trf-sky:        #38b6ff;    /* Sky Blue */
+  --trf-sage:       #87a37d;    /* Sage Green */
+  --trf-mint:       #9ad9b3;    /* Mint Green */
+  --trf-sandstone:  #c4af8f;    /* Sandstone */
+  --trf-copper:     #b3754e;    /* Copper Brown */
+  --trf-rose:       #d9b6ae;    /* Soft Rose */
+  --trf-coral:      #e8afa3;    /* Soft Coral */
+  --trf-lavender:   #b49eb7;    /* Lavender Gray */
+  --trf-lavender-blue: #a3a4c4; /* Lavender Blue */
+
+  /* ---- Semantic ---- */
+  /* Relleno / no textual (bordes, barras, iconos) — umbral 3:1 */
+  --trf-success: #87a37d;       /* Sage Green */
+  --trf-info:    #0189cc;       /* Vivid Blue */
+  --trf-warning: #fca03a;       /* Bright Orange */
+  --trf-danger:  #ec663b;       /* Burnt Orange */
+  /* Acción destructiva: fill de botón que admite texto blanco · 4,86:1 */
+  --trf-danger-action: #c34a24;
+  --trf-success-text-on-fill: #586f4f;  /* texto sobre el relleno del propio tono (4,84:1) */
+  --trf-success-text: #5c7553;
+  --trf-info-text:    #0169a0;
+  --trf-danger-text:  #bb4520;  /* 4,73:1 en el peor lienzo */
+
+  /* ============ SEMANTIC ALIASES (light) ============ */
+  --trf-bg:            #f5f4f2;  /* app canvas */
+  --trf-surface:       #ffffff;  /* card / paper */
+  --trf-surface-2:     #fafafa;  /* subtle raised */
+  --trf-surface-accent:#fff4ea;  /* soft orange fill */
+  --trf-border:        #e0ded9;  /* hairline */
+  --trf-border-strong: #c4c4c4;
+  --trf-text:          #2f2f2f;  /* primary text */
+  --trf-text-secondary:#565656;  /* AA · gris de marca PANTONE 425 C */
+  --trf-text-muted:    #6d6d6d;  /* AA · metadata, ejes, overlines */
+  --trf-text-disabled: #b0b0b0;  /* exento de AA: solo estado deshabilitado */
+  --trf-action:        #fc7603;  /* primary action */
+  /* Los botones rellenos NO cambian de fill en hover (ver Button.jsx): oscurecer el
+     naranja rompe AA con texto oscuro. Este queda para bordes y acentos de hover.
+     --trf-danger-hover se eliminó: se conservó «por si acaso» y ningún componente
+     llegó a usarlo. Un token sin consumidor ni propósito declarado es ruido. */
+  --trf-action-hover:  #ec663b;
+  --trf-focus-ring:    rgba(252,118,3,.12);
+
+  /* Controles y superficies auxiliares */
+  --trf-track-off:     #d4d4d4;  /* switch apagado */
+  --trf-fill-subtle:   #f2f2f2;  /* relleno neutro de badge/chip */
+  --trf-skeleton-base: #f0f0f0;
+  --trf-skeleton-hi:   #f8f8f8;
+
+  /* Navegación oscura */
+  --trf-sidebar-bg: #2f2f2f;
+  --trf-sidebar-text: #9a9a9a;
+  --trf-sidebar-text-active: #ffffff;
+
+  /* Inverso (tooltips, toasts, barras oscuras) */
+  --trf-surface-inverse: #2f2f2f;
+  --trf-text-on-inverse: #ffffff;
+  --trf-text-on-inverse-2: #b8b8b8;
+  --trf-text-on-inverse-3: #8c8c8c;
+
+  /* Texto sobre un FILL de color (botón destructivo, badges sólidos).
+     NO voltea con el tema: el fill sigue siendo oscuro en modo oscuro.
+     Distinto de --trf-text-on-inverse, que sí voltea porque describe una SUPERFICIE. */
+  --trf-text-on-fill: #ffffff;
+
+  /* Scrim de overlay. UN solo valor para diálogos y para el drawer móvil; es el
+     que el readme documentaba y el que ConfirmDestructive ya usaba. Modal tenía
+     rgba(30,25,20,.45), que no salía de ningún token. */
+  --trf-scrim: rgba(47,47,47,.34);
+}
+
+/* ============ DARK THEME ============ */
+[data-theme="dark"] {
+  --trf-bg:            #191919;
+  --trf-surface:       #242424;
+  --trf-surface-2:     #2e2e2e;
+  --trf-surface-accent:rgba(252,118,3,.16);
+  --trf-border:        #333333;
+  --trf-border-strong: #4c4c4c;
+  --trf-text:          #f2f2f2;
+  --trf-text-secondary:#b8b8b8;
+  --trf-text-muted:    #a0a0a0;
+  --trf-text-disabled: #6e6e6e;
+  --trf-orange-text:   #ffab5c;
+  --trf-focus-ring:    rgba(252,118,3,.24);
+  /* En oscuro un velo gris medio no separa: el contenido de detrás ya es oscuro.
+     El scrim se hunde a negro para que el diálogo siga leyéndose como capa aparte. */
+  --trf-scrim: rgba(0,0,0,.62);
+
+  /* ---- Texto semántico: variantes claras de la paleta del manual ----
+     Verificados ≥4,5:1 contra los nueve fondos oscuros del sistema
+     (surface, bg y surface-2 de las tres direcciones; el peor es #302c27). */
+  --trf-success-text: #9ad9b3;
+  --trf-success-text-on-fill: #9ad9b3;  /* en oscuro el relleno oscurece: el mismo tono ya da 7,48:1 */  /* Mint Green · 8,37:1 */
+  --trf-info-text:    #38b6ff;  /* Sky Blue · 6,02:1 */
+  --trf-danger-text:  #e8afa3;  /* Soft Coral · 7,17:1 */
+
+  /* ---- Rellenos y controles ----
+     Translucido a propósito: se adapta al surface de cada dirección sin
+     necesidad de redeclararlo tres veces. */
+  --trf-fill-subtle: rgba(255,255,255,.07);
+  --trf-track-off:   #565656;
+
+  /* ---- Superficie inversa: en oscuro invierte DE VERDAD ----
+     Superficie clara con texto oscuro, para que Tooltip y las barras ancladas
+     sigan destacando sobre el fondo. */
+  --trf-surface-inverse:   #f2f2f2;
+  --trf-text-on-inverse:   #2f2f2f;
+  --trf-text-on-inverse-2: #565656;
+  --trf-text-on-inverse-3: #7a7a7a;
+
+  /* ---- Elevación: los tintes sobre rgba(47,47,47,…) son invisibles en oscuro.
+     themes.css cubre --trf-shadow-sm y --trf-shadow-accent por dirección; el resto va aquí. */
+  --trf-shadow-xs:        0 1px 2px rgba(0,0,0,.35);
+  --trf-shadow-sm:        0 2px 8px rgba(0,0,0,.4);
+  --trf-shadow-md:        0 4px 12px rgba(0,0,0,.45);
+  --trf-shadow-lg:        0 12px 32px rgba(0,0,0,.55);
+  --trf-shadow-accent:    0 2px 10px rgba(252,118,3,.35);
+  --trf-shadow-accent-lg: 0 6px 16px rgba(252,118,3,.45);
+  --trf-shadow-hover:     0 10px 30px -10px rgba(252,118,3,.35);
+}
+
+/* ---- tokens/typography.css ---- */
+/* Transfiriendo — Typography tokens
+   Fase 4: sistema tipográfico de dos niveles (ver readme → VISUAL FOUNDATIONS → Type).
+   Poppins queda para Display/H1/H2/H3 y momentos de marca (Manual §4.2, acotado —
+   no revertido — a esos momentos). IBM Plex Sans es la fuente de interfaz: todo lo
+   demás, porque casi todo el sistema ya escribe `font-family: var(--trf-font-sans)`
+   sin saber qué hay detrás. JetBrains Mono para IDs, códigos y métricas.
+   Neue Kaya Serif + Garet Book son solo del logo (Manual §2.3), no se usan en UI. */
+:root {
+  --trf-font-brand: 'Poppins', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --trf-font-sans:  'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --trf-font-mono:  'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  /* Weights */
+  --trf-fw-light: 300;      /* @kind font */
+  --trf-fw-regular: 400;    /* @kind font */
+  --trf-fw-medium: 500;     /* @kind font */
+  --trf-fw-semibold: 600;   /* @kind font */
+
+  /* Type scale (px) */
+  --trf-text-display: 40px;   /* screen titles */
+  --trf-text-h1: 34px;
+  --trf-text-h2: 28px;
+  --trf-text-h3: 22px;        /* section / card heads */
+  --trf-text-h4: 19px;
+  --trf-text-lg: 17px;        /* Fase 4: era 16 — 1,07 con base, plano */
+  --trf-text-base: 15px;      /* body */
+  --trf-text-sm: 13px;        /* Fase 4: era 14 — 1,07 con base, plano */
+  --trf-text-xs: 12px;        /* labels · Fase 4: era 13 — 1,08 con sm, plano */
+  --trf-text-2xs: 11px;       /* overline / metadata */
+
+  /* Line heights */
+  --trf-leading-tight: 1.15;
+  --trf-leading-snug: 1.35;
+  --trf-leading-normal: 1.55;
+  --trf-leading-relaxed: 1.65;
+
+  /* Letter spacing */
+  --trf-tracking-display: -0.03em;
+  --trf-tracking-heading: -0.01em;
+  --trf-tracking-normal: 0;
+  --trf-tracking-label: 0.04em;
+  --trf-tracking-over: 0.08em;   /* uppercase overline */
+}
+
+/* ---- tokens/spacing.css ---- */
+/* Transfiriendo — Spacing, radius & layout tokens. Base-4 scale; no loose values. */
+:root {
+  --trf-space-1: 4px;
+  --trf-space-2: 8px;
+  --trf-space-3: 12px;
+  --trf-space-4: 16px;
+  --trf-space-5: 20px;
+  --trf-space-6: 24px;
+  --trf-space-8: 32px;
+  --trf-space-10: 40px;
+  --trf-space-12: 48px;
+  --trf-space-16: 64px;
+
+  /* Radios. La base equivale a la dirección Material (la de defecto): sm y md
+     comparten 8px, igual que radiusSm/ctrl en la tabla `themes` de la fuente.
+     Las otras direcciones los redefinen en tokens/themes.css. */
+  --trf-radius-sm: 8px;
+  --trf-radius-md: 8px;   /* control */
+  --trf-radius-lg: 12px;  /* contenedor */
+  --trf-radius-xl: 16px;
+  --trf-radius-full: 9999px;
+
+  /* Control heights */
+  --trf-control-sm: 32px;
+  --trf-control-md: 40px;
+  --trf-control-lg: 48px;
+}
+
+/* ---- tokens/motion.css ---- */
+/* Transfiriendo — Motion tokens.
+   One curve for everything: fast start, soft stop. Nothing moves longer than 400ms.
+   Movement confirms that something happened; if it confirms nothing, it is removed. */
+:root {
+  --trf-ease: cubic-bezier(.32,.72,0,1);               /* @kind other */
+  --trf-motion-instant: 100ms ease-out;                /* @kind other */
+  --trf-motion-fast: 180ms cubic-bezier(.32,.72,0,1);  /* @kind other */
+  --trf-motion-base: 260ms cubic-bezier(.32,.72,0,1);  /* @kind other */
+  --trf-motion-slow: 400ms cubic-bezier(.32,.72,0,1);  /* @kind other */
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}
+
+/* ---- tokens/animation.css ---- */
+/* Transfiriendo — Animaciones.
+   ÚNICO sitio donde viven los @keyframes del sistema. Antes cada componente
+   inyectaba un <style> propio (o los referenciaba sin definirlos: el spinner y el
+   skeleton estaban congelados para cualquiera que solo enlazara styles.css).
+
+   Nombres en kebab-case, prefijo trf-. Duraciones y curva salen de tokens/motion.css.
+   El bloque prefers-reduced-motion de motion.css neutraliza todo esto. */
+
+/* Spinner del estado loading de Button. */
+@keyframes trf-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Barrido del Skeleton. */
+@keyframes trf-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Entrada de página / de contenido: 12px de subida + fade.
+   Una sola dirección — nunca desde los lados, nunca con escala. */
+@keyframes trf-rise {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Velo de fondo (Sidebar drawer en móvil). */
+@keyframes trf-fade-in {
+  from { opacity: 0 }
+  to   { opacity: 1 }
+}
+
+/* Entrada de diálogo (Modal, ConfirmDestructive). */
+@keyframes trf-dialog-in {
+  from { opacity: 0; transform: translateY(8px) scale(.97); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Entrada de toast: se desliza desde el borde derecho. */
+@keyframes trf-toast-in {
+  from { opacity: 0; transform: translateX(24px) scale(.96); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Barra anclada al pie (UnsavedBar) y toast de deshacer (UndoToast):
+   suben desde abajo, la misma dirección que trf-rise. */
+@keyframes trf-dock-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---- tokens/elevation.css ---- */
+/* Transfiriendo — Elevation. Shadows are soft and low; a card only lifts if clickable.
+   Hover lift = translateY(-1px..-4px) + a faint orange-tinted halo. */
+:root {
+  --trf-shadow-xs: 0 1px 2px rgba(47,47,47,.06);
+  --trf-shadow-sm: 0 1px 3px rgba(47,47,47,.09);
+  --trf-shadow-md: 0 4px 12px rgba(47,47,47,.10);
+  --trf-shadow-lg: 0 12px 32px rgba(47,47,47,.12);
+  --trf-shadow-accent: 0 2px 6px rgba(252,118,3,.30);      /* primary button rest */
+  --trf-shadow-accent-lg: 0 6px 16px rgba(252,118,3,.40);  /* primary button hover */
+  --trf-shadow-hover: 0 10px 30px -10px rgba(252,118,3,.22); /* card hover halo */
+}
+
+/* ---- tokens/themes.css ---- */
+/* Transfiriendo — Direcciones visuales.
+   Valores tomados VERBATIM de la tabla `themes` del proyecto fuente
+   «Sistema de diseño Transfiriendo» (Transfiriendo Sistema.dc.html):
+   dirección `a` = Material, `b` = Cálido, `c` = Nítido.
+
+   El sistema es una búsqueda 2-D: dirección × modo → un juego COMPLETO de
+   tokens. La dirección no cambia solo la forma: también ajusta fondos,
+   superficies, texto y bordes. Lo único invariante es el naranja de marca.
+
+   Desviaciones de la fuente: solo --trf-text-secondary y --trf-text-muted, que
+   venían por debajo de WCAG AA. Ver las notas junto a cada token.
+
+     <html data-direction="nitido" data-theme="dark">
+
+   ANIDAMIENTO. Cada bloque oscuro se declara con DOS selectores:
+
+     [data-direction="D"][data-theme="dark"],                     /* ambos en el mismo nodo */
+     [data-theme="dark"] [data-direction="D"]:not([data-theme]),   /* dirección anidada bajo tema oscuro */
+     [data-direction="D"] [data-theme="dark"]:not([data-direction]) /* tema oscuro anidado bajo una dirección */
+
+   Sin el segundo, un <div data-direction="calido"> dentro de <html data-theme="dark">
+   hacía match solo con el bloque CLARO y el panel revertía a claro.
+
+   Sin el tercero, el caso inverso daba un híbrido que no es ninguna de las seis
+   combinaciones: un <div data-theme="dark"> dentro de una página Cálida tomaba el
+   COLOR de Material (del bloque base [data-theme="dark"], que solo declara color)
+   y la FORMA de Cálido, que seguía cayendo por herencia. Ahora resuelve a Cálido oscuro.
+
+   Los :not() dejan que un descendiente que declare lo propio lo gane. Especificidad
+   0,3,0 frente al 0,1,0 del bloque claro, así que gana sin !important.
+
+   Material es la dirección por defecto: sus valores claros son los de
+   tokens/colors.css, y su modo oscuro es el de [data-theme="dark"]. */
+
+/* ============ MATERIAL · claro ============
+   Superficie blanca sobre lienzo cálido; la sombra separa los planos. */
+[data-direction="material"] {
+  --trf-bg: #f5f4f2;
+  --trf-surface: #ffffff;
+  --trf-surface-2: #fafafa;
+  --trf-text: #2f2f2f;
+  --trf-text-secondary: #565656;
+  --trf-text-muted: #6d6d6d;
+  --trf-border: #eceae7;
+  --trf-border-strong: #e0ded9;
+  --trf-radius-lg: 12px;
+  --trf-radius-md: 8px;
+  --trf-radius-sm: 8px;
+  --trf-shadow-sm: 0 1px 3px rgba(47,47,47,.09);
+  --trf-shadow-accent: 0 2px 6px rgba(252,118,3,.3);
+  --trf-surface-accent: #fff4ea;
+  --trf-orange-text: #b04f00;
+  --trf-skeleton-base: #f0f0f0;
+  --trf-skeleton-hi: #f8f8f8;
+  --trf-sidebar-bg: #2f2f2f;
+  --trf-sidebar-text: #9a9a9a;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ============ MATERIAL · oscuro ============ */
+[data-direction="material"][data-theme="dark"],
+[data-theme="dark"] [data-direction="material"]:not([data-theme]),
+[data-direction="material"] [data-theme="dark"]:not([data-direction]) {
+  --trf-bg: #191919;
+  --trf-surface: #242424;
+  --trf-surface-2: #2e2e2e;
+  --trf-text: #f2f2f2;
+  --trf-text-secondary: #b8b8b8;
+  --trf-text-muted: #a0a0a0;
+  --trf-border: #333333;
+  --trf-border-strong: #3a3a3a;
+  --trf-radius-lg: 12px;
+  --trf-radius-md: 8px;
+  --trf-radius-sm: 8px;
+  --trf-shadow-sm: 0 2px 8px rgba(0,0,0,.4);
+  --trf-shadow-accent: 0 2px 10px rgba(252,118,3,.35);
+  --trf-surface-accent: rgba(252,118,3,.16);
+  --trf-orange-text: #ffab5c;
+  --trf-skeleton-base: #2a2a2a;
+  --trf-skeleton-hi: #333333;
+  --trf-sidebar-bg: #0f0f0f;
+  --trf-sidebar-text: #8a8a8a;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ============ CÁLIDO · claro ============
+   Neutros arena y radios generosos; el control es una cápsula (999px).
+   Sin elevación: la calidez y el aire hacen la separación, no la sombra. */
+[data-direction="calido"] {
+  --trf-bg: #faf8f5;
+  --trf-surface: #ffffff;
+  --trf-surface-2: #f6f2ec;
+  --trf-text: #2f2f2f;
+  --trf-text-secondary: #6b6051; /* Corregido por contraste: la fuente trae #97887a (3,4:1, bajo AA). Mismo matiz tierra. */
+  --trf-text-muted: #776b5c;      /* Corregido: la fuente trae #b0a290 (2,5:1). 4,66:1 incl. surface-accent. */
+  --trf-border: #eee7de;
+  --trf-border-strong: #e2d9cd;
+  --trf-radius-lg: 16px;
+  --trf-radius-md: 999px;
+  --trf-radius-sm: 12px;
+  --trf-shadow-sm: none;
+  --trf-shadow-accent: none;
+  --trf-surface-accent: #fff4ea;
+  --trf-orange-text: #b04f00;
+  --trf-skeleton-base: #f1ece5;
+  --trf-skeleton-hi: #f8f4ee;
+  --trf-sidebar-bg: #3a332c;
+  --trf-sidebar-text: #a99b89;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ============ CÁLIDO · oscuro ============ */
+[data-direction="calido"][data-theme="dark"],
+[data-theme="dark"] [data-direction="calido"]:not([data-theme]),
+[data-direction="calido"] [data-theme="dark"]:not([data-direction]) {
+  --trf-bg: #1c1a17;
+  --trf-surface: #26231f;
+  --trf-surface-2: #302c27;
+  --trf-text: #f2ede6;
+  --trf-text-secondary: #b6a793;
+  --trf-text-muted: #aca093;
+  --trf-border: #332f28;
+  --trf-border-strong: #3d382f;
+  --trf-radius-lg: 16px;
+  --trf-radius-md: 999px;
+  --trf-radius-sm: 12px;
+  --trf-shadow-sm: none;
+  --trf-shadow-accent: none;
+  --trf-surface-accent: rgba(252,118,3,.16);
+  --trf-orange-text: #ffab5c;
+  --trf-skeleton-base: #2c2822;
+  --trf-skeleton-hi: #35302a;
+  --trf-sidebar-bg: #100e0c;
+  --trf-sidebar-text: #8a7f70;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ============ NÍTIDO · claro ============
+   Radio plano de 6px en todo (card, control y detalle), sin elevación:
+   la jerarquía la carga la línea. Neutros más fríos y texto más contrastado. */
+[data-direction="nitido"] {
+  --trf-bg: #f4f4f3;
+  --trf-surface: #ffffff;
+  --trf-surface-2: #f7f7f6;
+  --trf-text: #1a1a1a;
+  --trf-text-secondary: #525252;
+  --trf-text-muted: #6b6b6b;
+  --trf-border: #e6e6e6;
+  --trf-border-strong: #d9d9d9;
+  --trf-radius-lg: 6px;
+  --trf-radius-md: 6px;
+  --trf-radius-sm: 6px;
+  --trf-shadow-sm: none;
+  --trf-shadow-accent: none;
+  --trf-surface-accent: #fff4ea;
+  --trf-orange-text: #b04f00;
+  --trf-skeleton-base: #eeeeee;
+  --trf-skeleton-hi: #f6f6f6;
+  --trf-sidebar-bg: #1a1a1a;
+  --trf-sidebar-text: #8a8a8a;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ============ NÍTIDO · oscuro ============ */
+[data-direction="nitido"][data-theme="dark"],
+[data-theme="dark"] [data-direction="nitido"]:not([data-theme]),
+[data-direction="nitido"] [data-theme="dark"]:not([data-direction]) {
+  --trf-bg: #141414;
+  --trf-surface: #1e1e1e;
+  --trf-surface-2: #282828;
+  --trf-text: #fafafa;
+  --trf-text-secondary: #a8a8a8;
+  --trf-text-muted: #9b9b9b;
+  --trf-border: #2e2e2e;
+  --trf-border-strong: #383838;
+  --trf-radius-lg: 6px;
+  --trf-radius-md: 6px;
+  --trf-radius-sm: 6px;
+  --trf-shadow-sm: none;
+  --trf-shadow-accent: none;
+  --trf-surface-accent: rgba(252,118,3,.16);
+  --trf-orange-text: #ffab5c;
+  --trf-skeleton-base: #242424;
+  --trf-skeleton-hi: #2d2d2d;
+  --trf-sidebar-bg: #000000;
+  --trf-sidebar-text: #7a7a7a;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ---- tokens/dataviz.css ---- */
+/* Transfiriendo — Tokens de visualización de datos.
+   Orden de serie FIJO: el naranja de marca se reserva SIEMPRE a la serie
+   principal; el resto sale de las paletas 2ª/3ª del manual. La escala de calor
+   va de crema a naranja quemado — nunca un degradado arcoíris. */
+:root {
+  /* Orden de serie (categórico) */
+  --trf-series-1: #fc7603;  /* serie principal · naranja de marca */
+  --trf-series-2: #0189cc;  /* Vivid Blue */
+  --trf-series-3: #87a37d;  /* Sage Green */
+  --trf-series-4: #fca03a;  /* Bright Orange */
+  --trf-series-5: #b49eb7;  /* Lavender Gray */
+  --trf-series-6: #c4af8f;  /* Sandstone */
+  --trf-series-7: #38b6ff;  /* Sky Blue */
+  --trf-series-8: #8c8c8c;  /* Philippine Gray */
+
+  /* Escala secuencial (mapas de calor, embudos) — de menos a más */
+  --trf-heat-1: #fdf3e9;
+  --trf-heat-2: #ffd8a8;
+  --trf-heat-3: #ffab5c;
+  --trf-heat-4: #fc7603;
+  --trf-heat-5: #a8410f;
+  /* Emparejamiento de texto, derivado del MISMO índice de bucket que el fondo.
+     Los tokens de texto son FIJOS, no temáticos: esta rampa es paleta de DATOS
+     y no tiene —ni debe tener— variante oscura, así que un token que voltee
+     encima suyo se rompe en modo oscuro. Con --trf-text las cinco celdas caían
+     por debajo de 2,5:1; los ratios de abajo valen en los dos temas.
+       heat-1..heat-4 → --trf-neutral-900: 12,22 / 9,97 / 7,16 / 4,93:1
+       heat-5         → --trf-text-on-fill (blanco): 6,13:1
+     heat-5 se oscureció desde #ec663b, que no admitía ningún color de texto a 11px
+     (blanco 3,22 · oscuro 4,16). La rampa sigue siendo monótona crema → naranja quemado. */
+
+}
+
+/* Cromo de gráfica. En selector universal, no en :root: la indirección var() se
+   sustituye donde se DECLARA, así que en :root quedarían congelados y no seguirían
+   ni al tema ni a la dirección. --trf-axis rotula TEXTO (11px), de modo que reusa el
+   token de texto muted (4,71:1 en claro · 5,12:1 en oscuro) en vez del #a0a0a0
+   anterior, que daba 2,61:1. */
+*, ::before, ::after {
+  /* DOS tokens, no uno. --trf-axis servía a la vez para la LÍNEA del eje
+     (componente de UI: umbral 3:1) y para su ETIQUETA (texto de 11px: umbral
+     4,5:1). Un solo nombre para dos umbrales invita a usar el valor flojo en
+     el texto, que es exactamente el fallo que tuvo: #a0a0a0 daba 2,61:1. */
+  --trf-axis-line: var(--trf-border-strong);
+  --trf-axis-label: var(--trf-text-muted);
+  /* Alias retrocompatible. Apunta a la ETIQUETA, que es el umbral más exigente:
+     si alguien lo usa para una línea, la línea sale más oscura de lo necesario,
+     que es el error inocuo. Al revés no lo sería. */
+  --trf-axis: var(--trf-axis-label);
+  --trf-grid: var(--trf-border);
+}
+
+/* ---- css/base.css ---- */
+/* Transfiriendo — Base de componentes.
+   Convención del sistema (la misma en los ~40 componentes):
+     · una clase de bloque por componente: .trf-btn, .trf-card, .trf-alert…
+     · las variantes y los estados viajan en atributos data-*, no en clases
+       concatenadas: [data-variant], [data-tone], [data-size], [data-hover].
+       Salen directos de los props de React sin construir strings de className.
+     · los sub-elementos usan __: .trf-switch__thumb
+   Ninguna transición usa `all`: las propiedades se enumeran siempre. */
+
+/* ---- Anillo de foco unificado ----
+   :focus-visible y no :focus: el anillo aparece con teclado y no con ratón.
+   Antes solo Input tenía anillo, y lo disparaba con onFocus de React, o sea
+   también al hacer clic — justo lo que :focus-visible existe para evitar. */
+.trf-focusable:focus-visible,
+.trf-btn:focus-visible,
+.trf-tab:focus-visible,
+.trf-switch__track:focus-visible,
+.trf-card[data-hover]:focus-visible {
+  outline: 2px solid var(--trf-action);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--trf-focus-ring);
+}
+/* Sobre superficie oscura el naranja se sostiene, pero el halo necesita más cuerpo. */
+[data-theme="dark"] .trf-focusable:focus-visible,
+[data-theme="dark"] .trf-btn:focus-visible,
+[data-theme="dark"] .trf-tab:focus-visible,
+[data-theme="dark"] .trf-switch__track:focus-visible {
+  box-shadow: 0 0 0 4px rgba(252,118,3,.32);
+}
+/* La navegación lateral es oscura incluso en modo claro: el anillo se aclara
+   para no perderse contra --trf-sidebar-bg. */
+.trf-sidebar .trf-focusable:focus-visible {
+  outline-color: var(--trf-orange-200);
+  box-shadow: 0 0 0 4px rgba(252,118,3,.32);
+}
+
+/* El foco nunca queda tapado por un hermano posterior. */
+.trf-btn:focus-visible,
+.trf-tab:focus-visible,
+.trf-focusable:focus-visible { position: relative; z-index: 1; }
+
+/* Solo para lectores de pantalla: mantiene el nombre accesible cuando la
+   etiqueta visible se oculta (Sidebar colapsada). */
+.trf-sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ---- css/core.css ---- */
+/* Transfiriendo — components/core.
+   Estilos de Button, Input, Card, Badge, Alert, Tabs, Switch y Skeleton.
+   Tamaños de fuente y espaciado vienen de tokens; nada cableado. */
+
+/* ============ Button ============ */
+.trf-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--trf-space-2);
+  font-family: var(--trf-font-sans); font-weight: var(--trf-fw-semibold); line-height: 1;
+  white-space: nowrap; border-radius: var(--trf-radius-md); cursor: pointer;
+  border: 1px solid transparent;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast),
+              border-color var(--trf-motion-fast), box-shadow var(--trf-motion-fast),
+              transform var(--trf-motion-fast);
+}
+.trf-btn[data-size="sm"] { height: var(--trf-control-sm); padding: 0 var(--trf-space-3); font-size: var(--trf-text-xs); }
+.trf-btn[data-size="md"] { height: var(--trf-control-md); padding: 0 var(--trf-space-4); font-size: var(--trf-text-sm); }
+.trf-btn[data-size="lg"] { height: var(--trf-control-lg); padding: 0 var(--trf-space-6); font-size: var(--trf-text-base); }
+.trf-btn[data-full] { width: 100%; }
+
+/* Rellenos: el fill NO cambia en hover. Oscurecer el naranja rompe AA con texto
+   oscuro (#ec663b da 4,16:1), así que el hover se expresa con elevación y subida. */
+.trf-btn[data-variant="primary"] {
+  background: var(--trf-action); color: var(--trf-neutral-900); box-shadow: var(--trf-shadow-accent);
+}
+.trf-btn[data-variant="primary"]:hover:not(:disabled) { box-shadow: var(--trf-shadow-accent-lg); transform: translateY(-1px); }
+.trf-btn[data-variant="danger"] {
+  background: var(--trf-danger-action); color: var(--trf-text-on-fill); box-shadow: var(--trf-shadow-sm);
+}
+.trf-btn[data-variant="danger"]:hover:not(:disabled) { box-shadow: var(--trf-shadow-md); transform: translateY(-1px); }
+
+/* Sin relleno: estos sí se tiñen, y el tinte usa el token de TEXTO. */
+.trf-btn[data-variant="secondary"] {
+  background: var(--trf-surface); color: var(--trf-text-secondary); border-color: var(--trf-border);
+}
+.trf-btn[data-variant="secondary"]:hover:not(:disabled) {
+  border-color: var(--trf-action); color: var(--trf-orange-text); transform: translateY(-1px);
+}
+.trf-btn[data-variant="ghost"] { background: transparent; color: var(--trf-text-secondary); }
+.trf-btn[data-variant="ghost"]:hover:not(:disabled) {
+  background: var(--trf-surface-accent); color: var(--trf-orange-text);
+}
+
+.trf-btn:active:not(:disabled) { transform: scale(.97); }
+.trf-btn:disabled { opacity: .4; cursor: not-allowed; }
+.trf-btn[aria-busy="true"] { cursor: progress; }
+
+.trf-btn__spinner {
+  width: 15px; height: 15px; border-radius: var(--trf-radius-full);
+  border: 2px solid currentColor; border-top-color: transparent; opacity: .75;
+  display: inline-block; animation: trf-spin .7s linear infinite;
+}
+
+/* ============ Input ============ */
+.trf-field { display: block; font-family: var(--trf-font-sans); }
+.trf-field__label {
+  display: block; margin-bottom: var(--trf-space-2);
+  font-size: var(--trf-text-xs); font-weight: var(--trf-fw-medium); color: var(--trf-text-secondary);
+}
+.trf-field__wrap { position: relative; display: block; }
+.trf-field__icon {
+  position: absolute; left: var(--trf-space-3); top: 50%; transform: translateY(-50%);
+  display: inline-flex; pointer-events: none; color: var(--trf-text-muted);
+  transition: color var(--trf-motion-fast);
+}
+/* :focus-within en el envoltorio sustituye al estado onFocus de React. */
+.trf-field__wrap:focus-within .trf-field__icon { color: var(--trf-action); }
+
+.trf-input {
+  width: 100%; height: var(--trf-control-md); box-sizing: border-box;
+  padding: 0 var(--trf-space-3);
+  font-family: var(--trf-font-sans); font-size: var(--trf-text-sm); color: var(--trf-text);
+  background: var(--trf-surface); border: 1px solid var(--trf-border);
+  border-radius: var(--trf-radius-md); outline: none;
+  transition: border-color var(--trf-motion-fast), box-shadow var(--trf-motion-fast);
+}
+.trf-input[data-with-icon] { padding-left: var(--trf-space-8); }
+.trf-input:hover:not(:focus) { border-color: var(--trf-border-strong); }
+.trf-input:focus-visible { border-color: var(--trf-action); box-shadow: 0 0 0 4px var(--trf-focus-ring); }
+.trf-input[aria-invalid="true"] { border-color: var(--trf-danger); }
+.trf-input:disabled { opacity: .55; cursor: not-allowed; }
+
+.trf-field__hint {
+  display: block; margin-top: var(--trf-space-2);
+  font-size: var(--trf-text-xs); color: var(--trf-text-muted);
+}
+.trf-field__hint[data-error] { color: var(--trf-danger-text); }
+
+/* ============ Card ============ */
+.trf-card {
+  background: var(--trf-surface); border: 1px solid var(--trf-border);
+  border-radius: var(--trf-radius-lg); box-shadow: var(--trf-shadow-sm);
+  box-sizing: border-box; font-family: var(--trf-font-sans); color: var(--trf-text);
+  transition: box-shadow var(--trf-motion-base), border-color var(--trf-motion-base),
+              transform var(--trf-motion-base);
+}
+.trf-card[data-accent] { background: var(--trf-surface-accent); border-color: rgba(252,118,3,.28); }
+/* Solo eleva si es clicable. */
+.trf-card[data-hover] { cursor: pointer; }
+.trf-card[data-hover]:hover,
+.trf-card[data-hover]:focus-visible {
+  box-shadow: var(--trf-shadow-hover); border-color: rgba(252,118,3,.28); transform: translateY(-4px);
+}
+
+/* ============ Badge ============ */
+/* El relleno neutral vive en la BASE, no en [data-tone="neutral"]: así un tono
+   desconocido degrada a neutral en vez de renderizar sin fondo ni color, que es
+   como se cuela un fallo silencioso. Mismo patrón que .trf-tl__dot. */
+.trf-badge {
+  display: inline-flex; align-items: center; gap: var(--trf-space-2);
+  padding: var(--trf-space-1) var(--trf-space-3);
+  border-radius: var(--trf-radius-full);
+  font-family: var(--trf-font-sans); font-size: var(--trf-text-2xs);
+  font-weight: var(--trf-fw-semibold); line-height: 1.4; letter-spacing: .02em;
+  background: var(--trf-fill-subtle); color: var(--trf-text-secondary);
+}
+.trf-badge[data-tone="neutral"] { background: var(--trf-fill-subtle); color: var(--trf-text-secondary); }
+/* Relleno translúcido, NO un escalón del ramp. El ramp naranja es paleta de marca
+   fija: --trf-orange-50 (#fff4ea) no tiene ni debe tener variante oscura, así que
+   usarlo como superficie temática dejaba este badge en 1,73:1 en modo oscuro.
+   Con rgba se compone sobre el surface de cada tema, igual que los otros cinco tonos. */
+.trf-badge[data-tone="orange"]  { background: rgba(252,118,3,.12); color: var(--trf-orange-text); box-shadow: inset 0 0 0 1px rgba(252,118,3,.30); }
+/* El relleno del Badge sube la luminancia del fondo, así que el tono de texto que
+   pasa sobre superficie (5,52:1) se queda corto AQUÍ. --trf-success-text-on-fill
+   es un escalón más oscuro, solo para texto sobre el relleno propio del tono. */
+.trf-badge[data-tone="success"] { background: rgba(135,163,125,.15); color: var(--trf-success-text-on-fill); box-shadow: inset 0 0 0 1px rgba(135,163,125,.30); }
+.trf-badge[data-tone="info"]    { background: rgba(1,137,204,.10); color: var(--trf-info-text); box-shadow: inset 0 0 0 1px rgba(1,137,204,.25); }
+.trf-badge[data-tone="warning"] { background: rgba(252,160,58,.14); color: var(--trf-orange-text); box-shadow: inset 0 0 0 1px rgba(252,160,58,.42); }
+.trf-badge[data-tone="danger"]  { background: rgba(236,102,59,.10); color: var(--trf-danger-text); box-shadow: inset 0 0 0 1px rgba(236,102,59,.25); }
+.trf-badge__dot { width: 6px; height: 6px; border-radius: var(--trf-radius-full); background: currentColor; }
+
+/* ============ Alert ============ */
+/* Borde COMPLETO de 1px en el tono semántico, no una barra lateral gruesa.
+   Un acento de color en un solo borde de >1px es un anti-patrón: el tono queda
+   colgado de un canto y el resto del contorno no pertenece a nadie. Con el borde
+   entero, el relleno y el ícono, el tono se lee por tres vías coherentes. */
+.trf-alert {
+  display: flex; gap: var(--trf-space-3); padding: var(--trf-space-4);
+  border-radius: var(--trf-radius-lg); font-family: var(--trf-font-sans);
+  border: 1px solid var(--trf-info);
+}
+.trf-alert[data-tone="info"]    { background: rgba(1,137,204,.06);   border-color: rgba(1,137,204,.38); }
+.trf-alert[data-tone="success"] { background: rgba(135,163,125,.08); border-color: rgba(135,163,125,.45); }
+.trf-alert[data-tone="warning"] { background: rgba(252,160,58,.08);  border-color: rgba(252,160,58,.48); }
+.trf-alert[data-tone="danger"]  { background: rgba(236,102,59,.06);  border-color: rgba(236,102,59,.40); }
+.trf-alert__icon { flex-shrink: 0; margin-top: 1px; display: inline-flex; }
+.trf-alert[data-tone="info"]    .trf-alert__icon { color: var(--trf-info); }
+.trf-alert[data-tone="success"] .trf-alert__icon { color: var(--trf-success); }
+.trf-alert[data-tone="warning"] .trf-alert__icon { color: var(--trf-warning); }
+.trf-alert[data-tone="danger"]  .trf-alert__icon { color: var(--trf-danger); }
+.trf-alert__title { margin: 0; font-size: var(--trf-text-sm); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-alert__body { margin: 0; font-size: var(--trf-text-xs); line-height: var(--trf-leading-normal); color: var(--trf-text-secondary); }
+.trf-alert__title + .trf-alert__body { margin-top: 2px; }
+
+/* ============ Tabs ============ */
+.trf-tabs {
+  position: relative; display: flex; gap: var(--trf-space-1);
+  border-bottom: 1px solid var(--trf-border); font-family: var(--trf-font-sans);
+}
+.trf-tab {
+  position: relative; padding: var(--trf-space-2) var(--trf-space-4);
+  border: none; background: transparent; font-family: inherit;
+  font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); cursor: pointer;
+  color: var(--trf-text-muted);
+  border-top-left-radius: var(--trf-radius-md); border-top-right-radius: var(--trf-radius-md);
+  transition: color var(--trf-motion-fast), background-color var(--trf-motion-fast);
+}
+.trf-tab:hover { color: var(--trf-text-secondary); }
+.trf-tab[aria-selected="true"] { color: var(--trf-orange-text); }
+.trf-tabs__bar {
+  position: absolute; bottom: -1px; height: 2px; border-radius: 2px;
+  background: var(--trf-action);
+  transition: left var(--trf-motion-base), width var(--trf-motion-base);
+}
+
+/* ============ Switch ============ */
+.trf-switch {
+  display: inline-flex; align-items: center; gap: var(--trf-space-3);
+  font-family: var(--trf-font-sans);
+}
+.trf-switch[data-disabled] { opacity: .5; }
+.trf-switch__track {
+  position: relative; width: 44px; height: 24px; flex-shrink: 0; padding: 0;
+  border: none; border-radius: var(--trf-radius-full); cursor: pointer;
+  background: var(--trf-track-off);
+  transition: background-color var(--trf-motion-fast);
+}
+.trf-switch__track[aria-checked="true"] { background: var(--trf-action); }
+.trf-switch__track:disabled { cursor: not-allowed; }
+.trf-switch__thumb {
+  position: absolute; top: 4px; left: 4px; width: 16px; height: 16px;
+  border-radius: var(--trf-radius-full); background: var(--trf-neutral-0);
+  box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  transition: transform var(--trf-motion-fast);
+}
+.trf-switch__track[aria-checked="true"] .trf-switch__thumb { transform: translateX(20px); }
+.trf-switch__label { font-size: var(--trf-text-sm); color: var(--trf-text-secondary); cursor: pointer; }
+.trf-switch[data-disabled] .trf-switch__label { cursor: not-allowed; }
+
+/* ============ Skeleton ============ */
+.trf-skeleton {
+  display: block; border-radius: var(--trf-radius-sm);
+  background: linear-gradient(90deg, var(--trf-skeleton-base), var(--trf-skeleton-hi), var(--trf-skeleton-base));
+  background-size: 200% 100%;
+  animation: trf-shimmer 1.4s ease-in-out infinite;
+}
+
+/* ============ Dialog (primitiva) ============
+   Un solo overlay y un solo contenedor para TODOS los diálogos. Antes Modal y
+   ConfirmDestructive traían cada uno los suyos y divergían: scrim rgba(30,25,20,.45)
+   con blur(3px) frente a rgba(47,47,47,.34) sin blur, y ninguno de los dos
+   tokenizado.
+
+   Sin backdrop-filter: el readme reserva el blur a cabeceras sticky, y sobre el
+   área completa de la ventana es el efecto más caro que existe — repinta en cada
+   scroll del contenido de detrás. El scrim solo ya separa las capas. */
+.trf-dialog__overlay {
+  position: fixed; inset: 0; z-index: 100;
+  display: grid; place-items: center;
+  padding: var(--trf-space-6);
+  background: var(--trf-scrim);
+}
+.trf-dialog {
+  position: relative; max-width: 100%;
+  border-radius: var(--trf-radius-lg); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-lg); overflow: hidden;
+  font-family: var(--trf-font-sans); color: var(--trf-text);
+  animation: trf-dialog-in var(--trf-motion-base) both;
+}
+
+/* ---- css/library.css ---- */
+/* Transfiriendo — components/library.
+   Misma convención que css/core.css: clase de bloque + data-* para variantes,
+   `__` para sub-elementos, transiciones enumeradas, tokens --trf-* directos. */
+
+/* ============ Chip ============ */
+.trf-chip {
+  display: inline-flex; align-items: center; gap: var(--trf-space-2);
+  height: 36px; padding: 0 var(--trf-space-4);
+  border-radius: var(--trf-radius-full);
+  font-family: var(--trf-font-sans); font-size: var(--trf-text-xs);
+  font-weight: var(--trf-fw-semibold); cursor: pointer;
+  background: var(--trf-surface); color: var(--trf-text-secondary);
+  border: 1px solid var(--trf-border-strong);
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast),
+              border-color var(--trf-motion-fast);
+}
+.trf-chip:hover { border-color: var(--trf-action); color: var(--trf-orange-text); }
+.trf-chip[aria-pressed="true"] {
+  background: var(--trf-action); color: var(--trf-neutral-900); border-color: var(--trf-action);
+}
+.trf-chip[aria-pressed="true"]:hover { color: var(--trf-neutral-900); }
+.trf-chip__check { font-size: var(--trf-text-2xs); }
+
+/* ============ Breadcrumbs ============ */
+.trf-crumbs {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--trf-space-2);
+  font-family: var(--trf-font-sans);
+}
+.trf-crumbs__item { display: inline-flex; align-items: center; gap: var(--trf-space-2); }
+.trf-crumbs__sep { color: var(--trf-text-muted); font-size: var(--trf-text-2xs); }
+.trf-crumbs__link {
+  display: inline-flex; align-items: center; min-height: 24px; padding: 0 2px;
+  font-size: var(--trf-text-xs); font-weight: var(--trf-fw-medium);
+  color: var(--trf-text-secondary); text-decoration: none;
+  border-radius: var(--trf-radius-sm);
+  transition: color var(--trf-motion-fast);
+}
+.trf-crumbs__link:hover { color: var(--trf-orange-text); text-decoration: underline; }
+.trf-crumbs__current {
+  display: inline-flex; align-items: center; min-height: 24px;
+  font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); color: var(--trf-text);
+}
+
+/* ============ Stepper ============ */
+.trf-stepper { display: flex; align-items: flex-start; font-family: var(--trf-font-sans); }
+.trf-stepper__step { display: flex; align-items: center; flex: 1; }
+.trf-stepper__step[data-last] { flex: 0 0 auto; }
+.trf-stepper__col { display: flex; flex-direction: column; align-items: center; gap: var(--trf-space-2); flex-shrink: 0; }
+.trf-stepper__dot {
+  width: 32px; height: 32px; border-radius: var(--trf-radius-full);
+  display: grid; place-items: center;
+  font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold);
+  background: var(--trf-surface); color: var(--trf-text-muted);
+  border: 2px solid var(--trf-border-strong);
+  transition: background-color var(--trf-motion-base), color var(--trf-motion-base),
+              border-color var(--trf-motion-base);
+}
+.trf-stepper__dot[data-on] {
+  background: var(--trf-action); color: var(--trf-neutral-900); border-color: var(--trf-action);
+}
+.trf-stepper__label {
+  font-size: var(--trf-text-xs); font-weight: var(--trf-fw-medium);
+  color: var(--trf-text-secondary); white-space: nowrap;
+}
+.trf-stepper__label[data-active] { font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-stepper__line {
+  flex: 1; height: 2px; margin: 0 var(--trf-space-2) var(--trf-space-6);
+  background: var(--trf-border-strong);
+  transition: background-color var(--trf-motion-base);
+}
+.trf-stepper__line[data-on] { background: var(--trf-action); }
+
+/* ============ Tooltip ============ */
+.trf-tip { position: relative; display: inline-flex; }
+.trf-tip__bubble {
+  position: absolute; z-index: 20; max-width: 260px;
+  padding: var(--trf-space-2) var(--trf-space-3);
+  border-radius: var(--trf-radius-sm);
+  background: var(--trf-surface-inverse); color: var(--trf-text-on-inverse);
+  font-family: var(--trf-font-sans); font-size: var(--trf-text-2xs);
+  font-weight: var(--trf-fw-medium); line-height: var(--trf-leading-snug);
+  box-shadow: var(--trf-shadow-md); pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--trf-motion-fast), transform var(--trf-motion-fast);
+}
+.trf-tip__bubble[data-open] { opacity: 1; }
+/* Cuatro posiciones. El desplazamiento de entrada va contra la posición. */
+.trf-tip__bubble[data-placement="top"]    { left: 50%; bottom: calc(100% + var(--trf-space-2)); transform: translateX(-50%) translateY(4px); }
+.trf-tip__bubble[data-placement="bottom"] { left: 50%; top: calc(100% + var(--trf-space-2)); transform: translateX(-50%) translateY(-4px); }
+.trf-tip__bubble[data-placement="left"]   { right: calc(100% + var(--trf-space-2)); top: 50%; transform: translateY(-50%) translateX(4px); }
+.trf-tip__bubble[data-placement="right"]  { left: calc(100% + var(--trf-space-2)); top: 50%; transform: translateY(-50%) translateX(-4px); }
+.trf-tip__bubble[data-placement="top"][data-open],
+.trf-tip__bubble[data-placement="bottom"][data-open] { transform: translateX(-50%); }
+.trf-tip__bubble[data-placement="left"][data-open],
+.trf-tip__bubble[data-placement="right"][data-open]  { transform: translateY(-50%); }
+
+/* ============ Pagination ============ */
+.trf-pager {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: var(--trf-space-4); font-family: var(--trf-font-sans);
+}
+.trf-pager__info { font-size: var(--trf-text-xs); color: var(--trf-text-secondary); }
+.trf-pager__list { display: flex; align-items: center; gap: var(--trf-space-2); }
+.trf-pager__btn {
+  min-width: var(--trf-control-md); height: var(--trf-control-md); padding: 0 var(--trf-space-2);
+  display: grid; place-items: center;
+  border: 1px solid var(--trf-border-strong); border-radius: var(--trf-radius-md);
+  background: var(--trf-surface); color: var(--trf-text-secondary);
+  font-family: inherit; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-medium);
+  cursor: pointer;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast),
+              border-color var(--trf-motion-fast);
+}
+.trf-pager__btn:hover:not(:disabled):not([aria-current]) {
+  border-color: var(--trf-action); color: var(--trf-orange-text);
+}
+.trf-pager__btn[aria-current="page"] {
+  background: var(--trf-action); color: var(--trf-neutral-900);
+  border-color: var(--trf-action); font-weight: var(--trf-fw-semibold);
+}
+.trf-pager__btn:disabled { opacity: .4; cursor: not-allowed; }
+.trf-pager__gap { min-width: 20px; text-align: center; color: var(--trf-text-muted); }
+
+/* ============ Timeline ============ */
+.trf-tl { display: flex; flex-direction: column; font-family: var(--trf-font-sans); }
+.trf-tl__row { display: grid; grid-template-columns: 28px 1fr; gap: var(--trf-space-4); }
+.trf-tl__rail { display: flex; flex-direction: column; align-items: center; }
+.trf-tl__dot {
+  width: 26px; height: 26px; flex-shrink: 0; display: grid; place-items: center;
+  border-radius: var(--trf-radius-full);
+  font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold);
+  background: var(--trf-fill-subtle); color: var(--trf-text-muted);
+}
+.trf-tl__dot[data-tone="accent"]  { background: var(--trf-surface-accent); color: var(--trf-orange-text); }
+.trf-tl__dot[data-tone="success"] { background: rgba(135,163,125,.16); color: var(--trf-success-text); }
+.trf-tl__dot[data-tone="info"]    { background: rgba(1,137,204,.12); color: var(--trf-info-text); }
+.trf-tl__dot[data-tone="warning"] { background: rgba(252,160,58,.14); color: var(--trf-orange-text); }
+.trf-tl__dot[data-tone="danger"]  { background: rgba(236,102,59,.12); color: var(--trf-danger-text); }
+.trf-tl__line { flex: 1; width: 2px; min-height: 18px; background: var(--trf-border); margin-top: var(--trf-space-1); }
+.trf-tl__body { padding-bottom: var(--trf-space-5); min-width: 0; }
+.trf-tl__body[data-last] { padding-bottom: 0; }
+.trf-tl__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--trf-space-3); flex-wrap: wrap; }
+.trf-tl__title { margin: 0; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-tl__time { font-family: var(--trf-font-mono); font-size: var(--trf-text-2xs); color: var(--trf-text-muted); flex-shrink: 0; }
+.trf-tl__text { margin: 3px 0 0; font-size: var(--trf-text-xs); line-height: var(--trf-leading-normal); color: var(--trf-text-secondary); }
+.trf-tl__author { margin: var(--trf-space-1) 0 0; font-size: var(--trf-text-2xs); color: var(--trf-text-muted); }
+
+/* ============ StatCard ============ */
+.trf-stat {
+  border-radius: var(--trf-radius-lg); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-sm);
+  padding: var(--trf-space-4); font-family: var(--trf-font-sans);
+  transition: box-shadow var(--trf-motion-base), border-color var(--trf-motion-base),
+              transform var(--trf-motion-base);
+}
+.trf-stat[data-interactive] { cursor: pointer; }
+.trf-stat[data-interactive]:hover,
+.trf-stat[data-interactive]:focus-visible {
+  box-shadow: var(--trf-shadow-hover); border-color: rgba(252,118,3,.28); transform: translateY(-4px);
+}
+.trf-stat__label {
+  margin: 0 0 var(--trf-space-2); font-size: var(--trf-text-2xs);
+  text-transform: uppercase; letter-spacing: var(--trf-tracking-over); color: var(--trf-text-muted);
+}
+.trf-stat__row { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--trf-space-3); }
+.trf-stat__value {
+  margin: 0; font-family: var(--trf-font-brand); font-size: var(--trf-text-h2); font-weight: var(--trf-fw-semibold);
+  letter-spacing: var(--trf-tracking-display); color: var(--trf-text); font-variant-numeric: tabular-nums;
+}
+.trf-stat__unit { font-size: var(--trf-text-base); font-weight: var(--trf-fw-semibold); color: var(--trf-text-muted); margin-left: 3px; }
+.trf-stat__delta { margin: var(--trf-space-1) 0 0; font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold); }
+.trf-stat__delta[data-sense="good"]    { color: var(--trf-success-text); }
+.trf-stat__delta[data-sense="bad"]     { color: var(--trf-danger-text); }
+.trf-stat__delta[data-sense="neutral"] { color: var(--trf-text-muted); }
+
+/* ============ Menú flotante compartido ============
+   Select, Combobox, DatePicker y DateRangePicker comparten disparador y panel.
+   Un solo bloque en vez de cuatro copias. */
+.trf-pop { position: relative; }
+.trf-trigger {
+  width: 100%; height: var(--trf-control-lg); padding: 0 var(--trf-space-4);
+  display: flex; align-items: center; justify-content: space-between; gap: var(--trf-space-2);
+  border: 1px solid var(--trf-border-strong); border-radius: var(--trf-radius-md);
+  background: var(--trf-surface); font-family: var(--trf-font-sans);
+  font-size: var(--trf-text-sm); font-weight: var(--trf-fw-medium);
+  color: var(--trf-text); cursor: pointer; outline: none;
+  transition: border-color var(--trf-motion-fast), box-shadow var(--trf-motion-fast);
+}
+.trf-trigger:hover { border-color: var(--trf-border-strong); }
+.trf-trigger[aria-expanded="true"] { border-color: var(--trf-action); }
+.trf-trigger[data-placeholder] { color: var(--trf-text-muted); }
+.trf-trigger__caret {
+  color: var(--trf-text-muted); font-size: var(--trf-text-2xs); flex-shrink: 0;
+  transition: transform var(--trf-motion-base);
+}
+.trf-trigger[aria-expanded="true"] .trf-trigger__caret { transform: rotate(180deg); }
+
+.trf-menu {
+  position: absolute; top: calc(100% + var(--trf-space-2)); left: 0; right: 0; z-index: 10;
+  padding: var(--trf-space-2);
+  border-radius: var(--trf-radius-sm); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-lg);
+  transform-origin: top;
+  animation: trf-dialog-in var(--trf-motion-base) both;
+}
+.trf-menu[hidden] { display: none; }
+.trf-option {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: var(--trf-space-2); padding: var(--trf-space-2) var(--trf-space-3);
+  border: none; border-radius: var(--trf-radius-md); background: transparent;
+  font-family: var(--trf-font-sans); font-size: var(--trf-text-xs);
+  font-weight: var(--trf-fw-medium); color: var(--trf-text);
+  cursor: pointer; text-align: left;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast);
+}
+.trf-option:hover, .trf-option[data-active] { background: var(--trf-fill-subtle); }
+.trf-option[aria-selected="true"] {
+  background: var(--trf-surface-accent); color: var(--trf-orange-text); font-weight: var(--trf-fw-semibold);
+}
+.trf-option__check { font-size: var(--trf-text-2xs); }
+.trf-menu__empty { padding: var(--trf-space-3); font-size: var(--trf-text-xs); color: var(--trf-text-muted); }
+
+/* ============ Popover ============ */
+.trf-popover { position: relative; display: inline-block; }
+.trf-popover__trigger {
+  display: inline-flex; align-items: center; min-height: 24px;
+  border-radius: var(--trf-radius-md); cursor: pointer;
+}
+.trf-popover__panel {
+  position: absolute; top: calc(100% + var(--trf-space-3)); left: 0; z-index: 14;
+  padding: var(--trf-space-4);
+  border-radius: var(--trf-radius-sm); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-lg);
+  transform-origin: top left;
+  animation: trf-dialog-in var(--trf-motion-fast) both;
+}
+.trf-popover__panel[hidden] { display: none; }
+.trf-popover__arrow {
+  position: absolute; top: -6px; left: 22px; width: 11px; height: 11px;
+  background: var(--trf-surface);
+  border-left: 1px solid var(--trf-border); border-top: 1px solid var(--trf-border);
+  transform: rotate(45deg);
+}
+
+/* ============ Accordion ============ */
+.trf-acc {
+  border: 1px solid var(--trf-border); border-radius: var(--trf-radius-lg);
+  background: var(--trf-surface); overflow: hidden; font-family: var(--trf-font-sans);
+}
+.trf-acc__item { border-bottom: 1px solid var(--trf-border); }
+.trf-acc__item[data-last] { border-bottom: none; }
+.trf-acc__head {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: var(--trf-space-3); padding: var(--trf-space-4);
+  border: none; background: transparent; font-family: inherit;
+  font-size: var(--trf-text-sm); font-weight: var(--trf-fw-semibold); color: var(--trf-text);
+  cursor: pointer; text-align: left;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast);
+}
+.trf-acc__head[aria-expanded="true"] { background: var(--trf-surface-accent); color: var(--trf-orange-text); }
+.trf-acc__caret {
+  flex-shrink: 0; color: var(--trf-text-muted); font-size: var(--trf-text-2xs);
+  transition: transform var(--trf-motion-base);
+}
+.trf-acc__head[aria-expanded="true"] .trf-acc__caret { transform: rotate(180deg); color: var(--trf-orange-text); }
+.trf-acc__panel {
+  display: grid; grid-template-rows: 0fr;
+  transition: grid-template-rows var(--trf-motion-base);
+}
+.trf-acc__panel[data-open] { grid-template-rows: 1fr; }
+.trf-acc__clip { overflow: hidden; }
+.trf-acc__body {
+  margin: 0; padding: 0 var(--trf-space-4) var(--trf-space-4);
+  font-size: var(--trf-text-xs); line-height: var(--trf-leading-relaxed); color: var(--trf-text-secondary);
+}
+
+/* ============ Combobox ============ */
+.trf-combo__icon {
+  position: absolute; left: var(--trf-space-3); top: 50%; transform: translateY(-50%);
+  color: var(--trf-text-muted); font-size: var(--trf-text-sm); pointer-events: none;
+}
+.trf-combo__field {
+  width: 100%; height: var(--trf-control-lg); box-sizing: border-box;
+  padding: 0 var(--trf-space-4) 0 var(--trf-space-8);
+  border: 1px solid var(--trf-border-strong); border-radius: var(--trf-radius-md);
+  background: var(--trf-surface); font-family: var(--trf-font-sans);
+  font-size: var(--trf-text-sm); font-weight: var(--trf-fw-medium);
+  color: var(--trf-text); outline: none;
+  transition: border-color var(--trf-motion-fast), box-shadow var(--trf-motion-fast);
+}
+.trf-combo__field[aria-expanded="true"] { border-color: var(--trf-action); }
+.trf-menu[data-scroll] { max-height: 208px; overflow-y: auto; }
+
+/* ============ FileUpload ============ */
+.trf-upload { display: flex; flex-direction: column; gap: var(--trf-space-4); font-family: var(--trf-font-sans); }
+.trf-upload__zone {
+  display: flex; flex-direction: column; align-items: center; gap: var(--trf-space-2);
+  padding: var(--trf-space-8);
+  border: 2px dashed var(--trf-border-strong); border-radius: var(--trf-radius-lg);
+  background: transparent; cursor: pointer; text-align: center;
+  transition: border-color var(--trf-motion-base), background-color var(--trf-motion-base);
+}
+.trf-upload__zone[data-drag] { border-color: var(--trf-action); background: var(--trf-surface-accent); }
+.trf-upload__glyph {
+  width: 48px; height: 48px; display: grid; place-items: center;
+  border-radius: var(--trf-radius-full);
+  background: var(--trf-surface-accent); color: var(--trf-orange-text); font-size: var(--trf-text-h4);
+}
+.trf-upload__cta { margin: var(--trf-space-1) 0 0; font-size: var(--trf-text-sm); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-upload__cta em { font-style: normal; color: var(--trf-orange-text); }
+.trf-upload__hint { margin: 0; font-size: var(--trf-text-xs); color: var(--trf-text-muted); }
+.trf-upload__list { display: flex; flex-direction: column; gap: var(--trf-space-3); }
+.trf-upload__row {
+  display: flex; align-items: center; gap: var(--trf-space-3);
+  padding: var(--trf-space-3) var(--trf-space-4);
+  border: 1px solid var(--trf-border); border-radius: var(--trf-radius-md);
+  background: var(--trf-surface);
+}
+.trf-upload__ext {
+  width: 36px; height: 36px; flex-shrink: 0; display: grid; place-items: center;
+  border-radius: var(--trf-radius-md); background: var(--trf-surface-2);
+  color: var(--trf-text-secondary); font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold);
+}
+.trf-upload__meta { flex: 1; min-width: 0; }
+.trf-upload__head { display: flex; align-items: baseline; justify-content: space-between; gap: var(--trf-space-3); margin-bottom: var(--trf-space-2); }
+.trf-upload__name { font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); color: var(--trf-text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trf-upload__pct { font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold); flex-shrink: 0; color: var(--trf-orange-text); }
+.trf-upload__pct[data-done] { color: var(--trf-success-text); }
+.trf-upload__track { height: 5px; border-radius: var(--trf-radius-full); background: var(--trf-surface-2); overflow: hidden; }
+.trf-upload__fill {
+  height: 100%; border-radius: var(--trf-radius-full); background: var(--trf-action);
+  transition: width var(--trf-motion-base);
+}
+.trf-upload__fill[data-done] { background: var(--trf-success); }
+.trf-upload__size { font-size: var(--trf-text-2xs); color: var(--trf-text-muted); flex-shrink: 0; font-variant-numeric: tabular-nums; }
+/* 28×28 mínimo: WCAG 2.2 SC 2.5.8 pide 24×24 como piso duro. */
+.trf-upload__x {
+  width: 28px; height: 28px; flex-shrink: 0; display: grid; place-items: center;
+  border: none; border-radius: var(--trf-radius-md); background: transparent;
+  color: var(--trf-text-muted); font-size: var(--trf-text-sm); cursor: pointer;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast);
+}
+.trf-upload__x:hover { background: var(--trf-fill-subtle); color: var(--trf-danger-text); }
+
+/* ============ Modal ============ */
+.trf-modal__head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: var(--trf-space-4); padding: var(--trf-space-6) var(--trf-space-6) 0;
+}
+.trf-modal__title {
+  margin: 0; font-size: var(--trf-text-h4); font-weight: var(--trf-fw-semibold);
+  letter-spacing: var(--trf-tracking-heading); color: var(--trf-text);
+}
+/* 28×28: WCAG 2.2 SC 2.5.8 pide 24×24 como piso duro. */
+.trf-modal__x {
+  width: 28px; height: 28px; flex-shrink: 0; display: grid; place-items: center;
+  border: none; border-radius: var(--trf-radius-md); background: transparent;
+  color: var(--trf-text-muted); font-size: var(--trf-text-sm); cursor: pointer;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast);
+}
+.trf-modal__x:hover { background: var(--trf-fill-subtle); color: var(--trf-text); }
+.trf-modal__body {
+  padding: var(--trf-space-3) var(--trf-space-6) 0;
+  font-size: var(--trf-text-xs); line-height: var(--trf-leading-normal); color: var(--trf-text-secondary);
+}
+.trf-modal__foot { display: flex; justify-content: flex-end; gap: var(--trf-space-3); padding: var(--trf-space-6); }
+
+/* ============ DataGrid ============ */
+.trf-grid {
+  border-radius: var(--trf-radius-lg); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-sm);
+  overflow-x: auto; font-family: var(--trf-font-sans);
+}
+.trf-grid table { width: 100%; border-collapse: collapse; font-size: var(--trf-text-sm); }
+.trf-grid__caption {
+  text-align: left; padding: var(--trf-space-4) var(--trf-space-5) 0;
+  font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold);
+  letter-spacing: var(--trf-tracking-over); text-transform: uppercase;
+  color: var(--trf-text-muted);
+}
+.trf-grid th { padding: 0; border-bottom: 1px solid var(--trf-border); white-space: nowrap; }
+.trf-grid th[data-align="right"] { text-align: right; }
+/* El encabezado ordenable es un <button> real: antes era un <th onClick> sin
+   tabIndex ni aria-sort, así que ordenar era imposible sin ratón. */
+.trf-grid__sort {
+  width: 100%; display: inline-flex; align-items: center; gap: var(--trf-space-2);
+  padding: var(--trf-space-3) var(--trf-space-5);
+  border: none; background: transparent; font-family: inherit;
+  font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold);
+  letter-spacing: var(--trf-tracking-over); text-transform: uppercase;
+  color: var(--trf-text-muted); cursor: pointer;
+  transition: color var(--trf-motion-fast);
+}
+.trf-grid th[data-align="right"] .trf-grid__sort { justify-content: flex-end; }
+.trf-grid__sort:hover { color: var(--trf-text-secondary); }
+/* Selector de VALOR, no de presencia: aria-sort viaja siempre en el <th> ahora
+   que es undefined cuando no hay orden, pero la regla existía antes de eso y
+   habría vuelto a fallar el día que alguien reintrodujera "none" explícito. */
+.trf-grid th:not([aria-sort="none"])[aria-sort] .trf-grid__sort { color: var(--trf-orange-text); }
+.trf-grid__arrow { font-size: var(--trf-text-2xs); color: var(--trf-border-strong); }
+.trf-grid th:not([aria-sort="none"])[aria-sort] .trf-grid__arrow { color: var(--trf-orange-text); }
+.trf-grid td {
+  padding: var(--trf-space-3) var(--trf-space-5);
+  border-bottom: 1px solid var(--trf-border);
+  color: var(--trf-text-secondary); white-space: nowrap;
+}
+.trf-grid tbody tr:last-child td { border-bottom: none; }
+.trf-grid tbody tr { transition: background-color var(--trf-motion-fast); }
+.trf-grid tbody tr:hover td { background: var(--trf-surface-2); }
+.trf-grid td[data-align="right"] { text-align: right; font-variant-numeric: tabular-nums; }
+.trf-grid td[data-mono] { font-family: var(--trf-font-mono); font-size: var(--trf-text-2xs); }
+
+/* ============ Sidebar ============ */
+.trf-sidebar {
+  width: 220px; flex-shrink: 0; background: var(--trf-sidebar-bg);
+  padding: var(--trf-space-5) var(--trf-space-4);
+  display: flex; flex-direction: column; gap: var(--trf-space-1);
+  font-family: var(--trf-font-sans);
+  transition: width var(--trf-motion-base);
+}
+.trf-sidebar[data-collapsed] { width: 68px; }
+.trf-sidebar__top {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--trf-space-3); padding: var(--trf-space-1) var(--trf-space-2) var(--trf-space-5);
+}
+.trf-sidebar[data-collapsed] .trf-sidebar__top { justify-content: center; }
+.trf-sidebar__brand {
+  font-size: var(--trf-text-base); font-weight: var(--trf-fw-semibold);
+  color: var(--trf-sidebar-text-active); letter-spacing: var(--trf-tracking-heading);
+  white-space: nowrap; overflow: hidden;
+}
+/* 28×28: WCAG 2.2 SC 2.5.8 pide 24×24 como piso duro. */
+.trf-sidebar__toggle {
+  width: 28px; height: 28px; flex-shrink: 0; display: grid; place-items: center;
+  border: none; border-radius: var(--trf-radius-md); background: transparent;
+  color: var(--trf-sidebar-text); font-size: var(--trf-text-sm); cursor: pointer;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast);
+}
+.trf-sidebar__toggle:hover { background: rgba(255,255,255,.08); color: var(--trf-sidebar-text-active); }
+.trf-sidebar__item {
+  position: relative; display: flex; align-items: center; gap: var(--trf-space-3);
+  padding: var(--trf-space-3); border: none; border-radius: var(--trf-radius-md);
+  cursor: pointer; font-family: inherit; font-size: var(--trf-text-xs);
+  font-weight: var(--trf-fw-semibold); text-align: left;
+  background: transparent; color: var(--trf-sidebar-text);
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast);
+}
+.trf-sidebar[data-collapsed] .trf-sidebar__item { justify-content: center; }
+.trf-sidebar__item:hover { background: rgba(255,255,255,.06); color: var(--trf-sidebar-text-active); }
+.trf-sidebar__item[aria-current="page"] { background: rgba(252,118,3,.16); color: var(--trf-action); }
+.trf-sidebar__glyph { width: 16px; height: 16px; border-radius: var(--trf-radius-sm); flex-shrink: 0; background: currentColor; }
+.trf-sidebar__label { white-space: nowrap; overflow: hidden; }
+.trf-sidebar__foot { margin-top: auto; padding-top: var(--trf-space-5); border-top: 1px solid rgba(255,255,255,.1); }
+
+/* ============ Toaster ============ */
+.trf-toasts {
+  position: fixed; bottom: var(--trf-space-6); right: var(--trf-space-6); z-index: 100;
+  display: flex; flex-direction: column; align-items: flex-end; gap: var(--trf-space-3);
+  pointer-events: none; font-family: var(--trf-font-sans);
+}
+.trf-toast {
+  width: 320px; max-width: 90vw;
+  border-radius: var(--trf-radius-lg); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-lg); overflow: hidden;
+  pointer-events: auto; display: flex; gap: var(--trf-space-3);
+  padding: var(--trf-space-3) var(--trf-space-4); align-items: center;
+  animation: trf-toast-in var(--trf-motion-base) both;
+}
+.trf-toast__icon {
+  width: 26px; height: 26px; flex-shrink: 0; display: grid; place-items: center;
+  border-radius: var(--trf-radius-full); font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold);
+}
+.trf-toast__icon[data-tone="success"] { background: rgba(135,163,125,.16); color: var(--trf-success-text); }
+.trf-toast__icon[data-tone="info"]    { background: rgba(1,137,204,.14); color: var(--trf-info-text); }
+.trf-toast__icon[data-tone="warning"] { background: rgba(252,160,58,.16); color: var(--trf-orange-text); }
+.trf-toast__icon[data-tone="danger"]  { background: rgba(236,102,59,.14); color: var(--trf-danger-text); }
+.trf-toast__meta { flex: 1; min-width: 0; }
+.trf-toast__title { margin: 0; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-toast__body { margin: 2px 0 0; font-size: var(--trf-text-2xs); line-height: var(--trf-leading-snug); color: var(--trf-text-secondary); }
+.trf-toast__action {
+  height: 32px; padding: 0 var(--trf-space-3); border: none; border-radius: var(--trf-radius-md);
+  background: var(--trf-surface-accent); color: var(--trf-orange-text);
+  font-family: inherit; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); cursor: pointer;
+  transition: background-color var(--trf-motion-fast);
+}
+/* Era 22×22 e incumplía WCAG 2.2 SC 2.5.8 (mínimo 24×24). */
+.trf-toast__x {
+  width: 28px; height: 28px; flex-shrink: 0; display: grid; place-items: center;
+  border: none; border-radius: var(--trf-radius-md); background: transparent;
+  color: var(--trf-text-muted); font-size: var(--trf-text-xs); cursor: pointer;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast);
+}
+.trf-toast__x:hover { background: var(--trf-fill-subtle); color: var(--trf-text); }
+
+/* ============ Calendario (DatePicker + DateRangePicker) ============ */
+.trf-cal {
+  position: absolute; top: calc(100% + var(--trf-space-2)); left: 0; z-index: 15;
+  padding: var(--trf-space-4);
+  border-radius: var(--trf-radius-sm); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-lg);
+  transform-origin: top; animation: trf-dialog-in var(--trf-motion-base) both;
+}
+.trf-cal[hidden] { display: none; }
+.trf-cal__head { display: flex; align-items: center; justify-content: space-between; margin-bottom: var(--trf-space-3); }
+.trf-cal__month { font-size: var(--trf-text-sm); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+/* 28×28: piso duro de WCAG 2.2 SC 2.5.8. */
+.trf-cal__nav {
+  width: 28px; height: 28px; display: grid; place-items: center;
+  border: none; border-radius: var(--trf-radius-md); background: transparent;
+  color: var(--trf-text-secondary); font-size: var(--trf-text-base); cursor: pointer;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast);
+}
+.trf-cal__nav:hover { background: var(--trf-fill-subtle); color: var(--trf-text); }
+.trf-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.trf-cal__wd {
+  text-align: center; font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold);
+  letter-spacing: var(--trf-tracking-label); color: var(--trf-text-muted); padding: var(--trf-space-1) 0;
+}
+.trf-cal__day {
+  height: 32px; border: none; border-radius: var(--trf-radius-md); background: transparent;
+  color: var(--trf-text); font-family: var(--trf-font-sans); font-size: var(--trf-text-xs);
+  font-weight: var(--trf-fw-medium); cursor: pointer;
+  transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast);
+}
+.trf-cal__day:hover { background: var(--trf-surface-accent); color: var(--trf-orange-text); }
+.trf-cal__day[aria-selected="true"] {
+  background: var(--trf-action); color: var(--trf-neutral-900); font-weight: var(--trf-fw-semibold);
+}
+.trf-cal__day[data-in-range] { background: var(--trf-surface-accent); color: var(--trf-orange-text); }
+.trf-cal__presets { display: flex; flex-wrap: wrap; gap: var(--trf-space-2); margin-bottom: var(--trf-space-3); }
+.trf-cal__preset {
+  height: 28px; padding: 0 var(--trf-space-3);
+  border: 1px solid var(--trf-border-strong); border-radius: var(--trf-radius-md);
+  background: transparent; font-family: var(--trf-font-sans); font-size: var(--trf-text-2xs);
+  font-weight: var(--trf-fw-semibold); color: var(--trf-text-secondary); cursor: pointer;
+  transition: border-color var(--trf-motion-fast), color var(--trf-motion-fast);
+}
+.trf-cal__preset:hover { border-color: var(--trf-action); color: var(--trf-orange-text); }
+
+/* ============ Gráficas: cromo (tooltip + leyenda) ============
+   La geometría SVG sigue inline porque la calculan los datos; lo que sale a CSS
+   es el cromo, que no depende de los valores. */
+.trf-chart { position: relative; font-family: var(--trf-font-sans); }
+.trf-chart__svg { display: block; overflow: visible; width: 100%; }
+.trf-chart__tip {
+  position: absolute; top: 0; z-index: 5; transform: translateX(-50%);
+  border-radius: var(--trf-radius-sm); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-lg);
+  overflow: hidden; pointer-events: none;
+}
+.trf-chart__tip-head { padding: var(--trf-space-2) var(--trf-space-3); border-bottom: 1px solid var(--trf-border); }
+.trf-chart__tip-title { font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-chart__tip-rows { padding: var(--trf-space-2) var(--trf-space-3); display: flex; flex-direction: column; gap: var(--trf-space-1); }
+.trf-chart__tip-row { display: flex; align-items: center; gap: var(--trf-space-2); }
+.trf-chart__tip-name { flex: 1; font-size: var(--trf-text-2xs); color: var(--trf-text-secondary); }
+.trf-chart__tip-val { font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold); color: var(--trf-text); font-variant-numeric: tabular-nums; }
+.trf-chart__swatch { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+.trf-legend { display: flex; flex-wrap: wrap; gap: var(--trf-space-3); margin-top: var(--trf-space-3); }
+.trf-legend__item {
+  display: inline-flex; align-items: center; gap: var(--trf-space-2);
+  font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label); color: var(--trf-text-secondary);
+}
+.trf-legend__swatch { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+.trf-legend__pct { font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-donut { display: flex; align-items: center; gap: var(--trf-space-5); flex-wrap: wrap; }
+.trf-donut__legend { display: flex; flex-direction: column; gap: var(--trf-space-2); }
+
+/* ---- css/charts.css ---- */
+/* Transfiriendo — components/charts.
+   La geometría de las gráficas sigue inline porque la calculan los datos;
+   lo que sale a CSS es todo lo que no depende de los valores. */
+
+/* ============ Embudo ============ */
+.trf-funnel { display: flex; flex-direction: column; gap: var(--trf-space-2); font-family: var(--trf-font-sans); }
+.trf-funnel__row { display: grid; grid-template-columns: 132px 1fr; gap: var(--trf-space-3); align-items: center; }
+.trf-funnel__label { margin: 0; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-funnel__drop { margin: 1px 0 0; font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label); color: var(--trf-text-muted); }
+.trf-funnel__track { height: 44px; display: flex; align-items: center; }
+.trf-funnel__bar {
+  height: 100%; min-width: 68px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 var(--trf-space-3);
+  transition: width var(--trf-motion-slow);
+}
+.trf-funnel__val,
+.trf-funnel__pct { font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); font-variant-numeric: tabular-nums; }
+.trf-funnel__pct { opacity: .8; }
+
+/* ============ Barras apiladas ============ */
+.trf-stack { font-family: var(--trf-font-sans); }
+.trf-stack__row { display: flex; align-items: flex-end; gap: var(--trf-space-3); }
+.trf-stack__col {
+  flex: 1; display: flex; flex-direction: column; align-items: center;
+  gap: var(--trf-space-2); height: 100%; justify-content: flex-end;
+}
+.trf-stack__total {
+  font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold);
+  font-variant-numeric: tabular-nums; color: var(--trf-text-muted);
+  transition: color var(--trf-motion-fast);
+}
+.trf-stack__col[data-hot] .trf-stack__total { color: var(--trf-text); }
+.trf-stack__bars {
+  width: 100%; max-width: 46px; display: flex; flex-direction: column;
+  border-radius: 6px 6px 0 0; overflow: hidden;
+  transition: opacity var(--trf-motion-base);
+}
+.trf-stack__bars[data-dim] { opacity: .45; }
+.trf-stack__label { font-size: var(--trf-text-2xs); color: var(--trf-text-muted); }
+
+/* ============ Dispersión ============ */
+.trf-scatter { font-family: var(--trf-font-sans); }
+.trf-scatter__plot { position: relative; }
+.trf-scatter__dot { cursor: default; transition: fill-opacity var(--trf-motion-fast); }
+.trf-scatter__dot:focus-visible { outline: 2px solid var(--trf-action); outline-offset: 2px; }
+.trf-chart__hit:focus-visible { outline: 2px solid var(--trf-action); outline-offset: -2px; }
+.trf-scatter__tip {
+  position: absolute; width: 168px; pointer-events: none; z-index: 2;
+  transform: translate(-50%, calc(-100% - 12px));
+  border-radius: var(--trf-radius-lg); border: 1px solid var(--trf-border);
+  background: var(--trf-surface); box-shadow: var(--trf-shadow-lg); overflow: hidden;
+}
+.trf-scatter__tip-head {
+  padding: var(--trf-space-2) var(--trf-space-3); border-bottom: 1px solid var(--trf-border);
+  display: flex; align-items: center; gap: var(--trf-space-2);
+}
+.trf-scatter__tip-id { font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-scatter__tip-rows { padding: var(--trf-space-2) var(--trf-space-3); display: flex; flex-direction: column; gap: var(--trf-space-1); }
+.trf-scatter__foot {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: var(--trf-space-3); margin-top: var(--trf-space-3);
+}
+.trf-scatter__axes { font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label); color: var(--trf-text-muted); }
+
+/* ============ Mapa de calor ============ */
+.trf-heat { font-family: var(--trf-font-sans); }
+.trf-heat__scroll { overflow-x: auto; }
+.trf-heat__grid { display: inline-grid; gap: var(--trf-space-1); min-width: 520px; }
+.trf-heat__wd {
+  text-align: center; font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label);
+  color: var(--trf-text-muted); padding-bottom: var(--trf-space-1);
+}
+.trf-heat__rowname {
+  display: flex; align-items: center; padding-right: var(--trf-space-2);
+  font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label); color: var(--trf-text-secondary);
+}
+.trf-heat__cell {
+  aspect-ratio: 1 / 1; min-height: 34px; border-radius: 6px;
+  display: grid; place-items: center;
+  transition: transform var(--trf-motion-fast);
+}
+.trf-heat__val { font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-semibold); font-variant-numeric: tabular-nums; }
+.trf-heat__legend { display: flex; align-items: center; gap: var(--trf-space-3); margin-top: var(--trf-space-4); }
+.trf-heat__legend span { font-size: var(--trf-text-2xs); letter-spacing: var(--trf-tracking-label); color: var(--trf-text-muted); }
+.trf-heat__ramp { display: flex; gap: 3px; }
+.trf-heat__swatch { width: 22px; height: 12px; border-radius: 3px; }
+
+/* ---- css/patterns.css ---- */
+/* Transfiriendo — components/patterns.
+   Misma convención que el resto: clase de bloque + data-*, transiciones
+   enumeradas, tokens --trf-* directos. */
+
+/* ============ Patrones: confirmación destructiva ============ */
+.trf-confirm__head { padding: var(--trf-space-5) var(--trf-space-6) 0; }
+.trf-confirm__title { margin: 0; font-size: var(--trf-text-h4); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-confirm__desc { margin: var(--trf-space-2) 0 0; font-size: var(--trf-text-xs); line-height: var(--trf-leading-normal); color: var(--trf-text-secondary); }
+.trf-confirm__field { padding: var(--trf-space-4) var(--trf-space-6) 0; }
+.trf-confirm__label { display: block; margin-bottom: var(--trf-space-2); font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-medium); color: var(--trf-text-secondary); }
+.trf-confirm__phrase { font-family: var(--trf-font-mono); color: var(--trf-text); }
+.trf-confirm__input {
+  width: 100%; height: var(--trf-control-md); box-sizing: border-box; padding: 0 var(--trf-space-3);
+  font-family: var(--trf-font-mono); font-size: var(--trf-text-xs); color: var(--trf-text);
+  background: var(--trf-surface); border: 1px solid var(--trf-border);
+  border-radius: var(--trf-radius-md); outline: none;
+  transition: border-color var(--trf-motion-fast), box-shadow var(--trf-motion-fast);
+}
+.trf-confirm__input[data-ready] { border-color: var(--trf-danger); }
+.trf-confirm__actions { display: flex; gap: var(--trf-space-3); padding: var(--trf-space-6); }
+.trf-confirm__cancel,
+.trf-confirm__go {
+  flex: 1; height: var(--trf-control-md); border-radius: var(--trf-radius-md);
+  font-family: inherit; font-size: var(--trf-text-sm); font-weight: var(--trf-fw-semibold); cursor: pointer;
+  transition: background-color var(--trf-motion-fast), opacity var(--trf-motion-fast);
+}
+.trf-confirm__cancel { border: 1px solid var(--trf-border); background: var(--trf-surface); color: var(--trf-text-secondary); }
+.trf-confirm__go { border: none; background: var(--trf-danger-action); color: var(--trf-text-on-fill); }
+.trf-confirm__go:disabled { background: var(--trf-border-strong); opacity: .55; cursor: not-allowed; }
+
+/* ============ Patrones: barras ancladas ============ */
+.trf-dock {
+  display: flex; align-items: center; gap: var(--trf-space-4);
+  padding: var(--trf-space-3) var(--trf-space-5);
+  background: var(--trf-surface-inverse); color: var(--trf-text-on-inverse);
+  border-radius: var(--trf-radius-lg); box-shadow: var(--trf-shadow-lg);
+  font-family: var(--trf-font-sans);
+  animation: trf-dock-in var(--trf-motion-base) both;
+}
+.trf-dock[data-compact] { display: inline-flex; padding: var(--trf-space-3) var(--trf-space-4) var(--trf-space-3) var(--trf-space-4); gap: var(--trf-space-4); }
+.trf-dock__dot { width: 7px; height: 7px; border-radius: var(--trf-radius-full); background: var(--trf-action); flex-shrink: 0; }
+.trf-dock__msg { flex: 1; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-medium); }
+.trf-dock__ghost {
+  height: 32px; padding: 0 var(--trf-space-4); border: none; border-radius: var(--trf-radius-md);
+  background: transparent; color: var(--trf-text-on-inverse-2);
+  font-family: inherit; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); cursor: pointer;
+  transition: color var(--trf-motion-fast);
+}
+.trf-dock__ghost:hover { color: var(--trf-text-on-inverse); }
+.trf-dock__primary {
+  height: 32px; padding: 0 var(--trf-space-4); border: none; border-radius: var(--trf-radius-md);
+  background: var(--trf-action); color: var(--trf-neutral-900);
+  font-family: inherit; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); cursor: pointer;
+}
+.trf-dock__undo {
+  height: 32px; padding: 0 var(--trf-space-3); border: none; border-radius: var(--trf-radius-md);
+  background: rgba(252,118,3,.18); color: var(--trf-orange-200);
+  font-family: inherit; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); cursor: pointer;
+}
+.trf-dock__x {
+  width: 28px; height: 28px; display: grid; place-items: center; border: none;
+  border-radius: var(--trf-radius-md); background: transparent;
+  color: var(--trf-text-on-inverse-3); font-size: var(--trf-text-xs); cursor: pointer;
+  transition: color var(--trf-motion-fast);
+}
+.trf-dock__x:hover { color: var(--trf-text-on-inverse); }
+
+/* ---- css/responsive.css ---- */
+/* Transfiriendo — Breakpoints y comportamiento responsive.
+   ============================================================
+   OJO: las custom properties NO funcionan dentro de @media, así que
+   `@media (min-width: var(--trf-bp-md))` no evalúa. Los valores se declaran
+   aquí como constantes documentadas y se escriben LITERALES en cada consulta.
+   Los tokens --trf-bp-* existen solo para leerlos desde JS.
+
+     sm   480px   móvil grande
+     md   768px   tablet · umbral del drawer de navegación
+     lg  1024px   escritorio angosto
+     xl  1280px   escritorio
+
+   Enfoque mobile-first: el estilo base es el del móvil y las consultas suben. */
+:root {
+  --trf-bp-sm: 480px;  /* @kind other */
+  --trf-bp-md: 768px;  /* @kind other */
+  --trf-bp-lg: 1024px; /* @kind other */
+  --trf-bp-xl: 1280px; /* @kind other */
+}
+
+/* ---- Sidebar: drawer por debajo de md ----
+   En móvil la barra fija de 220px se come la pantalla, así que pasa a panel
+   deslizante sobre el contenido. El COMPONENTE renderiza su propio scrim
+   (Sidebar.jsx: hermano del <nav>, con onClick y Escape hacia `onClose`); esta
+   hoja solo lo posiciona y lo oculta en escritorio. El botón .trf-sidebar__burger
+   SÍ es del consumidor: vive en la barra superior de la página, no en la
+   barra lateral, así que el componente no puede montarlo por sí mismo. */
+@media (max-width: 767px) {
+  .trf-sidebar {
+    position: fixed; inset: 0 auto 0 0; z-index: 80;
+    width: 260px; max-width: 82vw;
+    transform: translateX(-100%);
+    box-shadow: var(--trf-shadow-lg);
+    transition: transform var(--trf-motion-base);
+  }
+  .trf-sidebar[data-open] { transform: none; }
+  /* Colapsada no aplica en móvil: o está fuera, o está abierta entera. */
+  .trf-sidebar[data-collapsed] { width: 260px; }
+  .trf-sidebar[data-collapsed] .trf-sidebar__label { display: revert; }
+  .trf-sidebar__scrim {
+    position: fixed; inset: 0; z-index: 79;
+    background: var(--trf-scrim);
+    animation: trf-fade-in var(--trf-motion-fast) both;
+  }
+}
+@media (min-width: 768px) {
+  /* En escritorio el drawer no existe: la barra es parte del layout. */
+  .trf-sidebar__scrim { display: none; }
+  .trf-sidebar__burger { display: none; }
+}
+.trf-sidebar__burger {
+  width: 40px; height: 40px; display: grid; place-items: center;
+  border: 1px solid var(--trf-border); border-radius: var(--trf-radius-md);
+  background: var(--trf-surface); color: var(--trf-text-secondary);
+  font-size: var(--trf-text-base); cursor: pointer;
+}
+
+/* ---- Rejillas de dashboard ----
+   Cuatro KPI aplastados por debajo de ~600px era el defecto del template.
+   Mobile-first: una columna, dos en sm, cuatro en lg. */
+.trf-kpis { display: grid; grid-template-columns: 1fr; gap: var(--trf-space-3); }
+@media (min-width: 480px) { .trf-kpis { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .trf-kpis { grid-template-columns: repeat(4, 1fr); } }
+
+.trf-kpis-3 { display: grid; grid-template-columns: 1fr; gap: var(--trf-space-3); }
+@media (min-width: 480px) { .trf-kpis-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .trf-kpis-3 { grid-template-columns: repeat(3, 1fr); } }
+
+/* Cabecera de sección: el bloque de acciones baja en móvil en vez de apretarse. */
+.trf-pagehead {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: var(--trf-space-4);
+}
+@media (min-width: 768px) {
+  .trf-pagehead { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+}
+
+/* ---- Navegación en móvil ----
+   Medido: por debajo de 480px, .trf-tabs desborda (flex sin wrap) y
+   .trf-stepper también (etiquetas con white-space: nowrap). Breadcrumbs y
+   Pagination ya llevan flex-wrap y se reacomodan solos. */
+
+/* Tabs: desplazamiento horizontal, no wrap. Envolver a dos filas rompe el
+   indicador naranja, que se posiciona con offsetLeft sobre una sola línea. */
+@media (max-width: 767px) {
+  .trf-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .trf-tabs::-webkit-scrollbar { display: none; }
+  .trf-tab { flex: 0 0 auto; }
+}
+
+/* Stepper: en móvil solo se rotula el paso ACTUAL. Los números siguen visibles,
+   así que no se pierde la posición en la secuencia; lo que se pierde son las
+   etiquetas de los pasos que no toca leer ahora. */
+@media (max-width: 599px) {
+  .trf-stepper__label { display: none; }
+  .trf-stepper__label[data-active] { display: block; }
+  .trf-stepper__line { margin-bottom: var(--trf-space-4); }
+}

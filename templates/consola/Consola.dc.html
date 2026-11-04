@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Consola de procesos" description="Dashboard shell for an Innovación & IA console — resumen, tabla ordenable y aviso de conexión, todo con tokens y responsive." -->
+<helmet>
+
+
+
+<script src="./ds-base.js"></script>
+<style>
+  /* Solo lo que no puede ser inline: reset y una consulta de medios.
+     Todo lo demás sale de tokens --trf-* o de las clases del sistema. */
+  body { margin: 0; background: var(--trf-bg); color: var(--trf-text);
+         font-family: var(--trf-font-sans); -webkit-font-smoothing: antialiased; }
+  .cns-top { display: flex; align-items: center; justify-content: space-between;
+             gap: var(--trf-space-4); padding: 0 var(--trf-space-5); min-height: 56px;
+             background: var(--trf-surface); border-bottom: 1px solid var(--trf-border); }
+  .cns-nav { display: none; gap: var(--trf-space-1); }
+  @media (min-width: 768px) { .cns-nav { display: flex; } }
+  .cns-navlink { padding: var(--trf-space-2) var(--trf-space-3); border: none; background: transparent;
+                 border-radius: var(--trf-radius-md); font-family: inherit; font-size: var(--trf-text-xs);
+                 font-weight: var(--trf-fw-medium); color: var(--trf-text-muted); cursor: pointer;
+                 min-height: 32px; transition: background-color var(--trf-motion-fast), color var(--trf-motion-fast); }
+  .cns-navlink:hover { color: var(--trf-text-secondary); }
+  .cns-navlink[aria-current="page"] { background: var(--trf-surface-accent); color: var(--trf-orange-text); }
+  .cns-shell { padding: var(--trf-space-6) var(--trf-space-5); display: flex; flex-direction: column;
+               gap: var(--trf-space-5); max-width: 1040px; margin: 0 auto; width: 100%; box-sizing: border-box; }
+  .cns-summary { display: grid; grid-template-columns: 1fr; gap: var(--trf-space-3); }
+  @media (min-width: 768px) { .cns-summary { grid-template-columns: 1.1fr 1fr; } }
+  .cns-rows { display: flex; flex-direction: column; }
+  .cns-row { display: flex; align-items: baseline; justify-content: space-between; gap: var(--trf-space-3);
+             padding: var(--trf-space-3) 0; border-bottom: 1px solid var(--trf-border); }
+  .cns-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .cns-row:first-child { padding-top: 0; }
+</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column">
+
+  <div class="cns-top">
+    <div style="display:flex;align-items:center;gap:var(--trf-space-6)">
+      <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.Logo" base="../../assets" height="{{ 30 }}" hint-size="107px,30px"></x-import>
+      <nav class="cns-nav" aria-label="Secciones">
+        <button type="button" class="cns-navlink trf-focusable" aria-current="page">Procesos</button>
+        <button type="button" class="cns-navlink trf-focusable">Modelos</button>
+        <button type="button" class="cns-navlink trf-focusable">Reportes</button>
+      </nav>
+    </div>
+    <div style="width:32px;height:32px;border-radius:var(--trf-radius-full);background:var(--trf-surface-accent);box-shadow:inset 0 0 0 1px var(--trf-orange-100);color:var(--trf-orange-text);font-size:var(--trf-text-2xs);font-weight:var(--trf-fw-semibold);display:grid;place-items:center" title="Innovación &amp; IA">IA</div>
+  </div>
+
+  <div class="cns-shell">
+    <div class="trf-pagehead">
+      <div>
+        <h1 style="margin:0;font-family:var(--trf-font-brand);font-size:var(--trf-text-h2);font-weight:var(--trf-fw-semibold);letter-spacing:var(--trf-tracking-display)">Procesos automatizados</h1>
+        <p style="margin:var(--trf-space-1) 0 0;font-size:var(--trf-text-xs);color:var(--trf-text-secondary)">Cuatro unidades de negocio · actualizado hace 2 min</p>
+      </div>
+      <div style="display:flex;gap:var(--trf-space-2)">
+        <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.Button" variant="secondary" size="sm" hint-size="90px,32px">Filtrar</x-import>
+        <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.Button" size="sm" hint-size="140px,32px">Nuevo proceso</x-import>
+      </div>
+    </div>
+
+    <!-- Resumen: una métrica de resultado con su tendencia, y las de apoyo como
+         lista compacta. Reemplaza la fila de cuatro tarjetas idénticas de
+         número-grande + delta, que es el cliché de dashboard y lo primero que se copia. -->
+    <div class="cns-summary">
+      <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.StatCard" label="Horas ahorradas · acumulado del trimestre" value="1.840" delta="14,1% vs. trimestre anterior" trend="up" spark="{{ sparkHoras }}" hint-size="100%,120px"></x-import>
+
+      <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.Card" padding="{{ 16 }}" hint-size="100%,120px">
+        <div class="cns-rows">
+          <div class="cns-row">
+            <span style="font-size:var(--trf-text-xs);color:var(--trf-text-secondary)">Procesos activos</span>
+            <span style="font-size:var(--trf-text-lg);font-weight:var(--trf-fw-semibold);font-variant-numeric:tabular-nums">127</span>
+          </div>
+          <div class="cns-row">
+            <span style="font-size:var(--trf-text-xs);color:var(--trf-text-secondary)">Colaboradores</span>
+            <span style="font-size:var(--trf-text-lg);font-weight:var(--trf-fw-semibold);font-variant-numeric:tabular-nums">312</span>
+          </div>
+          <div class="cns-row">
+            <span style="font-size:var(--trf-text-xs);color:var(--trf-text-secondary)">Tasa de error</span>
+            <span style="display:inline-flex;align-items:baseline;gap:var(--trf-space-2)">
+              <span style="font-size:var(--trf-text-lg);font-weight:var(--trf-fw-semibold);font-variant-numeric:tabular-nums">0,4%</span>
+              <!-- Bajar es BUENO en una tasa de error: verde, no rojo. -->
+              <span style="font-size:var(--trf-text-2xs);font-weight:var(--trf-fw-semibold);color:var(--trf-success-text)">↓ 1,8%</span>
+            </span>
+          </div>
+        </div>
+      </x-import>
+    </div>
+
+    <!-- Usa el componente DataGrid: trae el contenedor con overflow-x, el orden
+         por teclado y aria-sort. Antes el template escribía su propia <table>. -->
+    <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.DataGrid" columns="{{ columnas }}" rows="{{ filas }}" render-cell="{{ celda }}" default-sort="{{ ordenInicial }}" caption="Procesos por unidad de negocio" hint-size="100%,280px"></x-import>
+
+    <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.Alert" tone="info" title="Motor DDI conectado" hint-size="100%,64px">Las recomendaciones se actualizan cada 15 minutos desde la capa Cliente 360.</x-import>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const DS = window.TransfiriendoDesignSystem_0ece16 || {};
+    const Badge = DS.Badge;
+    const tono = { activo: "success", "en revisión": "orange", pausado: "neutral" };
+
+    const columnas = [
+      { key: "id", label: "ID", mono: true },
+      { key: "unidad", label: "Unidad" },
+      { key: "estado", label: "Estado" },
+      { key: "volumen", label: "Volumen", align: "right" },
+      { key: "variacion", label: "Variación", align: "right" },
+    ];
+
+    const filas = [
+      { id: "TRF-4821", unidad: "Salud", estado: "activo", volumen: 1240, variacion: 12.4 },
+      { id: "TRF-4820", unidad: "Facturación", estado: "en revisión", volumen: 890, variacion: -3.1 },
+      { id: "TRF-4819", unidad: "Seguros", estado: "activo", volumen: 2105, variacion: 8.7 },
+      { id: "TRF-4818", unidad: "Cobranzas", estado: "pausado", volumen: 430, variacion: -0.4 },
+    ];
+
+    // Formato del sistema: un solo módulo, un solo locale (components/library/format.js).
+    const F = (window.TransfiriendoDesignSystem_0ece16 || {}).Format;
+    const celda = (key, value) => {
+      if (key === "estado" && Badge) {
+        return React.createElement(Badge, { tone: tono[value] || "neutral", dot: value === "activo" }, value);
+      }
+      if (key === "volumen") return F.int(value);
+      if (key === "variacion") {
+        const color = value > 0 ? "var(--trf-success-text)"
+          : (value < 0 ? "var(--trf-danger-text)" : "var(--trf-text-muted)");
+        return React.createElement("span", {
+          style: { fontWeight: 600, color, fontVariantNumeric: "tabular-nums" },
+        }, F.delta(value));
+      }
+      return undefined;
+    };
+
+    return {
+      columnas, filas, celda,
+      // La tabla llega ordenada por volumen: se declara, ya no se hereda por accidente.
+      ordenInicial: { key: "volumen", dir: "desc" },
+      sparkHoras: [1180, 1320, 1290, 1480, 1610, 1720, 1840],
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+/* Transfiriendo — components/patterns.
+   Misma convención que el resto: clase de bloque + data-*, transiciones
+   enumeradas, tokens --trf-* directos. */
+
+/* ============ Patrones: confirmación destructiva ============ */
+.trf-confirm__head { padding: var(--trf-space-5) var(--trf-space-6) 0; }
+.trf-confirm__title { margin: 0; font-size: var(--trf-text-h4); font-weight: var(--trf-fw-semibold); color: var(--trf-text); }
+.trf-confirm__desc { margin: var(--trf-space-2) 0 0; font-size: var(--trf-text-xs); line-height: var(--trf-leading-normal); color: var(--trf-text-secondary); }
+.trf-confirm__field { padding: var(--trf-space-4) var(--trf-space-6) 0; }
+.trf-confirm__label { display: block; margin-bottom: var(--trf-space-2); font-size: var(--trf-text-2xs); font-weight: var(--trf-fw-medium); color: var(--trf-text-secondary); }
+.trf-confirm__phrase { font-family: var(--trf-font-mono); color: var(--trf-text); }
+.trf-confirm__input {
+  width: 100%; height: var(--trf-control-md); box-sizing: border-box; padding: 0 var(--trf-space-3);
+  font-family: var(--trf-font-mono); font-size: var(--trf-text-xs); color: var(--trf-text);
+  background: var(--trf-surface); border: 1px solid var(--trf-border);
+  border-radius: var(--trf-radius-md); outline: none;
+  transition: border-color var(--trf-motion-fast), box-shadow var(--trf-motion-fast);
+}
+.trf-confirm__input[data-ready] { border-color: var(--trf-danger); }
+.trf-confirm__actions { display: flex; gap: var(--trf-space-3); padding: var(--trf-space-6); }
+.trf-confirm__cancel,
+.trf-confirm__go {
+  flex: 1; height: var(--trf-control-md); border-radius: var(--trf-radius-md);
+  font-family: inherit; font-size: var(--trf-text-sm); font-weight: var(--trf-fw-semibold); cursor: pointer;
+  transition: background-color var(--trf-motion-fast), opacity var(--trf-motion-fast);
+}
+.trf-confirm__cancel { border: 1px solid var(--trf-border); background: var(--trf-surface); color: var(--trf-text-secondary); }
+.trf-confirm__go { border: none; background: var(--trf-danger-action); color: var(--trf-text-on-fill); }
+.trf-confirm__go:disabled { background: var(--trf-border-strong); opacity: .55; cursor: not-allowed; }
+
+/* ============ Patrones: barras ancladas ============ */
+.trf-dock {
+  display: flex; align-items: center; gap: var(--trf-space-4);
+  padding: var(--trf-space-3) var(--trf-space-5);
+  background: var(--trf-surface-inverse); color: var(--trf-text-on-inverse);
+  border-radius: var(--trf-radius-lg); box-shadow: var(--trf-shadow-lg);
+  font-family: var(--trf-font-sans);
+  animation: trf-dock-in var(--trf-motion-base) both;
+}
+.trf-dock[data-compact] { display: inline-flex; padding: var(--trf-space-3) var(--trf-space-4) var(--trf-space-3) var(--trf-space-4); gap: var(--trf-space-4); }
+.trf-dock__dot { width: 7px; height: 7px; border-radius: var(--trf-radius-full); background: var(--trf-action); flex-shrink: 0; }
+.trf-dock__msg { flex: 1; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-medium); }
+.trf-dock__ghost {
+  height: 32px; padding: 0 var(--trf-space-4); border: none; border-radius: var(--trf-radius-md);
+  background: transparent; color: var(--trf-text-on-inverse-2);
+  font-family: inherit; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); cursor: pointer;
+  transition: color var(--trf-motion-fast);
+}
+.trf-dock__ghost:hover { color: var(--trf-text-on-inverse); }
+.trf-dock__primary {
+  height: 32px; padding: 0 var(--trf-space-4); border: none; border-radius: var(--trf-radius-md);
+  background: var(--trf-action); color: var(--trf-neutral-900);
+  font-family: inherit; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); cursor: pointer;
+}
+.trf-dock__undo {
+  height: 32px; padding: 0 var(--trf-space-3); border: none; border-radius: var(--trf-radius-md);
+  background: rgba(252,118,3,.18); color: var(--trf-orange-200);
+  font-family: inherit; font-size: var(--trf-text-xs); font-weight: var(--trf-fw-semibold); cursor: pointer;
+}
+.trf-dock__x {
+  width: 28px; height: 28px; display: grid; place-items: center; border: none;
+  border-radius: var(--trf-radius-md); background: transparent;
+  color: var(--trf-text-on-inverse-3); font-size: var(--trf-text-xs); cursor: pointer;
+  transition: color var(--trf-motion-fast);
+}
+.trf-dock__x:hover { color: var(--trf-text-on-inverse); }

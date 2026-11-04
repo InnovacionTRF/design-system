@@ -1,0 +1,192 @@
+/* Transfiriendo — Direcciones visuales.
+   Valores tomados VERBATIM de la tabla `themes` del proyecto fuente
+   «Sistema de diseño Transfiriendo» (Transfiriendo Sistema.dc.html):
+   dirección `a` = Material, `b` = Cálido, `c` = Nítido.
+
+   El sistema es una búsqueda 2-D: dirección × modo → un juego COMPLETO de
+   tokens. La dirección no cambia solo la forma: también ajusta fondos,
+   superficies, texto y bordes. Lo único invariante es el naranja de marca.
+
+   Desviaciones de la fuente: solo --trf-text-secondary y --trf-text-muted, que
+   venían por debajo de WCAG AA. Ver las notas junto a cada token.
+
+     <html data-direction="nitido" data-theme="dark">
+
+   ANIDAMIENTO. Cada bloque oscuro se declara con DOS selectores:
+
+     [data-direction="D"][data-theme="dark"],                     /* ambos en el mismo nodo */
+     [data-theme="dark"] [data-direction="D"]:not([data-theme]),   /* dirección anidada bajo tema oscuro */
+     [data-direction="D"] [data-theme="dark"]:not([data-direction]) /* tema oscuro anidado bajo una dirección */
+
+   Sin el segundo, un <div data-direction="calido"> dentro de <html data-theme="dark">
+   hacía match solo con el bloque CLARO y el panel revertía a claro.
+
+   Sin el tercero, el caso inverso daba un híbrido que no es ninguna de las seis
+   combinaciones: un <div data-theme="dark"> dentro de una página Cálida tomaba el
+   COLOR de Material (del bloque base [data-theme="dark"], que solo declara color)
+   y la FORMA de Cálido, que seguía cayendo por herencia. Ahora resuelve a Cálido oscuro.
+
+   Los :not() dejan que un descendiente que declare lo propio lo gane. Especificidad
+   0,3,0 frente al 0,1,0 del bloque claro, así que gana sin !important.
+
+   Nítido es la dirección por defecto (ajuste vigente desde esta revisión): sus
+   valores claros y oscuros son los que declara tokens/colors.css (:root y
+   [data-theme="dark"]), y tokens/spacing.css fija los radios base en 6px plano.
+   Material sigue existiendo tal cual — ya no depende de :root, declara sus propios
+   valores de forma independiente en el bloque de abajo — pero ahora solo se activa
+   explícitamente con data-direction="material". */
+
+/* ============ MATERIAL · claro ============
+   Superficie blanca sobre lienzo cálido; la sombra separa los planos. */
+[data-direction="material"] {
+  --trf-bg: #f5f4f2;
+  --trf-surface: #ffffff;
+  --trf-surface-2: #fafafa;
+  --trf-text: #2f2f2f;
+  --trf-text-secondary: #565656;
+  --trf-text-muted: #6d6d6d;
+  --trf-border: #eceae7;
+  --trf-border-strong: #e0ded9;
+  --trf-radius-lg: 12px;
+  --trf-radius-md: 8px;
+  --trf-radius-sm: 8px;
+  --trf-shadow-sm: 0 1px 3px rgba(47,47,47,.09);
+  --trf-shadow-accent: 0 2px 6px rgba(252,118,3,.3);
+  --trf-surface-accent: #fff4ea;
+  --trf-orange-text: #b04f00;
+  --trf-skeleton-base: #f0f0f0;
+  --trf-skeleton-hi: #f8f8f8;
+  --trf-sidebar-bg: #2f2f2f;
+  --trf-sidebar-text: #9a9a9a;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ============ MATERIAL · oscuro ============ */
+[data-direction="material"][data-theme="dark"],
+[data-theme="dark"] [data-direction="material"]:not([data-theme]),
+[data-direction="material"] [data-theme="dark"]:not([data-direction]) {
+  --trf-bg: #191919;
+  --trf-surface: #242424;
+  --trf-surface-2: #2e2e2e;
+  --trf-text: #f2f2f2;
+  --trf-text-secondary: #b8b8b8;
+  --trf-text-muted: #a0a0a0;
+  --trf-border: #333333;
+  --trf-border-strong: #3a3a3a;
+  --trf-radius-lg: 12px;
+  --trf-radius-md: 8px;
+  --trf-radius-sm: 8px;
+  --trf-shadow-sm: 0 2px 8px rgba(0,0,0,.4);
+  --trf-shadow-accent: 0 2px 10px rgba(252,118,3,.35);
+  --trf-surface-accent: rgba(252,118,3,.16);
+  --trf-orange-text: #ffab5c;
+  --trf-skeleton-base: #2a2a2a;
+  --trf-skeleton-hi: #333333;
+  --trf-sidebar-bg: #0f0f0f;
+  --trf-sidebar-text: #8a8a8a;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ============ CÁLIDO · claro ============
+   Neutros arena y radios generosos; el control es una cápsula (999px).
+   Sin elevación: la calidez y el aire hacen la separación, no la sombra. */
+[data-direction="calido"] {
+  --trf-bg: #faf8f5;
+  --trf-surface: #ffffff;
+  --trf-surface-2: #f6f2ec;
+  --trf-text: #2f2f2f;
+  --trf-text-secondary: #6b6051; /* Corregido por contraste: la fuente trae #97887a (3,4:1, bajo AA). Mismo matiz tierra. */
+  --trf-text-muted: #776b5c;      /* Corregido: la fuente trae #b0a290 (2,5:1). 4,66:1 incl. surface-accent. */
+  --trf-border: #eee7de;
+  --trf-border-strong: #e2d9cd;
+  --trf-radius-lg: 16px;
+  --trf-radius-md: 999px;
+  --trf-radius-sm: 12px;
+  --trf-shadow-sm: none;
+  --trf-shadow-accent: none;
+  --trf-surface-accent: #fff4ea;
+  --trf-orange-text: #b04f00;
+  --trf-skeleton-base: #f1ece5;
+  --trf-skeleton-hi: #f8f4ee;
+  --trf-sidebar-bg: #3a332c;
+  --trf-sidebar-text: #a99b89;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ============ CÁLIDO · oscuro ============ */
+[data-direction="calido"][data-theme="dark"],
+[data-theme="dark"] [data-direction="calido"]:not([data-theme]),
+[data-direction="calido"] [data-theme="dark"]:not([data-direction]) {
+  --trf-bg: #1c1a17;
+  --trf-surface: #26231f;
+  --trf-surface-2: #302c27;
+  --trf-text: #f2ede6;
+  --trf-text-secondary: #b6a793;
+  --trf-text-muted: #aca093;
+  --trf-border: #332f28;
+  --trf-border-strong: #3d382f;
+  --trf-radius-lg: 16px;
+  --trf-radius-md: 999px;
+  --trf-radius-sm: 12px;
+  --trf-shadow-sm: none;
+  --trf-shadow-accent: none;
+  --trf-surface-accent: rgba(252,118,3,.16);
+  --trf-orange-text: #ffab5c;
+  --trf-skeleton-base: #2c2822;
+  --trf-skeleton-hi: #35302a;
+  --trf-sidebar-bg: #100e0c;
+  --trf-sidebar-text: #8a7f70;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ============ NÍTIDO · claro ============
+   Radio plano de 6px en todo (card, control y detalle), sin elevación:
+   la jerarquía la carga la línea. Neutros más fríos y texto más contrastado. */
+[data-direction="nitido"] {
+  --trf-bg: #f4f4f3;
+  --trf-surface: #ffffff;
+  --trf-surface-2: #f7f7f6;
+  --trf-text: #1a1a1a;
+  --trf-text-secondary: #525252;
+  --trf-text-muted: #6b6b6b;
+  --trf-border: #e6e6e6;
+  --trf-border-strong: #d9d9d9;
+  --trf-radius-lg: 6px;
+  --trf-radius-md: 6px;
+  --trf-radius-sm: 6px;
+  --trf-shadow-sm: none;
+  --trf-shadow-accent: none;
+  --trf-surface-accent: #fff4ea;
+  --trf-orange-text: #b04f00;
+  --trf-skeleton-base: #eeeeee;
+  --trf-skeleton-hi: #f6f6f6;
+  --trf-sidebar-bg: #1a1a1a;
+  --trf-sidebar-text: #8a8a8a;
+  --trf-sidebar-text-active: #ffffff;
+}
+
+/* ============ NÍTIDO · oscuro ============ */
+[data-direction="nitido"][data-theme="dark"],
+[data-theme="dark"] [data-direction="nitido"]:not([data-theme]),
+[data-direction="nitido"] [data-theme="dark"]:not([data-direction]) {
+  --trf-bg: #141414;
+  --trf-surface: #1e1e1e;
+  --trf-surface-2: #282828;
+  --trf-text: #fafafa;
+  --trf-text-secondary: #a8a8a8;
+  --trf-text-muted: #9b9b9b;
+  --trf-border: #2e2e2e;
+  --trf-border-strong: #383838;
+  --trf-radius-lg: 6px;
+  --trf-radius-md: 6px;
+  --trf-radius-sm: 6px;
+  --trf-shadow-sm: none;
+  --trf-shadow-accent: none;
+  --trf-surface-accent: rgba(252,118,3,.16);
+  --trf-orange-text: #ffab5c;
+  --trf-skeleton-base: #242424;
+  --trf-skeleton-hi: #2d2d2d;
+  --trf-sidebar-bg: #000000;
+  --trf-sidebar-text: #7a7a7a;
+  --trf-sidebar-text-active: #ffffff;
+}

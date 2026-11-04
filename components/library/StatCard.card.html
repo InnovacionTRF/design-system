@@ -1,0 +1,20 @@
+<!-- @dsCard group="6 · Componentes" viewport="820x220" subtitle="métrica con sparkline" name="StatCard" -->
+<!doctype html><html><head><meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<style>body{margin:0;font-family:var(--trf-font-sans);background:var(--trf-bg);color:var(--trf-text);padding:24px}</style>
+</head><body><div id="root"></div>
+<script src="../../_ds_bundle.js"></script>
+<script>Object.assign(window, window.TransfiriendoDesignSystem_0ece16);</script>
+<script>
+ReactDOM.createRoot(document.getElementById('root')).render(
+React.createElement('div',{style:{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:14}},
+ React.createElement(StatCard,{label:'Procesos activos',value:'127',delta:'8,2% vs. mes anterior',trend:'up',spark:[88,94,101,99,110,118,127]}),
+ React.createElement(StatCard,{label:'Horas ahorradas',value:'1.840',delta:'14,1% vs. mes anterior',trend:'up',spark:[1180,1320,1290,1480,1610,1720,1840]}),
+ React.createElement(StatCard,{label:'Tasa de error',value:'0,4',unit:'%',delta:'1,8% vs. mes anterior',trend:'down',spark:[2.6,2.2,1.9,1.4,1.1,0.7,0.4]})));
+</script>
+</body></html>

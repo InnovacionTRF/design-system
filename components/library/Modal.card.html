@@ -1,0 +1,32 @@
+<!-- @dsCard group="6 · Componentes" viewport="700x360" subtitle="diálogo con overlay, título y acciones" name="Modal" -->
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<style>body{margin:0;font-family:var(--trf-font-sans);background:var(--trf-surface);color:var(--trf-text);padding:24px}</style>
+</head><body><div id="root"></div>
+<script src="../../_ds_bundle.js"></script>
+<script>Object.assign(window, window.TransfiriendoDesignSystem_0ece16);</script>
+<script>
+// Los botones son el componente Button, NO copias locales. Una tarjeta especimen
+// que redibuja el control se queda fuera de las correcciones del sistema: esta
+// traía texto blanco sobre naranja (2,72:1) y sobre danger (3,22:1), justo los
+// dos valores que el sistema eliminó.
+function App(){
+  const [open,setOpen]=React.useState(true);
+  return React.createElement('div',null,
+    React.createElement(Button,{onClick:()=>setOpen(true)},'Abrir modal'),
+    React.createElement(Modal,{
+      open, onClose:()=>setOpen(false), title:'Eliminar TRF-4821',
+      footer:[
+        React.createElement(Button,{key:'c',variant:'secondary',onClick:()=>setOpen(false)},'Cancelar'),
+        React.createElement(Button,{key:'d',variant:'danger',onClick:()=>setOpen(false)},'Eliminar'),
+      ]},
+      'Esto borra el proceso y todo su historial para siempre. No se puede deshacer.'));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script>
+</body></html>

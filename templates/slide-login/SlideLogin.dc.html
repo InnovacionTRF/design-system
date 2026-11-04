@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<!-- @template name="Slide · Login" description="16:9 split login screen — dark brand panel with slogan + corporate-email form, built from Transfiriendo components." -->
+<helmet>
+
+
+
+<script src="./ds-base.js"></script>
+<style>
+  /* Paleta FIJA a propósito: una diapositiva es un artefacto de marca, no una
+     interfaz temática. Usa la rampa (--trf-neutral-*, --trf-orange-*), que no
+     cambia con data-theme ni data-direction, así que se ve idéntica en las seis
+     combinaciones. Los tokens semánticos (--trf-surface, --trf-text) SÍ cambian:
+     con ellos, el panel oscuro de marca se volvería claro en modo oscuro. */
+  body{margin:0;background:var(--trf-neutral-800);font-family:var(--trf-font-brand);-webkit-font-smoothing:antialiased}
+  .slide{width:1280px;height:720px;display:grid;grid-template-columns:1.1fr 1fr;overflow:hidden}
+  .mono{font-family:var(--trf-font-mono)}
+</style>
+</helmet>
+<div class="slide">
+  <div style="background:var(--trf-neutral-900);padding:72px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden">
+    <div style="position:absolute;top:-120px;right:-120px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,rgba(252,118,3,.35),transparent 68%)"></div>
+    <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.Logo" inverted="{{ true }}" base="../../assets" height="{{ 110 }}" hint-size="392px,110px"></x-import>
+    <div style="position:relative">
+      <p class="mono" style="margin:0;font-size:14px;letter-spacing:.18em;text-transform:uppercase;color:var(--trf-orange-200)">Innovación &amp; IA</p>
+      <h1 style="margin:16px 0 0;font-family:var(--trf-font-brand);font-size:46px;line-height:1.12;font-weight:600;letter-spacing:-.02em;color:var(--trf-neutral-0);max-width:440px">Juntos creamos ecosistemas de negocio</h1>
+      <p style="margin:18px 0 0;font-size:17px;line-height:1.6;color:var(--trf-neutral-300);max-width:420px">Consola de procesos automatizados. Un solo lenguaje visual para todo lo que construimos.</p>
+    </div>
+    <p style="position:relative;margin:0;font-size:13px;color:var(--trf-neutral-600)">© 2024 Transfiriendo · Bogotá</p>
+  </div>
+
+  <div style="display:grid;place-items:center;padding:72px;background:var(--trf-neutral-0)">
+    <div style="width:100%;max-width:340px;display:flex;flex-direction:column;gap:20px">
+      <div>
+        <h2 style="margin:0;font-size:26px;font-weight:600;letter-spacing:-.01em;color:var(--trf-neutral-900)">Ingrese a su cuenta</h2>
+        <p style="margin:6px 0 0;font-size:14px;color:var(--trf-neutral-400)">Use su correo corporativo.</p>
+      </div>
+      <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.Input" label="Correo corporativo" placeholder="nombre@transfiriendo.com" hint-size="100%,62px"></x-import>
+      <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.Input" label="Contraseña" type="password" placeholder="••••••••••" hint-size="100%,62px"></x-import>
+      <x-import component-from-global-scope="TransfiriendoDesignSystem_0ece16.Button" full="{{ true }}" size="lg" hint-size="100%,48px">Entrar</x-import>
+      <p style="margin:0;text-align:center;font-size:13px;color:var(--trf-neutral-400)">¿Problemas para entrar? <a href="#" style="color:var(--trf-orange-500);text-decoration:none">Escríbanos</a></p>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:720}}"></script>
+</body>
+</html>

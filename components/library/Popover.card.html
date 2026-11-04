@@ -1,0 +1,25 @@
+<!-- @dsCard group="6 · Componentes" viewport="700x300" subtitle="panel flotante con flecha" name="Popover" -->
+<!doctype html><html><head><meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<style>body{margin:0;font-family:var(--trf-font-sans);background:var(--trf-surface);color:var(--trf-text);padding:24px}
+/* El botón primario es el componente Button, no una copia local: una copia
+   se queda fuera de las correcciones del sistema (esta traía blanco sobre
+   naranja, 2,72:1). .b solo mantiene el disparador cuando no hay React. */
+.b{height:var(--trf-control-md);padding:0 var(--trf-space-4);border:none;border-radius:var(--trf-radius-md);background:var(--trf-action);color:var(--trf-neutral-900);font-family:var(--trf-font-sans);font-size:var(--trf-text-sm);font-weight:var(--trf-fw-semibold);cursor:pointer}
+.b2{height:40px;padding:0 18px;border:1px solid var(--trf-border-strong);border-radius:var(--trf-radius-md);background:var(--trf-surface);color:var(--trf-text-secondary);font-family:var(--trf-font-sans);font-size:14px;font-weight:600;cursor:pointer}</style>
+</head><body><div id="root"></div>
+<script src="../../_ds_bundle.js"></script>
+<script>Object.assign(window, window.TransfiriendoDesignSystem_0ece16);</script>
+<script>
+function App(){const trg=React.createElement('button',{className:'b2'},'\u29e9 Filtros');
+return React.createElement(Popover,{trigger:trg},({close})=>React.createElement('div',null,
+  React.createElement('p',{style:{fontSize:11,fontWeight:600,letterSpacing:'.05em',textTransform:'uppercase',color:'var(--trf-text-muted)',margin:'0 0 12px'}},'Filtrar por estado'),
+  ['Activos','En revisión','Pausados'].map(l=>React.createElement('label',{key:l,style:{display:'flex',gap:10,alignItems:'center',padding:'7px 0',fontSize:13,color:'var(--trf-text)'}},React.createElement('input',{type:'checkbox',defaultChecked:l==='Activos'}),l)),
+  React.createElement('button',{className:'b',style:{width:'100%',marginTop:8},onClick:close},'Aplicar')));}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));</script>
+</body></html>

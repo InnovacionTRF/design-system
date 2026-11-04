@@ -1,0 +1,18 @@
+/* Transfiriendo — Capa de compatibilidad DEPRECADA. Opt-in.
+   ============================================================
+   Los alias cortos (--accent, --surface, --text-2, --ctrl-radius…) vinieron del
+   proyecto fuente. Ningún componente ni tarjeta del sistema los usa ya: todo
+   converge a --trf-*.
+
+   Este archivo existe solo para código EXTERNO que aún los referencie. Está
+   fuera de la cadena de styles.css a propósito, así que sus nombres ya no
+   figuran como tokens válidos del sistema y el linter de adherencia no los
+   acepta en código nuevo.
+
+   Para usarlo, enlácelo DESPUÉS de styles.css:
+
+     <link rel="stylesheet" href="styles.css">
+     <link rel="stylesheet" href="legacy.css">   <!-- solo si hace falta -->
+
+   No añada alias nuevos aquí. Migre a --trf-* y elimine el enlace. */
+@import url('tokens/compat.css');

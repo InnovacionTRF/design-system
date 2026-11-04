@@ -1,0 +1,117 @@
+<!-- @dsCard group="6 · Componentes" viewport="700x1290" name="Core" subtitle="Buttons, inputs, cards, badges, alerts, tabs, switch, checkbox, radio, textarea, skeleton" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<link rel="stylesheet" href="../../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.460.0/dist/umd/lucide.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body{margin:0;background:var(--trf-bg);font-family:var(--trf-font-sans);color:var(--trf-text);padding:24px}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:660px}
+  .row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  .lbl{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--trf-text-muted);margin:0 0 10px}
+  .stack{display:flex;flex-direction:column;gap:12px}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { Button, Input, Card, Badge, Alert, Tabs, Switch, Skeleton, Checkbox, RadioGroup, Textarea } = window.TransfiriendoDesignSystem_0ece16;
+// lucide icon wrapper -> React component
+const icon = (name) => (p) => {
+  const ref = React.useRef(null);
+  React.useEffect(() => { if(ref.current){ ref.current.innerHTML=""; const el=window.lucide.createElement(window.lucide[name]); el.setAttribute("width",p.size||16); el.setAttribute("height",p.size||16); el.setAttribute("stroke-width",p.strokeWidth||2); ref.current.appendChild(el);} });
+  return <span ref={ref} style={{display:"inline-flex",...(p.style||{})}} />;
+};
+const Plus=icon("Plus"), Search=icon("Search"), Filter=icon("Filter"), Info=icon("Info"), Check=icon("Check"), Trash=icon("Trash2");
+
+function Demo(){
+  const [tab,setTab]=React.useState("resumen");
+  const [on1,setOn1]=React.useState(true); const [on2,setOn2]=React.useState(false);
+  const [c1,setC1]=React.useState(true); const [c2,setC2]=React.useState(false);
+  const [unidad,setUnidad]=React.useState("salud");
+  const [desc,setDesc]=React.useState("");
+  return (
+    <div className="grid">
+      <div className="stack" style={{gridColumn:"1 / -1"}}>
+        <p className="lbl">Botones</p>
+        <div className="row">
+          <Button size="sm">Guardar</Button>
+          <Button icon={Plus}>Nuevo proceso</Button>
+          <Button variant="secondary" icon={Filter}>Filtrar</Button>
+          <Button variant="ghost">Ver detalle</Button>
+          <Button variant="danger" icon={Trash}>Eliminar</Button>
+          <Button loading>Procesando</Button>
+          <Button disabled>Deshabilitado</Button>
+        </div>
+      </div>
+
+      <div className="stack">
+        <p className="lbl">Formulario</p>
+        <Input label="Nombre del proceso" placeholder="Conciliación de cartera" />
+        <Input label="Buscar" placeholder="ID, unidad o responsable" icon={Search} />
+        <Input label="Volumen mensual" defaultValue="abc" error="Ingrese un número entero, sin puntos ni comas." />
+        <div className="row" style={{gap:20,paddingTop:4}}>
+          <Switch checked={on1} onChange={setOn1} label="Notificar" />
+          <Switch checked={on2} onChange={setOn2} label="Nocturno" />
+        </div>
+      </div>
+
+      <div className="stack">
+        <p className="lbl">Checkbox · Radio</p>
+        <div className="row" style={{gap:16}}>
+          <Checkbox checked={c1} onChange={setC1} label="Notificarme por correo" />
+          <Checkbox checked={c2} onChange={setC2} label="Incluir archivados" />
+          <Checkbox indeterminate label="Seleccionar todo" />
+        </div>
+        <RadioGroup
+          label="Unidad de negocio"
+          value={unidad}
+          onChange={setUnidad}
+          items={[{id:"salud",label:"Salud"},{id:"facturacion",label:"Facturación"},{id:"seguros",label:"Seguros",disabled:true}]}
+        />
+      </div>
+
+      <div className="stack" style={{gridColumn:"1 / -1"}}>
+        <p className="lbl">Textarea</p>
+        <Textarea label="Descripción del proceso" hint="Máximo 120 caracteres" maxLength={120} showCount value={desc} onChange={(e)=>setDesc(e.target.value)} />
+      </div>
+
+      <div className="stack">
+        <p className="lbl">Etiquetas</p>
+        <div className="row">
+          <Badge>borrador</Badge>
+          <Badge tone="orange">en revisión</Badge>
+          <Badge tone="success" dot>activo</Badge>
+          <Badge tone="info">programado</Badge>
+          <Badge tone="danger">detenido</Badge>
+        </div>
+        <p className="lbl" style={{marginTop:8}}>Avisos</p>
+        <Alert tone="info" icon={Info} title="Motor DDI conectado">Recomendaciones cada 15 min.</Alert>
+        <Alert tone="success" icon={Check} title="Proceso publicado">Corriendo en las cuatro unidades.</Alert>
+      </div>
+
+      <div className="stack" style={{gridColumn:"1 / -1"}}>
+        <p className="lbl">Tabs · Card · Carga</p>
+        <Tabs value={tab} onChange={setTab} items={[{id:"resumen",label:"Resumen"},{id:"detalle",label:"Detalle"},{id:"log",label:"Bitácora"}]} />
+        <div className="row" style={{alignItems:"stretch"}}>
+          <Card style={{flex:1,minWidth:180}}><p style={{margin:"0 0 4px",fontSize:13,fontWeight:600}}>Card estática</p><p style={{margin:0,fontSize:12,color:"var(--trf-text-secondary)"}}>Para contenido que solo se lee.</p></Card>
+          <Card onClick={() => {}} style={{flex:1,minWidth:180}}><p style={{margin:"0 0 4px",fontSize:13,fontWeight:600}}>Card clicable</p><p style={{margin:0,fontSize:12,color:"var(--trf-text-secondary)"}}>Se eleva 4px. Solo si es clickeable.</p></Card>
+          <Card accent style={{flex:1,minWidth:180}}><p style={{margin:"0 0 4px",fontSize:13,fontWeight:600,color:"var(--trf-orange-text)"}}>Card destacada</p><div className="stack" style={{gap:8,marginTop:8}}><Skeleton width="75%"/><Skeleton/><Skeleton width="50%"/></div></Card>
+        </div>
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<Demo/>);
+</script>
+</body>
+</html>

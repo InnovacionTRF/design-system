@@ -1,0 +1,102 @@
+/* Transfiriendo — Breakpoints y comportamiento responsive.
+   ============================================================
+   OJO: las custom properties NO funcionan dentro de @media, así que
+   `@media (min-width: var(--trf-bp-md))` no evalúa. Los valores se declaran
+   aquí como constantes documentadas y se escriben LITERALES en cada consulta.
+   Los tokens --trf-bp-* existen solo para leerlos desde JS.
+
+     sm   480px   móvil grande
+     md   768px   tablet · umbral del drawer de navegación
+     lg  1024px   escritorio angosto
+     xl  1280px   escritorio
+
+   Enfoque mobile-first: el estilo base es el del móvil y las consultas suben. */
+:root {
+  --trf-bp-sm: 480px;  /* @kind other */
+  --trf-bp-md: 768px;  /* @kind other */
+  --trf-bp-lg: 1024px; /* @kind other */
+  --trf-bp-xl: 1280px; /* @kind other */
+}
+
+/* ---- Sidebar: drawer por debajo de md ----
+   En móvil la barra fija de 220px se come la pantalla, así que pasa a panel
+   deslizante sobre el contenido. El COMPONENTE renderiza su propio scrim
+   (Sidebar.jsx: hermano del <nav>, con onClick y Escape hacia `onClose`); esta
+   hoja solo lo posiciona y lo oculta en escritorio. El botón .trf-sidebar__burger
+   SÍ es del consumidor: vive en la barra superior de la página, no en la
+   barra lateral, así que el componente no puede montarlo por sí mismo. */
+@media (max-width: 767px) {
+  .trf-sidebar {
+    position: fixed; inset: 0 auto 0 0; z-index: 80;
+    width: 260px; max-width: 82vw;
+    transform: translateX(-100%);
+    box-shadow: var(--trf-shadow-lg);
+    transition: transform var(--trf-motion-base);
+  }
+  .trf-sidebar[data-open] { transform: none; }
+  /* Colapsada no aplica en móvil: o está fuera, o está abierta entera. */
+  .trf-sidebar[data-collapsed] { width: 260px; }
+  .trf-sidebar[data-collapsed] .trf-sidebar__label { display: revert; }
+  .trf-sidebar__scrim {
+    position: fixed; inset: 0; z-index: 79;
+    background: var(--trf-scrim);
+    animation: trf-fade-in var(--trf-motion-fast) both;
+  }
+}
+@media (min-width: 768px) {
+  /* En escritorio el drawer no existe: la barra es parte del layout. */
+  .trf-sidebar__scrim { display: none; }
+  .trf-sidebar__burger { display: none; }
+}
+.trf-sidebar__burger {
+  width: 40px; height: 40px; display: grid; place-items: center;
+  border: 1px solid var(--trf-border); border-radius: var(--trf-radius-md);
+  background: var(--trf-surface); color: var(--trf-text-secondary);
+  font-size: var(--trf-text-base); cursor: pointer;
+}
+
+/* ---- Rejillas de dashboard ----
+   Cuatro KPI aplastados por debajo de ~600px era el defecto del template.
+   Mobile-first: una columna, dos en sm, cuatro en lg. */
+.trf-kpis { display: grid; grid-template-columns: 1fr; gap: var(--trf-space-3); }
+@media (min-width: 480px) { .trf-kpis { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .trf-kpis { grid-template-columns: repeat(4, 1fr); } }
+
+.trf-kpis-3 { display: grid; grid-template-columns: 1fr; gap: var(--trf-space-3); }
+@media (min-width: 480px) { .trf-kpis-3 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .trf-kpis-3 { grid-template-columns: repeat(3, 1fr); } }
+
+/* Cabecera de sección: el bloque de acciones baja en móvil en vez de apretarse. */
+.trf-pagehead {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: var(--trf-space-4);
+}
+@media (min-width: 768px) {
+  .trf-pagehead { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+}
+
+/* ---- Navegación en móvil ----
+   Medido: por debajo de 480px, .trf-tabs desborda (flex sin wrap) y
+   .trf-stepper también (etiquetas con white-space: nowrap). Breadcrumbs y
+   Pagination ya llevan flex-wrap y se reacomodan solos. */
+
+/* Tabs: desplazamiento horizontal, no wrap. Envolver a dos filas rompe el
+   indicador naranja, que se posiciona con offsetLeft sobre una sola línea. */
+@media (max-width: 767px) {
+  .trf-tabs {
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .trf-tabs::-webkit-scrollbar { display: none; }
+  .trf-tab { flex: 0 0 auto; }
+}
+
+/* Stepper: en móvil solo se rotula el paso ACTUAL. Los números siguen visibles,
+   así que no se pierde la posición en la secuencia; lo que se pierde son las
+   etiquetas de los pasos que no toca leer ahora. */
+@media (max-width: 599px) {
+  .trf-stepper__label { display: none; }
+  .trf-stepper__label[data-active] { display: block; }
+  .trf-stepper__line { margin-bottom: var(--trf-space-4); }
+}

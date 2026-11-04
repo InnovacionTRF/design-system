@@ -1,0 +1,216 @@
+<!-- @dsCard group="4 · Espacio y forma" viewport="960x1100" name="Auditoría de direcciones" subtitle="Cada superficie medida en Material, Cálido y Nítido" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+
+
+
+<link rel="stylesheet" href="../styles.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../_ds_bundle.js"></script>
+<style>
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--trf-surface);font-family:var(--trf-font-sans);color:var(--trf-text);padding:20px}
+  @keyframes trf-spin{to{transform:rotate(360deg)}}
+  @keyframes trf-shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{text-align:left;padding:8px 10px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--trf-text-muted);border-bottom:1px solid var(--trf-border)}
+  td{padding:6px 10px;border-bottom:1px solid var(--trf-border)}
+  .m{font-family:var(--trf-font-mono);font-size:11px;font-variant-numeric:tabular-nums}
+  .ok{color:var(--trf-success-text);font-weight:600}
+  .bad{color:var(--trf-danger-text);font-weight:600}
+  .fix{color:var(--trf-text-muted)}
+  /* Fuera de pantalla y oculto, pero medible: visibility:hidden conserva layout,
+     necesario porque Toaster y Modal usan position:fixed y escaparían del contenedor. */
+  #stage{position:absolute;left:-9999px;top:0;visibility:hidden}
+  h2{font-size:13px;font-weight:600;margin:0 0 2px}
+  p.note{margin:0 0 14px;font-size:12px;color:var(--trf-text-secondary);line-height:1.55}
+</style>
+</head>
+<body>
+<div id="root">
+<table><thead><tr><th>Componente</th><th>Rol</th><th>Material</th><th>Cálido</th><th>Nítido</th><th></th></tr></thead></table>
+</div>
+<script type="text/babel">
+const DS = window.TransfiriendoDesignSystem_0ece16;
+const {
+  Button, Input, Card, Badge, Alert, Tabs, Switch, Skeleton,
+  Accordion, Breadcrumbs, Chip, Combobox, DataGrid, DatePicker, DateRangePicker,
+  FileUpload, Modal, Pagination, Popover, Select, Sidebar, StatCard, Stepper,
+  Timeline, Toaster, Tooltip, ConfirmDestructive, UnsavedBar, UndoToast,
+} = DS;
+
+// Toaster es imperativo: se empuja un toast por ref para poder medir su burbuja.
+// useLayoutEffect y no useEffect: los layout effects del hijo corren ANTES que los
+// del padre, así que la burbuja ya existe cuando la tabla mide.
+function ToasterProbe(){
+  const ref = React.useRef(null);
+  React.useLayoutEffect(() => { ref.current && ref.current.push({ tone:"info", title:"Aviso", duration:0 }); }, []);
+  return <Toaster ref={ref} />;
+}
+
+// Roles: control → --trf-radius-md · contenedor → lg · detalle → sm · píldora → full
+const SPECS = [
+  ["Button", "control", <Button size="sm">Guardar</Button>],
+  ["Input", "control", <Input placeholder="Buscar" />],
+  ["Select", "control", <Select value="Salud" options={["Salud","Seguros"]} />],
+  ["Combobox", "control", <Combobox options={[{value:"a",label:"Salud"}]} />],
+  ["DatePicker", "control", <DatePicker value={{y:2026,m:6,d:15}} />],
+  ["DateRangePicker", "control", <DateRangePicker />],
+  ["Pagination", "control", <Pagination page={2} pages={9} />],
+  ["Tabs", "control", <Tabs value="a" onChange={()=>{}} items={[{id:"a",label:"Uno"},{id:"b",label:"Dos"}]} />],
+  ["Sidebar", "control", <Sidebar items={[{label:"Inicio"}]} active="Inicio" />],
+
+  ["Card", "contenedor", <Card padding={10}>x</Card>],
+  ["Alert", "contenedor", <Alert tone="info" title="t">c</Alert>],
+  ["StatCard", "contenedor", <StatCard label="Horas" value="1.840" delta="14,1%" trend="up" />],
+  ["Accordion", "contenedor", <Accordion items={[{id:"q",question:"P",answer:"R"}]} />],
+  ["DataGrid", "contenedor", <DataGrid columns={[{key:"a",label:"A"}]} rows={[{a:1}]} />],
+  ["FileUpload", "contenedor", <FileUpload />],
+  ["Modal", "contenedor", <Modal open title="T">c</Modal>],
+  ["ConfirmDestructive", "contenedor", <ConfirmDestructive open title="T" description="d" confirmPhrase="X" />],
+  ["Toaster", "contenedor", <ToasterProbe />],
+  ["UnsavedBar", "contenedor", <UnsavedBar dirty />],
+  ["UndoToast", "contenedor", <UndoToast open message="Archivado" />],
+
+  ["Popover", "detalle", <Popover trigger={<button>abrir</button>}>c</Popover>],
+  ["Tooltip", "detalle", <Tooltip label="hola"><button>t</button></Tooltip>],
+  ["Skeleton", "detalle", <Skeleton />],
+
+  ["Badge", "píldora", <Badge tone="success">activo</Badge>],
+  ["Chip", "píldora", <Chip selected>Salud</Chip>],
+  ["Switch", "píldora", <Switch checked />],
+  ["Stepper", "píldora", <Stepper steps={["Uno","Dos"]} current={0} />],
+
+  ["Timeline", "lista", <Timeline items={[{title:"t",time:"1"}]} />],
+  ["Breadcrumbs", "lista", <Breadcrumbs items={["Inicio","Procesos"]} />],
+];
+
+const DIRS = ["material","calido","nitido"];
+const EXPECT = {
+  control:    { material:"8px",    calido:"999px",  nitido:"6px" },
+  contenedor: { material:"12px",   calido:"16px",   nitido:"6px" },
+  detalle:    { material:"8px",    calido:"12px",   nitido:"6px" },
+  "píldora":  { material:"9999px", calido:"9999px", nitido:"9999px" },
+};
+
+function largestRadius(host){
+  let best = null, bestArea = -1;
+  for (const el of [host, ...host.querySelectorAll("*")]) {
+    const r = getComputedStyle(el).borderTopLeftRadius;
+    if (!r || r === "0px") continue;
+    const b = el.getBoundingClientRect();
+    const area = b.width * b.height;
+    if (area > bestArea) { bestArea = area; best = r; }
+  }
+  return best;
+}
+
+function radiusOf(host, role){
+  // Un control se mide en su DISPARADOR, no en el panel que despliega: Select,
+  // Combobox y los date pickers tienen ambos, y el panel es un contenedor con
+  // radio propio y mayor área que el disparador.
+  if (role === "control") {
+    const t = host.querySelector("input, button, [role=combobox], [role=button]");
+    if (t) return getComputedStyle(t).borderTopLeftRadius;
+  }
+  // Un detalle flotante se mide en el panel posicionado, no en el disparador.
+  if (role === "detalle") {
+    for (const el of host.querySelectorAll("*")) {
+      const cs = getComputedStyle(el);
+      if ((cs.position === "absolute" || cs.position === "fixed") && cs.borderTopLeftRadius !== "0px") {
+        return cs.borderTopLeftRadius;
+      }
+    }
+  }
+  if (role === "contenedor") {
+    const root = host.firstElementChild;
+    if (root) {
+      const r = getComputedStyle(root).borderTopLeftRadius;
+      if (r && r !== "0px") return r;
+    }
+  }
+  return largestRadius(host);
+}
+
+function App(){
+  const [measured,setMeasured] = React.useState(null);
+
+  const measureAll = React.useCallback(() => {
+    setMeasured(SPECS.map(([name, role]) => {
+      const got = {};
+      for (const d of DIRS) {
+        const host = document.querySelector(`[data-probe="${name}|${d}"]`);
+        got[d] = host ? radiusOf(host, role) : null;
+      }
+      const exp = EXPECT[role];
+      return { name, role, got, ok: exp ? DIRS.every(v => got[v] === exp[v]) : null };
+    }));
+  }, []);
+
+  // Los probes viven en el MISMO árbol de React que la tabla, así que en el layout
+  // effect el DOM ya está commiteado y getComputedStyle fuerza el recálculo de estilo.
+  // Medición SÍNCRONA a propósito: requestAnimationFrame no dispara si el documento
+  // no se está pintando (rasterizado fuera de pantalla), y un setTimeout deja la
+  // tarjeta en blanco si la captura llega antes.
+  // El observer cubre los componentes imperativos: Toaster monta su burbuja por
+  // estado, un render después de esta medición.
+  React.useLayoutEffect(() => {
+    measureAll();
+    const stage = document.getElementById("stage");
+    if (!stage) return undefined;
+    const obs = new MutationObserver(measureAll);
+    obs.observe(stage, { childList: true, subtree: true });
+    return () => obs.disconnect();
+  }, [measureAll]);
+
+  const byName = {};
+  if (measured) for (const m of measured) byName[m.name] = m;
+  const scored = measured ? measured.filter(r => r.ok !== null) : [];
+  const fails = scored.filter(r => !r.ok);
+
+  return (
+    <div>
+      <h2>Radio medido por dirección</h2>
+      <p className="note">
+        {!measured
+          ? <span>Esperado — control 8/999/6 · contenedor 12/16/6 · detalle 8/12/6 · píldora invariable.</span>
+          : fails.length === 0
+            ? <span><strong>{scored.length} de {scored.length}</strong> superficies con rol definido siguen la dirección. Esperado — control 8/999/6 · contenedor 12/16/6 · detalle 8/12/6 · píldora invariable.</span>
+            : <span className="bad">{fails.length} de {scored.length} no siguen su rol: {fails.map(f=>f.name).join(", ")}.</span>}
+        {" "}Las filas «lista» no tienen superficie con radio propio: figuran como informativas.
+      </p>
+      <table>
+        <thead><tr><th>Componente</th><th>Rol</th><th>Material</th><th>Cálido</th><th>Nítido</th><th></th></tr></thead>
+        <tbody>
+          {SPECS.map(([name, role]) => {
+            const m = byName[name];
+            return (
+              <tr key={name}>
+                <td style={{fontWeight:600}}>{name}</td>
+                <td className="fix">{role}</td>
+                {DIRS.map(d => <td key={d} className="m">{m ? (m.got[d] || "—") : "·"}</td>)}
+                <td className={!m ? "fix" : (m.ok === null ? "fix" : (m.ok ? "ok" : "bad"))}>
+                  {!m ? "·" : (m.ok === null ? "—" : (m.ok ? "✓" : "revisar"))}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+
+      <div id="stage">
+        {SPECS.map(([name, role, node]) => DIRS.map(dir => (
+          <div key={name + dir} data-probe={name + "|" + dir} data-direction={dir}>{node}</div>
+        )))}
+      </div>
+    </div>
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
